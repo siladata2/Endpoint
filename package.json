@@ -1,0 +1,19 @@
+{
+"name": "sila-api",
+"version": "1.0.0",
+"description": "SILA API - Professional API platform by Sila Tech",
+"main": "index.js",
+"scripts": {
+"start": "node index.js"
+},
+"engines": {
+"node": "24.x",
+"npm": "11.x"
+},
+"dependencies": {
+"cors": "^2.8.5",
+"dotenv": "^16.6.1",
+"express": "^5.1.0",
+"mongoose": "^8.18.1"
+}
+}

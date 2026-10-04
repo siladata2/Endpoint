@@ -1,0 +1,188 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="300" viewBox="0 0 900 300" fill="none">
+  <defs>
+    <linearGradient id="purple" x1="90" y1="60" x2="760" y2="240" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#B36CFF"/>
+      <stop offset="0.45" stop-color="#7B2CFF"/>
+      <stop offset="1" stop-color="#4A0FAF"/>
+    </linearGradient>
+
+    <linearGradient id="textPurple" x1="350" y1="90" x2="760" y2="210" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#D8B4FF"/>
+      <stop offset="0.5" stop-color="#9B55FF"/>
+      <stop offset="1" stop-color="#6B20D8"/>
+    </linearGradient>
+
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Transparent background -->
+
+  <!-- Main logo container -->
+  <rect
+    x="24"
+    y="24"
+    width="852"
+    height="252"
+    rx="58"
+    fill="#09070D"
+    stroke="#241538"
+    stroke-width="3"
+  />
+
+  <!-- Purple glow behind symbol -->
+  <circle
+    cx="150"
+    cy="150"
+    r="91"
+    fill="#701EFF"
+    opacity="0.12"
+    filter="url(#glow)"
+  />
+
+  <!-- API symbol -->
+  <g filter="url(#shadow)">
+
+    <!-- Outer hexagonal structure -->
+    <path
+      d="M150 61
+         L224 104
+         V196
+         L150 239
+         L76 196
+         V104
+         Z"
+      fill="#0D0A13"
+      stroke="url(#purple)"
+      stroke-width="9"
+      stroke-linejoin="round"
+    />
+
+    <!-- Inner API network -->
+    <path
+      d="M150 91V209"
+      stroke="url(#purple)"
+      stroke-width="8"
+      stroke-linecap="round"
+    />
+
+    <path
+      d="M101 120L199 180"
+      stroke="url(#purple)"
+      stroke-width="8"
+      stroke-linecap="round"
+    />
+
+    <path
+      d="M101 180L199 120"
+      stroke="url(#purple)"
+      stroke-width="8"
+      stroke-linecap="round"
+    />
+
+    <!-- Network nodes -->
+    <circle cx="150" cy="91" r="12" fill="#B36CFF"/>
+    <circle cx="101" cy="120" r="12" fill="#8B3DFF"/>
+    <circle cx="199" cy="120" r="12" fill="#8B3DFF"/>
+    <circle cx="101" cy="180" r="12" fill="#6C20D8"/>
+    <circle cx="199" cy="180" r="12" fill="#6C20D8"/>
+    <circle cx="150" cy="209" r="12" fill="#B36CFF"/>
+
+    <!-- Center -->
+    <circle
+      cx="150"
+      cy="150"
+      r="27"
+      fill="#120B1D"
+      stroke="url(#purple)"
+      stroke-width="6"
+    />
+
+    <path
+      d="M137 150H163"
+      stroke="#E5D2FF"
+      stroke-width="6"
+      stroke-linecap="round"
+    />
+
+    <path
+      d="M150 137V163"
+      stroke="#E5D2FF"
+      stroke-width="6"
+      stroke-linecap="round"
+    />
+
+  </g>
+
+  <!-- Vertical divider -->
+  <rect
+    x="270"
+    y="82"
+    width="2"
+    height="136"
+    rx="1"
+    fill="#35204C"
+  />
+
+  <!-- SILA -->
+  <text
+    x="315"
+    y="164"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="82"
+    font-weight="800"
+    letter-spacing="2"
+    fill="#FFFFFF"
+  >
+    SILA
+  </text>
+
+  <!-- API -->
+  <text
+    x="545"
+    y="164"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="82"
+    font-weight="800"
+    letter-spacing="2"
+    fill="url(#textPurple)"
+  >
+    API
+  </text>
+
+  <!-- Professional subtitle -->
+  <text
+    x="320"
+    y="202"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="17"
+    font-weight="500"
+    letter-spacing="5"
+    fill="#8E819B"
+  >
+    NEXT-GEN API's PLATFORM
+  </text>
+
+  <!-- Decorative purple line -->
+  <rect
+    x="320"
+    y="218"
+    width="170"
+    height="3"
+    rx="1.5"
+    fill="url(#purple)"
+  />
+
+  <circle cx="502" cy="219.5" r="3" fill="#8B3DFF"/>
+  <circle cx="516" cy="219.5" r="3" fill="#6B20D8"/>
+
+</svg>

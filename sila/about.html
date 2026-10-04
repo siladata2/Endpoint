@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>About — SILA API</title>
+
+  <meta
+    name="description"
+    content="About SILA API and Sila Tech."
+  >
+
+  <meta name="theme-color" content="#08060d">
+
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href="/silaapi.svg"
+  >
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #07050b;
+      --card: #0e0a15;
+      --card-hover: #120c19;
+      --border: #241733;
+      --purple: #8b3dff;
+      --purple-light: #b36cff;
+      --text: #ffffff;
+      --soft: #aaa0b5;
+      --muted: #756a80;
+    }
+
+    body {
+      min-height: 100vh;
+
+      background:
+        radial-gradient(
+          circle at 50% -10%,
+          rgba(123, 44, 255, 0.14),
+          transparent 38%
+        ),
+        var(--bg);
+
+      color: var(--text);
+
+      font-family: var(--font-body);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* NAV */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+
+      background:
+        rgba(7, 5, 11, 0.88);
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
+      border-bottom:
+        1px solid #1b1226;
+    }
+
+    .nav {
+      width:
+        min(1100px, calc(100% - 32px));
+
+      height: 76px;
+
+      margin: auto;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .brand img {
+      width: 45px;
+      height: 45px;
+      object-fit: contain;
+    }
+
+    .brand-name {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .brand-name span {
+      color: var(--purple-light);
+    }
+
+    nav {
+      display: flex;
+      gap: 7px;
+    }
+
+    nav a {
+      padding: 9px 12px;
+
+      border-radius: 8px;
+
+      color: var(--soft);
+
+      font-size: 14px;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: #fff;
+
+      background:
+        rgba(139, 61, 255, 0.09);
+    }
+
+    /* MAIN */
+
+    main {
+      width:
+        min(1000px, calc(100% - 32px));
+
+      margin: auto;
+
+      padding:
+        75px 0 100px;
+    }
+
+    .hero {
+      text-align: center;
+
+      margin-bottom: 55px;
+    }
+
+    .hero img {
+      width: 100px;
+      height: 100px;
+
+      object-fit: contain;
+
+      margin-bottom: 25px;
+
+      filter:
+        drop-shadow(
+          0 0 35px
+          rgba(139, 61, 255, 0.25)
+        );
+    }
+
+    .hero h1 {
+      font-size:
+        clamp(40px, 7vw, 62px);
+
+      letter-spacing: -2px;
+
+      margin-bottom: 15px;
+    }
+
+    .hero h1 span {
+      color: var(--purple-light);
+    }
+
+    .hero p {
+      max-width: 680px;
+
+      margin: auto;
+
+      color: var(--soft);
+
+      font-size: 16px;
+      line-height: 1.75;
+    }
+
+    /* CARDS */
+
+    .grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, 1fr);
+
+      gap: 16px;
+    }
+
+    .card {
+      padding: 25px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 15px;
+
+      background:
+        linear-gradient(
+          145deg,
+          #100b17,
+          #0b0810
+        );
+    }
+
+    .card h2 {
+      font-size: 19px;
+
+      margin-bottom: 12px;
+    }
+
+    .card p {
+      color: var(--soft);
+
+      font-size: 14px;
+
+      line-height: 1.75;
+    }
+
+    .card.full {
+      grid-column: 1 / -1;
+    }
+
+    /* CONTACT */
+
+    .contact-list {
+      display: grid;
+
+      gap: 9px;
+
+      margin-top: 17px;
+    }
+
+    .contact-item {
+      display: flex;
+
+      align-items: center;
+
+      gap: 12px;
+
+      padding: 12px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 9px;
+
+      background: #0a0710;
+    }
+
+    .contact-label {
+      min-width: 90px;
+
+      color: var(--muted);
+
+      font-size: 11px;
+    }
+
+    .contact-value {
+      color: #c9b8d5;
+
+      font-size: 13px;
+
+      word-break: break-all;
+    }
+
+    .contact-value:hover {
+      color: var(--purple-light);
+    }
+
+    /* CTA */
+
+    .cta {
+      margin-top: 16px;
+
+      padding: 30px;
+
+      border:
+        1px solid
+        rgba(139, 61, 255, 0.25);
+
+      border-radius: 15px;
+
+      background:
+        radial-gradient(
+          circle at 100% 0%,
+          rgba(123, 44, 255, 0.13),
+          transparent 45%
+        ),
+        #0d0913;
+
+      text-align: center;
+    }
+
+    .cta h2 {
+      margin-bottom: 9px;
+    }
+
+    .cta p {
+      color: var(--soft);
+
+      font-size: 14px;
+
+      line-height: 1.6;
+
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      display: inline-flex;
+
+      align-items: center;
+      justify-content: center;
+
+      min-height: 44px;
+
+      padding:
+        0 19px;
+
+      border-radius: 9px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #994dff,
+          #6418ca
+        );
+
+      color: #fff;
+
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* FOOTER */
+
+    footer {
+      border-top:
+        1px solid var(--border);
+    }
+
+    .footer {
+      width:
+        min(1000px, calc(100% - 32px));
+
+      margin: auto;
+
+      padding: 28px 0;
+
+      text-align: center;
+
+      color: var(--muted);
+
+      font-size: 12px;
+    }
+
+    @media (max-width: 650px) {
+
+      nav a:not(.active) {
+        display: none;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card.full {
+        grid-column: auto;
+      }
+
+      .hero {
+        padding-top: 20px;
+      }
+
+      .contact-item {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .contact-label {
+        min-width: auto;
+      }
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/sila.css">
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+
+  <header>
+
+    <div class="nav">
+
+      <a
+        href="/"
+        class="brand"
+      >
+
+        <img
+          src="/silaapi.svg"
+          alt="SILA API"
+        >
+
+        <div class="brand-name">
+          SILA <span>API</span>
+        </div>
+
+      </a>
+
+      <nav>
+
+        <a href="/">
+          Home
+        </a>
+
+        <a href="/endpoints">
+          Endpoints
+        </a>
+
+        <a
+          href="/about"
+          class="active"
+        >
+          About
+        </a>
+
+        <a href="/silapanel">
+          Panel
+        </a>
+
+      </nav>
+
+    </div>
+
+  </header>
+
+
+  <!-- MAIN -->
+
+  <main>
+
+    <section class="hero">
+
+      <img
+        src="/silaapi.svg"
+        alt="SILA API"
+      >
+
+      <h1>
+        About <span>SILA API</span>
+      </h1>
+
+      <p>
+        SILA API is an API platform created by
+        Sila Tech to provide developers with
+        simple, reliable and easy-to-integrate
+        services for their applications and
+        WhatsApp bots.
+      </p>
+
+    </section>
+
+
+    <section class="grid">
+
+      <!-- ABOUT -->
+
+      <article class="card">
+
+        <h2>
+          SILA API
+        </h2>
+
+        <p>
+          SILA API provides a centralized platform
+          for accessing different services through
+          simple HTTP endpoints. Developers can
+          integrate the available APIs into websites,
+          applications, automation systems and
+          WhatsApp bots.
+        </p>
+
+      </article>
+
+
+      <!-- SILA TECH -->
+
+      <article class="card">
+
+        <h2>
+          Sila Tech
+        </h2>
+
+        <p>
+          SILA API is powered and maintained by
+          Sila Tech. The platform is designed with
+          developers in mind, focusing on simple
+          endpoints, clear responses and practical
+          integration.
+        </p>
+
+      </article>
+
+
+      <!-- BASE URL -->
+
+      <article class="card full">
+
+        <h2>
+          API Base URL
+        </h2>
+
+        <p>
+          All public SILA API endpoints use the
+          following base URL:
+        </p>
+
+        <div class="contact-list">
+
+          <div class="contact-item">
+
+            <span class="contact-label">
+              BASE URL
+            </span>
+
+            <a
+              class="contact-value"
+              href="https://api.silatech.site"
+            >
+              https://api.silatech.site
+            </a>
+
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <!-- CONTACT -->
+
+      <article class="card full">
+
+        <h2>
+          Contact & Official Links
+        </h2>
+
+        <p>
+          Use the official Sila Tech channels below
+          for updates, support and more information.
+        </p>
+
+        <div class="contact-list">
+
+          <div class="contact-item">
+
+            <span class="contact-label">
+              PHONE
+            </span>
+
+            <span class="contact-value">
+              +255 789 661 031
+            </span>
+
+          </div>
+
+          <div class="contact-item">
+
+            <span class="contact-label">
+              PHONE
+            </span>
+
+            <span class="contact-value">
+              +255 637 351 031
+            </span>
+
+          </div>
+
+          <div class="contact-item">
+
+            <span class="contact-label">
+              PHONE
+            </span>
+
+            <span class="contact-value">
+              +255 636 341 031
+            </span>
+
+          </div>
+
+          <div class="contact-item">
+
+            <span class="contact-label">
+              PHONE
+            </span>
+
+            <span class="contact-value">
+              +255 780 251 031
+            </span>
+
+          </div>
+
+          <div class="contact-item">
+
+            <span class="contact-label">
+              CHANNEL
+            </span>
+
+            <a
+              class="contact-value"
+              href="https://whatsapp.com/channel/0029VbBG4gfISTkCpKxyMH02"
+              target="_blank"
+              rel="noopener"
+            >
+              WhatsApp Channel
+            </a>
+
+          </div>
+
+          <div class="contact-item">
+
+            <span class="contact-label">
+              GROUP
+            </span>
+
+            <a
+              class="contact-value"
+              href="https://chat.whatsapp.com/Db9YMXctmLG2BZs4aNuwRi"
+              target="_blank"
+              rel="noopener"
+            >
+              WhatsApp Group
+            </a>
+
+          </div>
+
+          <div class="contact-item">
+
+            <span class="contact-label">
+              WEBSITE
+            </span>
+
+            <a
+              class="contact-value"
+              href="https://silatech.site"
+              target="_blank"
+              rel="noopener"
+            >
+              silatech.site
+            </a>
+
+          </div>
+
+          <div class="contact-item">
+
+            <span class="contact-label">
+              BOT HOSTING
+            </span>
+
+            <a
+              class="contact-value"
+              href="https://host.silatech.site"
+              target="_blank"
+              rel="noopener"
+            >
+              host.silatech.site
+            </a>
+
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <!-- CTA -->
+
+      <article class="cta full">
+
+        <h2>
+          Start Building
+        </h2>
+
+        <p>
+          Explore the available SILA API endpoints
+          and start integrating them into your project.
+        </p>
+
+        <a
+          href="/endpoints"
+          class="btn"
+        >
+          Explore Endpoints
+        </a>
+
+      </article>
+
+    </section>
+
+  </main>
+
+
+  <!-- FOOTER -->
+
+  <footer>
+
+    <div class="footer">
+      SILA API — Powered By Sila Tech
+    </div>
+
+  </footer>
+
+  <script src="/assets/sila.js" defer></script>
+</body>
+</html>

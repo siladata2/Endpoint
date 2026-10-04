@@ -1,0 +1,647 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>SILA API — Admin Panel</title>  <meta name="theme-color" content="#08060d">  <link rel="icon" type="image/svg+xml" href="/silaapi.svg">  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #07050b;
+      --card: #0e0a15;
+      --border: #281839;
+      --purple: #8b3dff;
+      --purple2: #b36cff;
+      --text: #fff;
+      --soft: #aaa0b5;
+      --muted: #756a80;
+      --danger: #ff6685;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 20px;
+
+      background:
+        radial-gradient(
+          circle at 50% 0%,
+          rgba(139, 61, 255, .16),
+          transparent 42%
+        ),
+        radial-gradient(
+          circle at 100% 100%,
+          rgba(80, 20, 150, .08),
+          transparent 35%
+        ),
+        var(--bg);
+
+      color: var(--text);
+
+      font-family: var(--font-body);
+    }
+
+    .login-wrapper {
+      width: 100%;
+      max-width: 430px;
+    }
+
+    .logo-area {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .logo {
+      width: 78px;
+      height: 78px;
+      object-fit: contain;
+
+      margin-bottom: 18px;
+
+      filter:
+        drop-shadow(
+          0 0 30px
+          rgba(139, 61, 255, .28)
+        );
+    }
+
+    .brand {
+      font-size: 26px;
+      font-weight: 850;
+      letter-spacing: -.8px;
+    }
+
+    .brand span {
+      color: var(--purple2);
+    }
+
+    .subtitle {
+      margin-top: 8px;
+      color: var(--soft);
+      font-size: 13px;
+    }
+
+    .card {
+      padding: 29px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(18, 12, 26, .98),
+          rgba(10, 7, 14, .98)
+        );
+
+      border: 1px solid var(--border);
+      border-radius: 17px;
+
+      box-shadow:
+        0 25px 80px
+        rgba(0, 0, 0, .35);
+    }
+
+    .card-title {
+      font-size: 19px;
+      font-weight: 750;
+      margin-bottom: 7px;
+    }
+
+    .card-description {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+      margin-bottom: 25px;
+    }
+
+    .field {
+      margin-bottom: 17px;
+    }
+
+    .field label {
+      display: block;
+
+      margin-bottom: 8px;
+
+      color: #cfc6d6;
+
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      height: 48px;
+
+      padding: 0 14px;
+
+      outline: none;
+
+      color: #fff;
+      background: #09070d;
+
+      border: 1px solid #261934;
+      border-radius: 9px;
+
+      font-size: 13px;
+
+      transition:
+        border-color .2s,
+        box-shadow .2s;
+    }
+
+    .input-wrapper input::placeholder {
+      color: #5f5567;
+    }
+
+    .input-wrapper input:focus {
+      border-color: var(--purple);
+
+      box-shadow:
+        0 0 0 3px
+        rgba(139, 61, 255, .09);
+    }
+
+    .pin-toggle {
+      position: absolute;
+
+      right: 10px;
+      top: 50%;
+
+      transform: translateY(-50%);
+
+      border: 0;
+      background: transparent;
+
+      color: var(--muted);
+
+      cursor: pointer;
+
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .pin-toggle:hover {
+      color: var(--purple2);
+    }
+
+    .login-button {
+      width: 100%;
+      height: 48px;
+
+      margin-top: 5px;
+
+      border: 0;
+      border-radius: 9px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #9b50ff,
+          #6419c9
+        );
+
+      color: #fff;
+
+      cursor: pointer;
+
+      font-size: 13px;
+      font-weight: 750;
+
+      box-shadow:
+        0 8px 25px
+        rgba(112, 35, 210, .18);
+
+      transition:
+        transform .15s,
+        opacity .15s;
+    }
+
+    .login-button:hover {
+      opacity: .92;
+    }
+
+    .login-button:active {
+      transform: scale(.985);
+    }
+
+    .login-button.loading {
+      opacity: .65;
+      cursor: wait;
+    }
+
+    .error {
+      display: none;
+
+      margin-top: 14px;
+      padding: 11px 12px;
+
+      border: 1px solid rgba(255, 102, 133, .22);
+      border-radius: 8px;
+
+      background: rgba(255, 102, 133, .06);
+
+      color: var(--danger);
+
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .footer {
+      margin-top: 18px;
+
+      text-align: center;
+
+      color: var(--muted);
+
+      font-size: 10px;
+    }
+
+    .footer strong {
+      color: #a78ebc;
+      font-weight: 600;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 23px;
+      }
+
+      .logo {
+        width: 68px;
+        height: 68px;
+      }
+    }
+  </style>  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/sila.css">
+</head><body>  <div class="login-wrapper"><div class="logo-area">
+
+  <img
+    src="/silaapi.svg"
+    alt="SILA API"
+    class="logo"
+  >
+
+  <div class="brand">
+    SILA <span>API</span>
+  </div>
+
+  <div class="subtitle">
+    Secure administration panel
+  </div>
+
+</div>
+
+
+<div class="card">
+
+  <div class="card-title">
+    Admin sign in
+  </div>
+
+  <div class="card-description">
+    Sign in to manage SILA API services,
+    monitor requests and access administration
+    tools.
+  </div>
+
+
+  <form id="loginForm">
+
+    <div class="field">
+
+      <label for="username">
+        Username
+      </label>
+
+      <div class="input-wrapper">
+
+        <input
+          id="username"
+          name="username"
+          type="text"
+          placeholder="Enter admin username"
+          autocomplete="username"
+          required
+        >
+
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label for="pin">
+        PIN
+      </label>
+
+      <div class="input-wrapper">
+
+        <input
+          id="pin"
+          name="pin"
+          type="password"
+          inputmode="numeric"
+          placeholder="Enter your PIN"
+          autocomplete="current-password"
+          required
+        >
+
+        <button
+          type="button"
+          class="pin-toggle"
+          id="togglePin"
+        >
+          SHOW
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <button
+      type="submit"
+      class="login-button"
+      id="loginButton"
+    >
+      Sign in
+    </button>
+
+
+    <div
+      class="error"
+      id="errorMessage"
+    ></div>
+
+  </form>
+
+</div>
+
+
+<div class="footer">
+  SILA API · <strong>Powered By Sila Tech</strong>
+</div>
+
+  </div>  <script>
+
+    /*
+     * IMPORTANT
+     *
+     * Do NOT put the real admin credentials
+     * inside this HTML file.
+     *
+     * The login request is sent to the backend.
+     */
+
+    const API_BASE =
+      "https://api.silatech.site";
+
+
+    const form =
+      document.getElementById(
+        "loginForm"
+      );
+
+
+    const username =
+      document.getElementById(
+        "username"
+      );
+
+
+    const pin =
+      document.getElementById(
+        "pin"
+      );
+
+
+    const loginButton =
+      document.getElementById(
+        "loginButton"
+      );
+
+
+    const errorMessage =
+      document.getElementById(
+        "errorMessage"
+      );
+
+
+    const togglePin =
+      document.getElementById(
+        "togglePin"
+      );
+
+
+    /*
+     * SHOW / HIDE PIN
+     */
+
+    togglePin.addEventListener(
+      "click",
+      function () {
+
+        const hidden =
+          pin.type === "password";
+
+        pin.type =
+          hidden
+            ? "text"
+            : "password";
+
+        togglePin.textContent =
+          hidden
+            ? "HIDE"
+            : "SHOW";
+
+      }
+    );
+
+
+    /*
+     * LOGIN
+     */
+
+    form.addEventListener(
+      "submit",
+      async function (event) {
+
+        event.preventDefault();
+
+
+        const user =
+          username.value.trim();
+
+        const password =
+          pin.value.trim();
+
+
+        if (!user || !password) {
+
+          showError(
+            "Please enter your username and PIN."
+          );
+
+          return;
+
+        }
+
+
+        loginButton.disabled = true;
+
+        loginButton.classList.add(
+          "loading"
+        );
+
+        loginButton.textContent =
+          "Signing in...";
+
+
+        hideError();
+
+
+        try {
+
+          /*
+           * Expected backend endpoint:
+           *
+           * POST /api/admin/login
+           *
+           * Body:
+           * {
+           *   "username": "...",
+           *   "pin": "..."
+           * }
+           */
+
+          const response =
+            await fetch(
+              API_BASE +
+              "/api/admin/login",
+              {
+                method: "POST",
+
+                headers: {
+                  "Content-Type":
+                    "application/json",
+
+                  "Accept":
+                    "application/json"
+                },
+
+                body:
+                  JSON.stringify({
+                    username: user,
+                    pin: password
+                  })
+              }
+            );
+
+
+          let data = {};
+
+          try {
+            data =
+              await response.json();
+          } catch {
+            data = {};
+          }
+
+
+          if (
+            !response.ok ||
+            data.success === false
+          ) {
+
+            throw new Error(
+              data.error ||
+              data.message ||
+              "Invalid username or PIN."
+            );
+
+          }
+
+
+          /*
+           * Save only the authentication
+           * information returned by the server.
+           *
+           * Never save the PIN.
+           */
+
+          if (data.token) {
+
+            sessionStorage.setItem(
+              "sila_admin_token",
+              data.token
+            );
+
+          }
+
+
+          /*
+           * Redirect to admin dashboard.
+           */
+
+          window.location.href =
+            "/silapanel/dashboard";
+
+
+        } catch (error) {
+
+          showError(
+            error.message ||
+            "Unable to sign in."
+          );
+
+
+          loginButton.disabled = false;
+
+          loginButton.classList.remove(
+            "loading"
+          );
+
+          loginButton.textContent =
+            "Sign in";
+
+        }
+
+      }
+    );
+
+
+    function showError(message) {
+
+      errorMessage.textContent =
+        message;
+
+      errorMessage.style.display =
+        "block";
+
+    }
+
+
+    function hideError() {
+
+      errorMessage.style.display =
+        "none";
+
+      errorMessage.textContent =
+        "";
+
+    }
+
+  </script>  <script src="/assets/sila.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,1973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>API Endpoints — SILA API</title>
+
+  <meta
+    name="description"
+    content="Explore and test SILA API endpoints."
+  >
+
+  <meta name="theme-color" content="#08060d">
+
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href="/silaapi.svg"
+  >
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #07050b;
+      --card: #0e0a15;
+      --card2: #110c18;
+
+      --border: #241733;
+      --border-hover: #563080;
+
+      --purple: #8b3dff;
+      --purple-light: #b36cff;
+
+      --text: #fff;
+      --soft: #aaa0b5;
+      --muted: #756a80;
+
+      --green: #48d597;
+      --red: #ff6685;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(
+          circle at 50% -10%,
+          rgba(123, 44, 255, 0.14),
+          transparent 38%
+        ),
+        var(--bg);
+
+      color: var(--text);
+
+      font-family: var(--font-body);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    /* NAV */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+
+      background:
+        rgba(7, 5, 11, 0.88);
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
+      border-bottom:
+        1px solid #1b1226;
+    }
+
+    .nav {
+      width:
+        min(1180px, calc(100% - 32px));
+
+      height: 76px;
+
+      margin: auto;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .brand img {
+      width: 45px;
+      height: 45px;
+      object-fit: contain;
+    }
+
+    .brand-name {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .brand-name span {
+      color: var(--purple-light);
+    }
+
+    nav {
+      display: flex;
+      gap: 7px;
+    }
+
+    nav a {
+      padding: 9px 12px;
+
+      color: var(--soft);
+
+      border-radius: 8px;
+
+      font-size: 14px;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: #fff;
+      background:
+        rgba(139, 61, 255, 0.09);
+    }
+
+    /* MAIN */
+
+    main {
+      width:
+        min(1000px, calc(100% - 32px));
+
+      margin: auto;
+
+      padding:
+        65px 0 90px;
+    }
+
+    .page-header {
+      text-align: center;
+
+      margin-bottom: 42px;
+    }
+
+    .page-header h1 {
+      font-size:
+        clamp(36px, 7vw, 58px);
+
+      letter-spacing: -2px;
+
+      margin-bottom: 13px;
+    }
+
+    .page-header h1 span {
+      color: var(--purple-light);
+    }
+
+    .page-header p {
+      max-width: 650px;
+
+      margin: auto;
+
+      color: var(--soft);
+
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .base-url-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 15px;
+
+      padding: 15px 17px;
+
+      margin-bottom: 25px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 12px;
+
+      background: var(--card);
+    }
+
+    .base-url-label {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .base-url {
+      color: #c294ff;
+
+      font-family: var(--font-mono);
+      font-size: 13px;
+
+      word-break: break-all;
+    }
+
+    /* SEARCH */
+
+    .search-box {
+      margin-bottom: 18px;
+    }
+
+    .search-box input {
+      width: 100%;
+
+      height: 48px;
+
+      padding:
+        0 16px;
+
+      outline: none;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 10px;
+
+      background: #0c0811;
+
+      color: #fff;
+
+      font-size: 14px;
+    }
+
+    .search-box input::placeholder {
+      color: #62576a;
+    }
+
+    .search-box input:focus {
+      border-color:
+        rgba(139, 61, 255, 0.6);
+
+      box-shadow:
+        0 0 0 3px
+        rgba(139, 61, 255, 0.08);
+    }
+
+    /* ENDPOINT LIST */
+
+    #endpointList {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .endpoint {
+      border:
+        1px solid var(--border);
+
+      border-radius: 13px;
+
+      background:
+        linear-gradient(
+          145deg,
+          #100b17,
+          #0b0810
+        );
+
+      overflow: hidden;
+
+      transition:
+        border 0.2s ease;
+    }
+
+    .endpoint.open {
+      border-color:
+        rgba(139, 61, 255, 0.5);
+    }
+
+    .endpoint-head {
+      width: 100%;
+
+      padding: 17px;
+
+      display: flex;
+      align-items: center;
+
+      gap: 14px;
+
+      cursor: pointer;
+
+      background: transparent;
+
+      border: 0;
+
+      color: #fff;
+
+      text-align: left;
+    }
+
+    .endpoint-head:hover {
+      background:
+        rgba(139, 61, 255, 0.035);
+    }
+
+    .method {
+      flex-shrink: 0;
+
+      min-width: 48px;
+
+      padding: 6px 8px;
+
+      border-radius: 6px;
+
+      text-align: center;
+
+      background:
+        rgba(139, 61, 255, 0.11);
+
+      color: #b989ff;
+
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .endpoint-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .endpoint-name {
+      font-size: 15px;
+      font-weight: 700;
+
+      margin-bottom: 4px;
+    }
+
+    .endpoint-path {
+      color: var(--muted);
+
+      font-family: var(--font-mono);
+
+      font-size: 11px;
+
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .arrow {
+      flex-shrink: 0;
+
+      color: #766981;
+
+      font-size: 17px;
+
+      transition:
+        transform 0.2s ease;
+    }
+
+    .endpoint.open .arrow {
+      transform: rotate(180deg);
+      color: var(--purple-light);
+    }
+
+    /* TESTER */
+
+    .tester {
+      display: none;
+
+      padding:
+        0 17px 20px;
+
+      border-top:
+        1px solid var(--border);
+    }
+
+    .endpoint.open .tester {
+      display: block;
+    }
+
+    .description {
+      padding:
+        17px 0;
+
+      color: var(--soft);
+
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .parameter-title {
+      margin-bottom: 10px;
+
+      color: #d8d0df;
+
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .parameters {
+      display: flex;
+      flex-direction: column;
+
+      gap: 9px;
+
+      margin-bottom: 15px;
+    }
+
+    .parameter {
+      padding: 12px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 9px;
+
+      background: #0a0710;
+    }
+
+    .parameter-top {
+      display: flex;
+
+      justify-content: space-between;
+
+      gap: 10px;
+
+      margin-bottom: 7px;
+    }
+
+    .parameter-name {
+      font-family: var(--font-mono);
+
+      color: #caa5f2;
+
+      font-size: 12px;
+    }
+
+    .required {
+      color: var(--red);
+
+      font-size: 10px;
+    }
+
+    .parameter input,
+    .parameter textarea,
+    .parameter select {
+      width: 100%;
+
+      border:
+        1px solid #241833;
+
+      border-radius: 7px;
+
+      background: #100b16;
+
+      color: #fff;
+
+      outline: none;
+
+      padding:
+        10px;
+
+      font-size: 12px;
+    }
+
+    .parameter textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .parameter input:focus,
+    .parameter textarea:focus,
+    .parameter select:focus {
+      border-color:
+        rgba(139, 61, 255, 0.55);
+    }
+
+    .tester-actions {
+      display: flex;
+      flex-wrap: wrap;
+
+      gap: 8px;
+
+      margin-top: 12px;
+    }
+
+    .action-btn {
+      border: 0;
+
+      border-radius: 8px;
+
+      min-height: 39px;
+
+      padding:
+        0 14px;
+
+      cursor: pointer;
+
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .send-btn {
+      background:
+        linear-gradient(
+          135deg,
+          #994dff,
+          #6418ca
+        );
+
+      color: #fff;
+    }
+
+    .copy-btn {
+      border:
+        1px solid var(--border);
+
+      background: #0b0810;
+
+      color: #cfc5d6;
+    }
+
+    .action-btn:hover {
+      opacity: 0.88;
+    }
+
+    /* URL PREVIEW */
+
+    .url-preview {
+      margin-top: 13px;
+
+      display: none;
+
+      padding: 11px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 8px;
+
+      background: #09060d;
+
+      color: #9e91aa;
+
+      font-family: var(--font-mono);
+
+      font-size: 10px;
+
+      line-height: 1.6;
+
+      word-break: break-all;
+    }
+
+    /* RESPONSE */
+
+    .response-box {
+      display: none;
+
+      margin-top: 18px;
+    }
+
+    .response-head {
+      display: flex;
+
+      justify-content: space-between;
+      align-items: center;
+
+      margin-bottom: 9px;
+    }
+
+    .response-title {
+      color: #dcd4e1;
+
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .response-status {
+      font-size: 10px;
+    }
+
+    .response-content {
+      overflow: auto;
+
+      max-height: 500px;
+
+      padding: 14px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 9px;
+
+      background: #050408;
+
+      color: #d6cde0;
+
+      font-family: var(--font-mono);
+
+      font-size: 11px;
+
+      line-height: 1.6;
+    }
+
+    .media-preview {
+      display: none;
+
+      margin-top: 12px;
+
+      padding: 12px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 9px;
+
+      background: #08060c;
+
+      text-align: center;
+    }
+
+    .media-preview img,
+    .media-preview video,
+    .media-preview audio {
+      max-width: 100%;
+      border-radius: 7px;
+    }
+
+    .media-preview video {
+      max-height: 500px;
+    }
+
+    /* EMPTY */
+
+    .empty {
+      padding: 45px;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 13px;
+
+      text-align: center;
+
+      color: var(--muted);
+    }
+
+    /* FOOTER */
+
+    footer {
+      border-top:
+        1px solid var(--border);
+    }
+
+    .footer {
+      width:
+        min(1000px, calc(100% - 32px));
+
+      margin: auto;
+
+      padding: 27px 0;
+
+      text-align: center;
+
+      color: var(--muted);
+
+      font-size: 12px;
+    }
+
+    @media (max-width: 650px) {
+
+      nav a:not(.active) {
+        display: none;
+      }
+
+      .nav {
+        height: 68px;
+      }
+
+      .base-url-box {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .endpoint-head {
+        padding: 14px;
+      }
+
+      .tester {
+        padding:
+          0 14px 17px;
+      }
+
+      .hero {
+        padding-top: 45px;
+      }
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/sila.css">
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+
+  <header>
+
+    <div class="nav">
+
+      <a
+        href="/"
+        class="brand"
+      >
+
+        <img
+          src="/silaapi.svg"
+          alt="SILA API"
+        >
+
+        <div class="brand-name">
+          SILA <span>API</span>
+        </div>
+
+      </a>
+
+      <nav>
+
+        <a href="/">
+          Home
+        </a>
+
+        <a
+          href="/endpoints"
+          class="active"
+        >
+          Endpoints
+        </a>
+
+        <a href="/about">
+          About
+        </a>
+
+        <a href="/silapanel">
+          Panel
+        </a>
+
+      </nav>
+
+    </div>
+
+  </header>
+
+
+  <!-- MAIN -->
+
+  <main>
+
+    <section class="page-header">
+
+      <h1>
+        API <span>Endpoints</span>
+      </h1>
+
+      <p>
+        Explore available SILA API services, enter parameters
+        and test endpoints directly from your browser.
+      </p>
+
+    </section>
+
+
+    <!-- BASE URL -->
+
+    <div class="base-url-box">
+
+      <div>
+
+        <div class="base-url-label">
+          API BASE URL
+        </div>
+
+        <div class="base-url">
+          https://api.silatech.site
+        </div>
+
+      </div>
+
+      <button
+        class="action-btn copy-btn"
+        onclick="copyText(BASE_URL)"
+      >
+        Copy Base URL
+      </button>
+
+    </div>
+
+
+    <!-- SEARCH -->
+
+    <div class="search-box">
+
+      <input
+        id="searchInput"
+        type="search"
+        placeholder="Search APIs..."
+        autocomplete="off"
+      >
+
+    </div>
+
+
+    <!-- ENDPOINTS -->
+
+    <div id="endpointList">
+
+      <div class="empty">
+        Loading endpoints...
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <!-- FOOTER -->
+
+  <footer>
+
+    <div class="footer">
+      SILA API — Powered By Sila Tech
+    </div>
+
+  </footer>
+
+
+  <script>
+
+    const BASE_URL = window.location.origin;
+
+
+    let allEndpoints = [];
+
+
+    /* =========================
+       LOAD ENDPOINTS
+    ========================== */
+
+    async function loadEndpoints() {
+
+      const list =
+        document.getElementById(
+          "endpointList"
+        );
+
+      try {
+
+        const response =
+          await fetch(
+            BASE_URL + "/api/endpoints",
+            {
+              headers: {
+                "Accept": "application/json"
+              },
+              cache: "no-store"
+            }
+          );
+
+
+        if (!response.ok) {
+          throw new Error(
+            "Unable to load endpoints"
+          );
+        }
+
+
+        const data =
+          await response.json();
+
+
+        allEndpoints =
+          Array.isArray(data)
+            ? data
+            : (
+                Array.isArray(data.endpoints)
+                  ? data.endpoints
+                  : []
+              );
+
+
+        renderEndpoints(
+          allEndpoints
+        );
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        list.innerHTML = `
+          <div class="empty">
+            Failed to load API endpoints.
+          </div>
+        `;
+
+      }
+
+    }
+
+
+    /* =========================
+       RENDER
+    ========================== */
+
+    function renderEndpoints(
+      endpoints
+    ) {
+
+      const list =
+        document.getElementById(
+          "endpointList"
+        );
+
+
+      if (!endpoints.length) {
+
+        list.innerHTML = `
+          <div class="empty">
+            No API endpoints found.
+          </div>
+        `;
+
+        return;
+      }
+
+
+      list.innerHTML =
+        endpoints
+          .map(
+            (api, index) =>
+              createEndpoint(
+                api,
+                index
+              )
+          )
+          .join("");
+
+
+      endpoints.forEach(
+        (api, index) => {
+
+          setupEndpoint(
+            api,
+            index
+          );
+
+        }
+      );
+
+    }
+
+
+    /* =========================
+       CREATE ENDPOINT
+    ========================== */
+
+    function createEndpoint(
+      api,
+      index
+    ) {
+
+      const name =
+        escapeHtml(
+          api.name ||
+          api.path ||
+          "SILA API"
+        );
+
+
+      const description =
+        escapeHtml(
+          api.description ||
+          "SILA API endpoint."
+        );
+
+
+      const method =
+        escapeHtml(
+          api.method ||
+          "GET"
+        );
+
+
+      const path =
+        api.path ||
+        api.endpoint ||
+        "";
+
+
+      const safePath =
+        escapeHtml(path);
+
+
+      return `
+
+        <div
+          class="endpoint"
+          id="endpoint-${index}"
+          data-search="${escapeHtml(
+            (
+              name +
+              " " +
+              description +
+              " " +
+              path
+            ).toLowerCase()
+          )}"
+        >
+
+          <button
+            class="endpoint-head"
+            onclick="toggleEndpoint(${index})"
+          >
+
+            <span class="method">
+              ${method}
+            </span>
+
+            <span class="endpoint-info">
+
+              <span class="endpoint-name">
+                ${name}
+              </span>
+
+              <span class="endpoint-path">
+                ${safePath || "Endpoint"}
+              </span>
+
+            </span>
+
+            <span class="arrow">
+              ▼
+            </span>
+
+          </button>
+
+
+          <div
+            class="tester"
+            id="tester-${index}"
+          >
+
+            <div class="description">
+              ${description}
+            </div>
+
+            <div class="parameter-title">
+              Parameters
+            </div>
+
+            <div
+              class="parameters"
+              id="parameters-${index}"
+            >
+              Loading parameters...
+            </div>
+
+
+            <div class="tester-actions">
+
+              <button
+                class="action-btn send-btn"
+                onclick="sendRequest(${index})"
+              >
+                Send Request
+              </button>
+
+              <button
+                class="action-btn copy-btn"
+                onclick="copyEndpoint(${index})"
+              >
+                Copy Endpoint
+              </button>
+
+              <button
+                class="action-btn copy-btn"
+                onclick="copyJSON(${index})"
+              >
+                Copy JSON
+              </button>
+
+              <button
+                class="action-btn copy-btn"
+                onclick="copyCurl(${index})"
+              >
+                Copy cURL
+              </button>
+
+            </div>
+
+
+            <div
+              class="url-preview"
+              id="url-${index}"
+            ></div>
+
+
+            <div
+              class="response-box"
+              id="response-${index}"
+            >
+
+              <div class="response-head">
+
+                <span class="response-title">
+                  Response
+                </span>
+
+                <span
+                  class="response-status"
+                  id="response-status-${index}"
+                ></span>
+
+              </div>
+
+
+              <pre
+                class="response-content"
+                id="response-content-${index}"
+              ></pre>
+
+
+              <div
+                class="media-preview"
+                id="media-${index}"
+              ></div>
+
+            </div>
+
+          </div>
+
+        </div>
+      `;
+
+    }
+
+
+    /* =========================
+       SETUP PARAMETERS
+    ========================== */
+
+    function setupEndpoint(
+      api,
+      index
+    ) {
+
+      const container =
+        document.getElementById(
+          "parameters-" + index
+        );
+
+
+      const parameters =
+        Array.isArray(
+          api.parameters
+        )
+          ? api.parameters
+          : [];
+
+
+      if (!parameters.length) {
+
+        container.innerHTML = `
+          <div
+            style="
+              color:#756a80;
+              font-size:12px;
+            "
+          >
+            This endpoint does not require parameters.
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      container.innerHTML =
+        parameters
+          .map(
+            (parameter, parameterIndex) => {
+
+              const name =
+                parameter.name ||
+                `parameter${parameterIndex + 1}`;
+
+
+              const type =
+                parameter.type ||
+                "text";
+
+
+              const placeholder =
+                parameter.placeholder ||
+                `Enter ${name}`;
+
+
+              const required =
+                parameter.required === true;
+
+
+              return `
+
+                <div class="parameter">
+
+                  <div class="parameter-top">
+
+                    <span class="parameter-name">
+                      ${escapeHtml(name)}
+                    </span>
+
+                    ${
+                      required
+                        ? `
+                          <span class="required">
+                            Required
+                          </span>
+                        `
+                        : ""
+                    }
+
+                  </div>
+
+                  ${
+                    type === "textarea"
+                      ? `
+                        <textarea
+                          data-index="${index}"
+                          data-parameter="${escapeHtml(name)}"
+                          data-required="${required}"
+                          placeholder="${escapeHtml(placeholder)}"
+                        ></textarea>
+                      `
+                      : `
+                        <input
+                          type="${
+                            type === "number"
+                              ? "number"
+                              : "text"
+                          }"
+                          data-index="${index}"
+                          data-parameter="${escapeHtml(name)}"
+                          data-required="${required}"
+                          placeholder="${escapeHtml(placeholder)}"
+                        >
+                      `
+                  }
+
+                </div>
+
+              `;
+
+            }
+          )
+          .join("");
+
+    }
+
+
+    /* =========================
+       TOGGLE
+    ========================== */
+
+    function toggleEndpoint(index) {
+
+      const endpoint =
+        document.getElementById(
+          "endpoint-" + index
+        );
+
+
+      endpoint.classList.toggle(
+        "open"
+      );
+
+    }
+
+
+    /* =========================
+       BUILD REQUEST
+    ========================== */
+
+    function buildRequest(index) {
+
+      const api =
+        allEndpoints[index];
+
+
+      const path =
+        api.path ||
+        api.endpoint ||
+        "";
+
+
+      let url =
+        BASE_URL +
+        (
+          path.startsWith("/")
+            ? path
+            : "/" + path
+        );
+
+
+      const inputs =
+        document.querySelectorAll(
+          `[data-index="${index}"]`
+        );
+
+
+      const params = {};
+
+
+      inputs.forEach(
+        (input) => {
+
+          const name =
+            input.dataset.parameter;
+
+          const value =
+            input.value.trim();
+
+          const required =
+            input.dataset.required === "true";
+
+
+          if (
+            required &&
+            !value
+          ) {
+            throw new Error(
+              `Please enter: ${name}`
+            );
+          }
+
+
+          if (value) {
+            params[name] = value;
+          }
+
+        }
+      );
+
+
+      const method =
+        (
+          api.method ||
+          "GET"
+        ).toUpperCase();
+
+
+      if (
+        method === "GET" ||
+        method === "DELETE"
+      ) {
+
+        const query =
+          new URLSearchParams(
+            params
+          ).toString();
+
+
+        if (query) {
+          url +=
+            (url.includes("?")
+              ? "&"
+              : "?") +
+            query;
+        }
+
+      }
+
+
+      return {
+        api,
+        url,
+        method,
+        params
+      };
+
+    }
+
+
+    /* =========================
+       SEND REQUEST
+    ========================== */
+
+    async function sendRequest(
+      index
+    ) {
+
+      const responseBox =
+        document.getElementById(
+          "response-" + index
+        );
+
+
+      const responseContent =
+        document.getElementById(
+          "response-content-" + index
+        );
+
+
+      const responseStatus =
+        document.getElementById(
+          "response-status-" + index
+        );
+
+
+      const urlPreview =
+        document.getElementById(
+          "url-" + index
+        );
+
+
+      const mediaPreview =
+        document.getElementById(
+          "media-" + index
+        );
+
+
+      responseBox.style.display =
+        "block";
+
+      mediaPreview.style.display =
+        "none";
+
+      mediaPreview.innerHTML = "";
+
+
+      try {
+
+        const request =
+          buildRequest(index);
+
+
+        urlPreview.style.display =
+          "block";
+
+        urlPreview.textContent =
+          request.url;
+
+
+        responseContent.textContent =
+          "Sending request...";
+
+
+        const options = {
+          method: request.method,
+
+          headers: {
+            "Accept":
+              "application/json, text/plain, */*"
+          }
+        };
+
+
+        if (
+          request.method !== "GET" &&
+          request.method !== "DELETE"
+        ) {
+
+          options.headers[
+            "Content-Type"
+          ] =
+            "application/json";
+
+
+          options.body =
+            JSON.stringify(
+              request.params
+            );
+
+        }
+
+
+        const response =
+          await fetch(
+            request.url,
+            options
+          );
+
+
+        const contentType =
+          response.headers.get(
+            "content-type"
+          ) || "";
+
+
+        responseStatus.textContent =
+          `${response.status} ${response.statusText}`;
+
+
+        responseStatus.style.color =
+          response.ok
+            ? "var(--green)"
+            : "var(--red)";
+
+
+        /*
+         * MEDIA RESPONSE
+         */
+
+        if (
+          contentType.startsWith(
+            "image/"
+          ) ||
+          contentType.startsWith(
+            "video/"
+          ) ||
+          contentType.startsWith(
+            "audio/"
+          )
+        ) {
+
+          const blob =
+            await response.blob();
+
+
+          const mediaUrl =
+            URL.createObjectURL(
+              blob
+            );
+
+
+          if (
+            contentType.startsWith(
+              "image/"
+            )
+          ) {
+
+            mediaPreview.innerHTML =
+              `
+                <img
+                  src="${mediaUrl}"
+                  alt="API response"
+                >
+              `;
+
+          } else if (
+            contentType.startsWith(
+              "video/"
+            )
+          ) {
+
+            mediaPreview.innerHTML =
+              `
+                <video
+                  controls
+                  src="${mediaUrl}"
+                ></video>
+              `;
+
+          } else {
+
+            mediaPreview.innerHTML =
+              `
+                <audio
+                  controls
+                  src="${mediaUrl}"
+                ></audio>
+              `;
+
+          }
+
+
+          mediaPreview.style.display =
+            "block";
+
+
+          responseContent.textContent =
+            `Media response: ${contentType}`;
+
+
+          return;
+
+        }
+
+
+        /*
+         * TEXT / JSON RESPONSE
+         */
+
+        const text =
+          await response.text();
+
+
+        let formatted =
+          text;
+
+
+        try {
+
+          const json =
+            JSON.parse(text);
+
+
+          formatted =
+            JSON.stringify(
+              json,
+              null,
+              2
+            );
+
+        } catch {
+          // Keep plain text.
+        }
+
+
+        responseContent.textContent =
+          formatted;
+
+      } catch (error) {
+
+        responseStatus.textContent =
+          "Request failed";
+
+        responseStatus.style.color =
+          "var(--red)";
+
+
+        responseContent.textContent =
+          error.message ||
+          "Unable to complete request.";
+
+      }
+
+    }
+
+
+    /* =========================
+       COPY ENDPOINT
+    ========================== */
+
+    function copyEndpoint(
+      index
+    ) {
+
+      try {
+
+        const request =
+          buildRequest(index);
+
+        copyText(
+          request.url
+        );
+
+      } catch (error) {
+
+        alert(
+          error.message
+        );
+
+      }
+
+    }
+
+
+    /* =========================
+       COPY JSON
+    ========================== */
+
+    function copyJSON(
+      index
+    ) {
+
+      try {
+
+        const request =
+          buildRequest(index);
+
+
+        copyText(
+          JSON.stringify(
+            request.params,
+            null,
+            2
+          )
+        );
+
+      } catch (error) {
+
+        alert(
+          error.message
+        );
+
+      }
+
+    }
+
+
+    /* =========================
+       COPY CURL
+    ========================== */
+
+    function copyCurl(
+      index
+    ) {
+
+      try {
+
+        const request =
+          buildRequest(index);
+
+
+        let curl =
+          `curl -X ${request.method} "${request.url}"`;
+
+
+        if (
+          request.method !== "GET" &&
+          request.method !== "DELETE"
+        ) {
+
+          curl +=
+            ` -H "Content-Type: application/json"`;
+
+
+          curl +=
+            ` -d '${JSON.stringify(
+              request.params
+            )}'`;
+
+        }
+
+
+        copyText(curl);
+
+      } catch (error) {
+
+        alert(
+          error.message
+        );
+
+      }
+
+    }
+
+
+    /* =========================
+       COPY TEXT
+    ========================== */
+
+    async function copyText(
+      text
+    ) {
+
+      try {
+
+        await navigator.clipboard.writeText(
+          text
+        );
+
+        alert(
+          "Copied successfully."
+        );
+
+      } catch {
+
+        const textarea =
+          document.createElement(
+            "textarea"
+          );
+
+
+        textarea.value =
+          text;
+
+
+        document.body.appendChild(
+          textarea
+        );
+
+
+        textarea.select();
+
+
+        document.execCommand(
+          "copy"
+        );
+
+
+        textarea.remove();
+
+
+        alert(
+          "Copied successfully."
+        );
+
+      }
+
+    }
+
+
+    /* =========================
+       SEARCH
+    ========================== */
+
+    document
+      .getElementById(
+        "searchInput"
+      )
+      .addEventListener(
+        "input",
+        function () {
+
+          const query =
+            this.value
+              .trim()
+              .toLowerCase();
+
+
+          const items =
+            document.querySelectorAll(
+              ".endpoint"
+            );
+
+
+          let visible =
+            0;
+
+
+          items.forEach(
+            (item) => {
+
+              const text =
+                item.dataset.search ||
+                "";
+
+
+              const show =
+                !query ||
+                text.includes(query);
+
+
+              item.style.display =
+                show
+                  ? "block"
+                  : "none";
+
+
+              if (show) {
+                visible++;
+              }
+
+            }
+          );
+
+
+          const empty =
+            document.querySelector(
+              ".search-empty"
+            );
+
+
+          if (
+            visible === 0 &&
+            items.length > 0
+          ) {
+
+            if (!empty) {
+
+              const message =
+                document.createElement(
+                  "div"
+                );
+
+
+              message.className =
+                "empty search-empty";
+
+
+              message.textContent =
+                "No matching APIs found.";
+
+
+              document
+                .getElementById(
+                  "endpointList"
+                )
+                .appendChild(
+                  message
+                );
+
+            }
+
+          } else if (empty) {
+
+            empty.remove();
+
+          }
+
+        }
+      );
+
+
+    /* =========================
+       SECURITY ESCAPE
+    ========================== */
+
+    function escapeHtml(
+      value
+    ) {
+
+      return String(value)
+
+        .replaceAll(
+          "&",
+          "&amp;"
+        )
+
+        .replaceAll(
+          "<",
+          "&lt;"
+        )
+
+        .replaceAll(
+          ">",
+          "&gt;"
+        )
+
+        .replaceAll(
+          '"',
+          "&quot;"
+        )
+
+        .replaceAll(
+          "'",
+          "&#039;"
+        );
+
+    }
+
+
+    /* START */
+
+    loadEndpoints();
+
+  </script>
+
+  <script src="/assets/sila.js" defer></script>
+</body>
+</html>
