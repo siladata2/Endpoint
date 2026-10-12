@@ -35,13 +35,10 @@ router.get("/", async (req, res) => {
     const response = await fetch(apiUrl, {
       method: "GET",
       headers: {
-        Accept: "application/json"
+        Accept: "image/*, application/json"
       },
       signal: AbortSignal.timeout(60000)
     });
-
-    const contentType =
-      response.headers.get("content-type") || "";
 
     if (!response.ok) {
       return res.status(502).json({
@@ -52,6 +49,10 @@ router.get("/", async (req, res) => {
       });
     }
 
+    const contentType =
+      response.headers.get("content-type") || "";
+
+    // Provider akirudisha JSON, rudisha JSON
     if (contentType.includes("application/json")) {
       const data = await response.json();
 
@@ -62,24 +63,45 @@ router.get("/", async (req, res) => {
       });
     }
 
-    const result = await response.text();
+    // Hakikisha response ina aina ya picha inayotambulika
+    if (!contentType.startsWith("image/")) {
+      const message = await response.text();
 
-    return res.status(200).json({
-      success: true,
-      creator: "Sila Tech",
-      result
-    });
+      return res.status(502).json({
+        success: false,
+        creator: "Sila Tech",
+        error: "Provider did not return an image",
+        details: message.slice(0, 300)
+      });
+    }
+
+    // Rudisha picha kama binary data bila kuibadilisha kuwa text
+    res.setHeader("Content-Type", contentType);
+    res.setHeader("Cache-Control", "no-store");
+    res.setHeader("X-Powered-By", "Sila Tech");
+
+    const imageBuffer = Buffer.from(
+      await response.arrayBuffer()
+    );
+
+    return res.status(200).send(imageBuffer);
 
   } catch (error) {
-    console.error("[SILA API] Image Creator:", error.message);
+    console.error(
+      "[SILA API] Image Creator:",
+      error.message
+    );
 
-    return res.status(
+    const isTimeout =
       error.name === "TimeoutError" ||
-      error.name === "AbortError" ? 504 : 502
-    ).json({
+      error.name === "AbortError";
+
+    return res.status(isTimeout ? 504 : 502).json({
       success: false,
       creator: "Sila Tech",
-      error: "Unable to generate the image right now."
+      error: isTimeout
+        ? "Image generation timed out. Please try again."
+        : "Unable to generate the image right now."
     });
   }
 });
