@@ -2,27 +2,29 @@ const express = require("express");
 const router = express.Router();
 
 router.apiInfo = {
-  name: "Image Creator",
-  description: "Generate logo/image from text using Prexzy API",
+  name: "AI Image Creator",
+  description: "Generate an image from a text prompt.",
   method: "GET",
   parameters: [
     {
       name: "text",
       type: "text",
       required: true,
-      placeholder: "Enter text - e.g Sila Tech"
+      placeholder: "Sila"
     }
   ]
 };
 
 router.get("/", async (req, res) => {
   try {
-    const text = req.query.text;
+    const text = String(req.query.text || "").trim();
 
     if (!text) {
       return res.status(400).json({
         success: false,
-        error: "Missing required parameter: text"
+        creator: "Sila Tech",
+        error: "Missing required parameter: text",
+        usage: "/imagecreator/image?text=Sila"
       });
     }
 
@@ -30,63 +32,54 @@ router.get("/", async (req, res) => {
       "https://prexzyapis.com/imagecreator/image?text=" +
       encodeURIComponent(text);
 
-    const apiResponse = await fetch(apiUrl);
+    const response = await fetch(apiUrl, {
+      method: "GET",
+      headers: {
+        Accept: "application/json"
+      },
+      signal: AbortSignal.timeout(60000)
+    });
 
-    if (!apiResponse.ok) {
-      return res.status(apiResponse.status).json({
-        success: false,
-        error: "ImageCreator API request failed",
-        status: apiResponse.status
-      });
-    }
+    const contentType =
+      response.headers.get("content-type") || "";
 
-    const data = await apiResponse.json();
-    
-    // console.log(data) yako inarudisha hivi - tunahandle formats zote
-    // inaweza kuwa { image: "url" } au { url: "url" } au { result: "url" }
-    const imageUrl = data?.image || data?.url || data?.result || data?.data;
-
-    if (!imageUrl) {
+    if (!response.ok) {
       return res.status(502).json({
         success: false,
-        error: "Image URL was not returned by upstream API",
-        raw: data
+        creator: "Sila Tech",
+        error: "Image provider request failed",
+        upstreamStatus: response.status
       });
     }
 
-    const imageResponse = await fetch(imageUrl);
+    if (contentType.includes("application/json")) {
+      const data = await response.json();
 
-    if (!imageResponse.ok) {
-      return res.status(502).json({
-        success: false,
-        error: "Failed to fetch generated image",
-        status: imageResponse.status
+      return res.status(200).json({
+        success: true,
+        creator: "Sila Tech",
+        result: data
       });
     }
 
-    const imageBuffer = Buffer.from(
-      await imageResponse.arrayBuffer()
-    );
+    const result = await response.text();
 
-    // Auto-detect content type
-    const contentType = imageResponse.headers.get("content-type") || "image/png";
-
-    res.status(200);
-    res.setHeader("Content-Type", contentType);
-    res.setHeader("Content-Length", imageBuffer.length);
-    res.setHeader("Content-Disposition", "inline");
-    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    res.setHeader("X-Content-Type-Options", "nosniff");
-
-    return res.end(imageBuffer);
+    return res.status(200).json({
+      success: true,
+      creator: "Sila Tech",
+      result
+    });
 
   } catch (error) {
-    console.error("ImageCreator Error:", error);
+    console.error("[SILA API] Image Creator:", error.message);
 
-    return res.status(500).json({
+    return res.status(
+      error.name === "TimeoutError" ||
+      error.name === "AbortError" ? 504 : 502
+    ).json({
       success: false,
-      error: "Failed to generate Image",
-      message: process.env.NODE_ENV === "production" ? undefined : error.message
+      creator: "Sila Tech",
+      error: "Unable to generate the image right now."
     });
   }
 });
