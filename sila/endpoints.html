@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Endpoints — SILA API</title>
+  <meta name="description" content="Browse and test every SILA API endpoint directly from your browser.">
+  <meta name="theme-color" content="#07050b">
+  <meta property="og:title" content="Endpoints — SILA API">
+  <meta property="og:description" content="Browse and test every SILA API endpoint directly from your browser.">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/svg+xml" href="/silaapi.svg">
+  <link rel="apple-touch-icon" href="/silaapi.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/sila.css">
+</head>
+<body>
+  <div class="ambient"></div>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="bar">
+        <a class="brand" href="/" aria-label="SILA API home">
+          <svg viewBox="60 50 180 200" aria-hidden="true"><defs><linearGradient id="lg" x1="76" y1="61" x2="224" y2="239" gradientUnits="userSpaceOnUse"><stop stop-color="#B36CFF"/><stop offset=".5" stop-color="#7B2CFF"/><stop offset="1" stop-color="#4A0FAF"/></linearGradient></defs><path d="M150 61L224 104V196L150 239L76 196V104Z" fill="#0D0A13" stroke="url(#lg)" stroke-width="12" stroke-linejoin="round"/><path d="M150 91V209M101 120L199 180M101 180L199 120" stroke="url(#lg)" stroke-width="9" stroke-linecap="round"/><circle cx="150" cy="91" r="13" fill="#B36CFF"/><circle cx="101" cy="120" r="13" fill="#8B3DFF"/><circle cx="199" cy="120" r="13" fill="#8B3DFF"/><circle cx="101" cy="180" r="13" fill="#6C20D8"/><circle cx="199" cy="180" r="13" fill="#6C20D8"/><circle cx="150" cy="209" r="13" fill="#B36CFF"/><circle cx="150" cy="150" r="27" fill="#120B1D" stroke="url(#lg)" stroke-width="7"/><path d="M137 150H163M150 137V163" stroke="#E5D2FF" stroke-width="7" stroke-linecap="round"/></svg>
+          <span class="brand-name">SILA <span>API</span></span>
+        </a>
+
+        <nav class="nav-links" aria-label="Main">
+        <a href="/">Home</a>
+        <a href="/endpoints" class="active">Endpoints</a>
+        <a href="/about">About</a>
+        </nav>
+
+        <div class="nav-actions">
+          <a class="btn btn-primary btn-sm" href="/endpoints">Explore APIs</a>
+          <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        </div>
+      </div>
+
+      <nav class="mobile-menu" aria-label="Mobile">
+      <a href="/">Home</a>
+      <a href="/endpoints" class="active">Endpoints</a>
+      <a href="/about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-head">
+      <div class="container">
+        <h1>API endpoints</h1>
+        <p>Search the available services, fill in the parameters and test every endpoint directly from your browser.</p>
+      </div>
+    </section>
+
+    <div class="container">
+      <div class="urlbar">
+        <div>
+          <small>Base URL</small>
+          <div class="base-url" id="baseUrlText">https://api.silatech.site</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" type="button" onclick="copyText(BASE_URL)">Copy base URL</button>
+      </div>
+
+      <div class="toolbar">
+        <div class="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="searchInput" type="search" placeholder="Search APIs…  (press / to focus)" autocomplete="off" aria-label="Search APIs">
+        </div>
+        <div class="chips" id="categoryChips"></div>
+      </div>
+
+      <div id="endpointList">
+        <div class="skeleton" style="min-height:76px"></div>
+        <div class="skeleton" style="min-height:76px"></div>
+        <div class="skeleton" style="min-height:76px"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <a class="brand" href="/"><svg viewBox="60 50 180 200" aria-hidden="true"><defs><linearGradient id="lg2" x1="76" y1="61" x2="224" y2="239" gradientUnits="userSpaceOnUse"><stop stop-color="#B36CFF"/><stop offset=".5" stop-color="#7B2CFF"/><stop offset="1" stop-color="#4A0FAF"/></linearGradient></defs><path d="M150 61L224 104V196L150 239L76 196V104Z" fill="#0D0A13" stroke="url(#lg2)" stroke-width="12" stroke-linejoin="round"/><path d="M150 91V209M101 120L199 180M101 180L199 120" stroke="url(#lg2)" stroke-width="9" stroke-linecap="round"/><circle cx="150" cy="91" r="13" fill="#B36CFF"/><circle cx="101" cy="120" r="13" fill="#8B3DFF"/><circle cx="199" cy="120" r="13" fill="#8B3DFF"/><circle cx="101" cy="180" r="13" fill="#6C20D8"/><circle cx="199" cy="180" r="13" fill="#6C20D8"/><circle cx="150" cy="209" r="13" fill="#B36CFF"/><circle cx="150" cy="150" r="27" fill="#120B1D" stroke="url(#lg2)" stroke-width="7"/><path d="M137 150H163M150 137V163" stroke="#E5D2FF" stroke-width="7" stroke-linecap="round"/></svg><span class="brand-name">SILA <span>API</span></span></a>
+          <p>Simple HTTP endpoints with clear JSON responses, built by Sila Tech for apps and WhatsApp bots.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Platform</h4>
+          <a href="/endpoints">Endpoints</a>
+          <a href="/about">About</a>
+          <a href="/api/endpoints">Endpoint list (JSON)</a>
+        </div>
+        <div class="footer-col">
+          <h4>Sila Tech</h4>
+          <a href="https://silatech.site" target="_blank" rel="noopener">silatech.site</a>
+          <a href="https://host.silatech.site" target="_blank" rel="noopener">Bot hosting</a>
+        </div>
+        <div class="footer-col">
+          <h4>Community</h4>
+          <a href="https://whatsapp.com/channel/0029VbBG4gfISTkCpKxyMH02" target="_blank" rel="noopener">WhatsApp channel</a>
+          <a href="https://chat.whatsapp.com/Db9YMXctmLG2BZs4aNuwRi" target="_blank" rel="noopener">WhatsApp group</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>SILA API — Powered by Sila Tech</span>
+        <span>© <script>document.write(new Date().getFullYear())</script> Sila Tech</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/sila.js"></script>
+
+  <script>
+    const BASE_URL = window.location.origin;
+    const CHEVRON = `<svg class="arrow" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`;
+    let allEndpoints = [];
+    let activeCategory = "all";
+
+    document.getElementById("baseUrlText").textContent = BASE_URL;
+
+    /* =========================
+       LOAD
+    ========================== */
+    async function loadEndpoints() {
+      const list = document.getElementById("endpointList");
+      try {
+        const response = await fetch(BASE_URL + "/api/endpoints", { headers: { Accept: "application/json" }, cache: "no-store" });
+        if (!response.ok) throw new Error("Unable to load endpoints");
+        const data = await response.json();
+        allEndpoints = Array.isArray(data) ? data : (Array.isArray(data.endpoints) ? data.endpoints : []);
+        renderCategories();
+        renderEndpoints(allEndpoints);
+        applyDeepLink();
+      } catch (error) {
+        console.error(error);
+        list.innerHTML = '<div class="empty">Failed to load API endpoints. Refresh the page to try again.</div>';
+      }
+    }
+
+    /* =========================
+       CATEGORIES
+    ========================== */
+    function renderCategories() {
+      const counts = {};
+      allEndpoints.forEach(function (e) { const c = e.category || "general"; counts[c] = (counts[c] || 0) + 1; });
+      const cats = Object.keys(counts).sort();
+      const box = document.getElementById("categoryChips");
+      if (cats.length < 2) { box.style.display = "none"; return; }
+      box.innerHTML =
+        '<button class="chip active" type="button" data-cat="all">All <em>' + allEndpoints.length + "</em></button>" +
+        cats.map(function (c) {
+          return '<button class="chip" type="button" data-cat="' + escapeHtml(c) + '">' + escapeHtml(catLabel(c)) + " <em>" + counts[c] + "</em></button>";
+        }).join("");
+      box.querySelectorAll(".chip").forEach(function (chip) {
+        chip.addEventListener("click", function () { setCategory(chip.dataset.cat); });
+      });
+    }
+
+    function setCategory(cat) {
+      activeCategory = cat;
+      document.querySelectorAll("#categoryChips .chip").forEach(function (c) {
+        c.classList.toggle("active", c.dataset.cat === cat);
+      });
+      applyFilter();
+    }
+
+    /* =========================
+       RENDER
+    ========================== */
+    function renderEndpoints(endpoints) {
+      const list = document.getElementById("endpointList");
+      if (!endpoints.length) {
+        list.innerHTML = '<div class="empty">No API endpoints found.</div>';
+        return;
+      }
+      list.innerHTML = endpoints.map(createEndpoint).join("");
+      endpoints.forEach(setupEndpoint);
+    }
+
+    function createEndpoint(api, index) {
+      const name = escapeHtml(api.name || api.path || "SILA API");
+      const description = escapeHtml(api.description || "SILA API endpoint.");
+      const method = escapeHtml(api.method || "GET");
+      const path = api.path || api.endpoint || "";
+      const category = escapeHtml(api.category || "general");
+
+      return `
+        <div class="endpoint" id="endpoint-${index}" data-category="${category}"
+             data-search="${escapeHtml((name + " " + description + " " + path + " " + category).toLowerCase())}">
+          <button class="endpoint-head" type="button" onclick="toggleEndpoint(${index})" aria-expanded="false">
+            <span class="method ${method.toLowerCase()}">${method}</span>
+            <span class="endpoint-info">
+              <span class="endpoint-name">${name}</span>
+              <span class="endpoint-path">${escapeHtml(path) || "Endpoint"}</span>
+            </span>
+            <span class="tag">${escapeHtml(catLabel(api.category))}</span>
+            ${CHEVRON}
+          </button>
+
+          <div class="tester" id="tester-${index}">
+            <div class="description">${description}</div>
+
+            <div class="parameter-title">Parameters</div>
+            <div class="parameters" id="parameters-${index}"></div>
+
+            <div class="tester-actions">
+              <button class="action-btn send-btn" type="button" onclick="sendRequest(${index})">Send request</button>
+              <button class="action-btn copy-btn" type="button" onclick="copyEndpoint(${index})">Copy URL</button>
+              <button class="action-btn copy-btn" type="button" onclick="copyCurl(${index})">Copy cURL</button>
+              <button class="action-btn copy-btn" type="button" onclick="copyJSON(${index})">Copy JSON</button>
+            </div>
+
+            <div class="url-preview" id="url-${index}"></div>
+
+            <div class="response-box" id="response-${index}">
+              <div class="response-head">
+                <span>Response</span>
+                <span class="response-status" id="response-status-${index}"></span>
+              </div>
+              <pre class="response-content" id="response-content-${index}"></pre>
+              <div class="media-preview" id="media-${index}"></div>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function setupEndpoint(api, index) {
+      const container = document.getElementById("parameters-" + index);
+      const parameters = Array.isArray(api.parameters) ? api.parameters : [];
+
+      if (!parameters.length) {
+        container.innerHTML = '<div style="color:var(--muted);font-size:13.5px">This endpoint does not need any parameters.</div>';
+        return;
+      }
+
+      container.innerHTML = parameters.map(function (parameter, i) {
+        const name = parameter.name || "parameter" + (i + 1);
+        const type = parameter.type || "text";
+        const placeholder = parameter.placeholder || "Enter " + name;
+        const required = parameter.required === true;
+        const attrs = `data-index="${index}" data-parameter="${escapeHtml(name)}" data-required="${required}" placeholder="${escapeHtml(placeholder)}"`;
+
+        return `
+          <div class="parameter">
+            <div class="parameter-top">
+              <span class="parameter-name">${escapeHtml(name)}</span>
+              ${required ? '<span class="required">Required</span>' : ""}
+            </div>
+            ${type === "textarea"
+              ? `<textarea ${attrs}></textarea>`
+              : `<input type="${type === "number" ? "number" : "text"}" ${attrs}>`}
+          </div>`;
+      }).join("");
+    }
+
+    function toggleEndpoint(index) {
+      const el = document.getElementById("endpoint-" + index);
+      const open = el.classList.toggle("open");
+      el.querySelector(".endpoint-head").setAttribute("aria-expanded", open ? "true" : "false");
+    }
+
+    /* =========================
+       BUILD REQUEST
+    ========================== */
+    function buildRequest(index) {
+      const api = allEndpoints[index];
+      const path = api.path || api.endpoint || "";
+      let url = BASE_URL + (path.startsWith("/") ? path : "/" + path);
+
+      const params = {};
+      document.querySelectorAll('[data-index="' + index + '"]').forEach(function (input) {
+        const name = input.dataset.parameter;
+        const value = input.value.trim();
+        if (input.dataset.required === "true" && !value) throw new Error("Please enter: " + name);
+        if (value) params[name] = value;
+      });
+
+      const method = (api.method || "GET").toUpperCase();
+      if (method === "GET" || method === "DELETE") {
+        const query = new URLSearchParams(params).toString();
+        if (query) url += (url.includes("?") ? "&" : "?") + query;
+      }
+      return { api: api, url: url, method: method, params: params };
+    }
+
+    /* =========================
+       SEND
+    ========================== */
+    async function sendRequest(index) {
+      const responseBox = document.getElementById("response-" + index);
+      const responseContent = document.getElementById("response-content-" + index);
+      const responseStatus = document.getElementById("response-status-" + index);
+      const urlPreview = document.getElementById("url-" + index);
+      const mediaPreview = document.getElementById("media-" + index);
+
+      responseBox.style.display = "block";
+      mediaPreview.style.display = "none";
+      mediaPreview.innerHTML = "";
+
+      try {
+        const request = buildRequest(index);
+        urlPreview.style.display = "block";
+        urlPreview.textContent = request.url;
+        responseStatus.textContent = "";
+        responseContent.textContent = "Sending request…";
+
+        const options = { method: request.method, headers: { Accept: "application/json, text/plain, */*" } };
+        if (request.method !== "GET" && request.method !== "DELETE") {
+          options.headers["Content-Type"] = "application/json";
+          options.body = JSON.stringify(request.params);
+        }
+
+        const started = performance.now();
+        const response = await fetch(request.url, options);
+        const ms = Math.round(performance.now() - started);
+        const contentType = response.headers.get("content-type") || "";
+
+        responseStatus.textContent = response.status + " " + response.statusText + " · " + ms + " ms";
+        responseStatus.style.color = response.ok ? "var(--green)" : "var(--red)";
+
+        if (contentType.startsWith("image/") || contentType.startsWith("video/") || contentType.startsWith("audio/")) {
+          const blob = await response.blob();
+          const mediaUrl = URL.createObjectURL(blob);
+          if (contentType.startsWith("image/")) mediaPreview.innerHTML = '<img src="' + mediaUrl + '" alt="API response">';
+          else if (contentType.startsWith("video/")) mediaPreview.innerHTML = '<video controls src="' + mediaUrl + '"></video>';
+          else mediaPreview.innerHTML = '<audio controls src="' + mediaUrl + '"></audio>';
+          mediaPreview.style.display = "block";
+          responseContent.textContent = "Media response: " + contentType;
+          return;
+        }
+
+        const text = await response.text();
+        let formatted = text;
+        try { formatted = JSON.stringify(JSON.parse(text), null, 2); } catch (e) { /* keep plain text */ }
+        responseContent.textContent = formatted;
+      } catch (error) {
+        responseStatus.textContent = "Request failed";
+        responseStatus.style.color = "var(--red)";
+        responseContent.textContent = error.message || "Unable to complete the request.";
+      }
+    }
+
+    /* =========================
+       COPY
+    ========================== */
+    function copyEndpoint(index) {
+      try { copyText(buildRequest(index).url); } catch (error) { silaToast(error.message); }
+    }
+
+    function copyJSON(index) {
+      try { copyText(JSON.stringify(buildRequest(index).params, null, 2)); } catch (error) { silaToast(error.message); }
+    }
+
+    function copyCurl(index) {
+      try {
+        const request = buildRequest(index);
+        let curl = 'curl -X ' + request.method + ' "' + request.url + '"';
+        if (request.method !== "GET" && request.method !== "DELETE") {
+          curl += ' -H "Content-Type: application/json"';
+          curl += " -d '" + JSON.stringify(request.params) + "'";
+        }
+        copyText(curl);
+      } catch (error) { silaToast(error.message); }
+    }
+
+    /* =========================
+       SEARCH + FILTER
+    ========================== */
+    function applyFilter() {
+      const query = document.getElementById("searchInput").value.trim().toLowerCase();
+      const items = document.querySelectorAll(".endpoint");
+      let visible = 0;
+
+      items.forEach(function (item) {
+        const matchesText = !query || (item.dataset.search || "").includes(query);
+        const matchesCat = activeCategory === "all" || item.dataset.category === activeCategory;
+        const show = matchesText && matchesCat;
+        item.style.display = show ? "" : "none";
+        if (show) visible++;
+      });
+
+      const empty = document.querySelector(".search-empty");
+      if (visible === 0 && items.length > 0) {
+        if (!empty) {
+          const message = document.createElement("div");
+          message.className = "empty search-empty";
+          message.textContent = "No matching APIs found. Try a different search or category.";
+          document.getElementById("endpointList").appendChild(message);
+        }
+      } else if (empty) {
+        empty.remove();
+      }
+    }
+
+    document.getElementById("searchInput").addEventListener("input", applyFilter);
+
+    document.addEventListener("keydown", function (e) {
+      const tag = (document.activeElement && document.activeElement.tagName) || "";
+      if (e.key === "/" && tag !== "INPUT" && tag !== "TEXTAREA") {
+        e.preventDefault();
+        document.getElementById("searchInput").focus();
+      }
+    });
+
+    /* =========================
+       DEEP LINKS  (?open=/ai/talkai  ?cat=ai  ?q=text)
+    ========================== */
+    function applyDeepLink() {
+      const params = new URLSearchParams(window.location.search);
+
+      const cat = params.get("cat");
+      if (cat && document.querySelector('#categoryChips .chip[data-cat="' + CSS.escape(cat) + '"]')) setCategory(cat);
+
+      const q = params.get("q");
+      if (q) { document.getElementById("searchInput").value = q; applyFilter(); }
+
+      const open = params.get("open");
+      if (open) {
+        const index = allEndpoints.findIndex(function (e) { return (e.path || e.endpoint) === open; });
+        if (index >= 0) {
+          const el = document.getElementById("endpoint-" + index);
+          el.classList.add("open");
+          el.querySelector(".endpoint-head").setAttribute("aria-expanded", "true");
+          setTimeout(function () { el.scrollIntoView({ behavior: "smooth", block: "center" }); }, 150);
+        }
+      }
+    }
+
+    loadEndpoints();
+  </script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="theme-color" content="#07050b">
+  <title>Sign in</title>
+  <link rel="icon" type="image/svg+xml" href="/silaapi.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+:root{--bg:#07050b;--surface:#0e0a15;--surface-2:#130d1c;--line:#241733;--line-2:#1b1226;--purple:#8b3dff;--purple-light:#b36cff;--text:#fff;--soft:#aaa0b5;--muted:#756a80;--green:#48d597;--red:#ff6685;--amber:#ffb454;
+--font-head:"Sora","Plus Jakarta Sans",system-ui,sans-serif;--font-body:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;--font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{min-height:100vh;background:radial-gradient(800px 480px at 85% -10%,rgba(123,44,255,.2),transparent 60%),var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+::selection{background:rgba(139,61,255,.45)}
+*{scrollbar-width:thin;scrollbar-color:#3a2457 transparent}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--purple-light);outline-offset:2px}
+.brand{display:flex;align-items:center;gap:12px}.brand svg{width:34px;height:34px}
+.brand-name{font-family:var(--font-head);font-weight:800;font-size:18px;letter-spacing:-.01em}.brand-name span{color:var(--purple-light)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+body{display:grid;place-items:center;padding:24px}
+.wrap{width:min(430px,100%)}
+.top{display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:26px}
+.top svg{width:64px;height:64px;margin-bottom:14px}
+.top .brand-name{font-size:26px}
+.top p{margin-top:6px;color:var(--muted);font-size:14px}
+.card{padding:30px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,var(--surface-2),var(--surface));box-shadow:0 40px 90px -40px rgba(123,44,255,.55)}
+.card h1{font-family:var(--font-head);font-size:22px;letter-spacing:-.03em}
+.card .sub{margin:6px 0 24px;color:var(--soft);font-size:14.5px}
+.field{margin-bottom:16px}
+label{display:block;margin-bottom:7px;color:var(--soft);font-size:13.5px;font-weight:600}
+.input{position:relative}
+input{width:100%;height:50px;padding:0 16px;border:1px solid var(--line);border-radius:12px;background:#09060e;color:#fff;font-family:var(--font-body);font-size:15px;transition:border-color .2s,box-shadow .2s}
+input:focus{outline:none;border-color:var(--purple);box-shadow:0 0 0 4px rgba(139,61,255,.16)}
+.toggle{position:absolute;right:8px;top:50%;transform:translateY(-50%);height:34px;padding:0 12px;border-radius:8px;color:var(--soft);font-size:12.5px;font-weight:600}
+.toggle:hover{color:#fff;background:rgba(255,255,255,.05)}
+.submit{width:100%;height:50px;margin-top:6px;border-radius:12px;font-family:var(--font-head);font-weight:600;font-size:15px;color:#fff;background:linear-gradient(135deg,#9b4dff,#6818d0);box-shadow:0 12px 34px -10px rgba(123,44,255,.7),inset 0 1px 0 rgba(255,255,255,.22);transition:transform .2s,opacity .2s}
+.submit:hover{transform:translateY(-1px)}.submit:disabled{opacity:.6;cursor:wait;transform:none}
+.error{display:none;margin-top:14px;padding:12px 14px;border:1px solid rgba(255,102,133,.3);border-radius:11px;background:rgba(255,102,133,.08);color:#ff93a8;font-size:14px}
+.foot{margin-top:22px;text-align:center;color:var(--muted);font-size:13px}.foot strong{color:var(--soft)}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <svg viewBox="60 50 180 200" aria-hidden="true"><defs><linearGradient id="lg" x1="76" y1="61" x2="224" y2="239" gradientUnits="userSpaceOnUse"><stop stop-color="#B36CFF"/><stop offset=".5" stop-color="#7B2CFF"/><stop offset="1" stop-color="#4A0FAF"/></linearGradient></defs><path d="M150 61L224 104V196L150 239L76 196V104Z" fill="#0D0A13" stroke="url(#lg)" stroke-width="12" stroke-linejoin="round"/><path d="M150 91V209M101 120L199 180M101 180L199 120" stroke="url(#lg)" stroke-width="9" stroke-linecap="round"/><circle cx="150" cy="91" r="13" fill="#B36CFF"/><circle cx="101" cy="120" r="13" fill="#8B3DFF"/><circle cx="199" cy="120" r="13" fill="#8B3DFF"/><circle cx="101" cy="180" r="13" fill="#6C20D8"/><circle cx="199" cy="180" r="13" fill="#6C20D8"/><circle cx="150" cy="209" r="13" fill="#B36CFF"/><circle cx="150" cy="150" r="27" fill="#120B1D" stroke="url(#lg)" stroke-width="7"/><path d="M137 150H163M150 137V163" stroke="#E5D2FF" stroke-width="7" stroke-linecap="round"/></svg>
+      <div class="brand-name">SILA <span>API</span></div>
+      <p>Administration</p>
+    </div>
+
+    <div class="card">
+      <h1>Sign in</h1>
+      <p class="sub">Enter your admin username and PIN to open the dashboard.</p>
+
+      <form id="loginForm" autocomplete="on">
+        <div class="field">
+          <label for="username">Username</label>
+          <input id="username" name="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+        </div>
+
+        <div class="field">
+          <label for="pin">PIN</label>
+          <div class="input">
+            <input id="pin" name="pin" type="password" inputmode="numeric" autocomplete="current-password" required style="padding-right:78px">
+            <button class="toggle" type="button" id="togglePin">Show</button>
+          </div>
+        </div>
+
+        <button class="submit" type="submit" id="loginButton">Sign in</button>
+        <div class="error" id="errorMessage" role="alert"></div>
+      </form>
+    </div>
+
+    <div class="foot">SILA API · <strong>Powered by Sila Tech</strong></div>
+  </div>
+
+  <script>
+    const API_BASE = window.location.origin;
+    const form = document.getElementById("loginForm");
+    const username = document.getElementById("username");
+    const pin = document.getElementById("pin");
+    const loginButton = document.getElementById("loginButton");
+    const errorMessage = document.getElementById("errorMessage");
+    const togglePin = document.getElementById("togglePin");
+
+    /* already signed in? go straight to the dashboard */
+    if (sessionStorage.getItem("sila_admin_token")) {
+      fetch(API_BASE + "/api/admin/me", { headers: { Authorization: "Bearer " + sessionStorage.getItem("sila_admin_token") } })
+        .then(function (r) { if (r.ok) window.location.replace("/sila/dashboard"); else sessionStorage.removeItem("sila_admin_token"); })
+        .catch(function () {});
+    }
+
+    togglePin.addEventListener("click", function () {
+      const hidden = pin.type === "password";
+      pin.type = hidden ? "text" : "password";
+      togglePin.textContent = hidden ? "Hide" : "Show";
+    });
+
+    function showError(message) { errorMessage.textContent = message; errorMessage.style.display = "block"; }
+    function hideError() { errorMessage.style.display = "none"; errorMessage.textContent = ""; }
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const user = username.value.trim();
+      const password = pin.value.trim();
+      if (!user || !password) { showError("Enter your username and PIN."); return; }
+
+      loginButton.disabled = true;
+      loginButton.textContent = "Signing in…";
+      hideError();
+
+      try {
+        const response = await fetch(API_BASE + "/api/admin/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({ username: user, pin: password })
+        });
+
+        let data = {};
+        try { data = await response.json(); } catch (e) { data = {}; }
+
+        if (!response.ok || data.success === false) {
+          throw new Error(data.error || data.message || "Invalid username or PIN.");
+        }
+
+        if (data.token) sessionStorage.setItem("sila_admin_token", data.token);
+        window.location.href = "/sila/dashboard";
+      } catch (error) {
+        showError(error.message || "Unable to sign in.");
+        loginButton.disabled = false;
+        loginButton.textContent = "Sign in";
+      }
+    });
+  </script>
+</body>
+</html>

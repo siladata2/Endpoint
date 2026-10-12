@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="theme-color" content="#07050b">
+  <title>Dashboard</title>
+  <link rel="icon" type="image/svg+xml" href="/silaapi.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+:root{--bg:#07050b;--surface:#0e0a15;--surface-2:#130d1c;--line:#241733;--line-2:#1b1226;--purple:#8b3dff;--purple-light:#b36cff;--text:#fff;--soft:#aaa0b5;--muted:#756a80;--green:#48d597;--red:#ff6685;--amber:#ffb454;
+--font-head:"Sora","Plus Jakarta Sans",system-ui,sans-serif;--font-body:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;--font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{min-height:100vh;background:radial-gradient(800px 480px at 85% -10%,rgba(123,44,255,.2),transparent 60%),var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+::selection{background:rgba(139,61,255,.45)}
+*{scrollbar-width:thin;scrollbar-color:#3a2457 transparent}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--purple-light);outline-offset:2px}
+.brand{display:flex;align-items:center;gap:12px}.brand svg{width:34px;height:34px}
+.brand-name{font-family:var(--font-head);font-weight:800;font-size:18px;letter-spacing:-.01em}.brand-name span{color:var(--purple-light)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.app{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:6px;padding:22px 16px;border-right:1px solid var(--line-2);background:#0a070f}
+.sidebar .brand{padding:4px 10px 22px}
+.nav-label{padding:14px 12px 6px;color:var(--muted);font-size:12.5px;font-weight:600}
+.nav a,.nav button{display:flex;align-items:center;gap:12px;width:100%;padding:11px 12px;border-radius:11px;color:var(--soft);font-size:14.5px;font-weight:600;text-align:left;transition:background .2s,color .2s}
+.nav a:hover,.nav button:hover{color:#fff;background:rgba(255,255,255,.04)}
+.nav a.active{color:#fff;background:linear-gradient(135deg,rgba(155,77,255,.28),rgba(104,24,208,.2));box-shadow:inset 0 0 0 1px rgba(179,108,255,.32)}
+.nav svg{width:18px;height:18px;flex-shrink:0}
+.nav .danger:hover{color:var(--red);background:rgba(255,102,133,.08)}
+.spacer{flex:1}
+
+.main{min-width:0}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 32px;border-bottom:1px solid var(--line-2);background:rgba(7,5,11,.82);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.topbar h1{font-family:var(--font-head);font-size:20px;letter-spacing:-.03em}
+.topbar small{display:block;color:var(--muted);font-size:12.5px}
+.top-right{display:flex;align-items:center;gap:10px}
+.menu-btn{display:none;width:42px;height:42px;border:1px solid var(--line);border-radius:11px;align-items:center;justify-content:center}
+.menu-btn svg{width:20px;height:20px}
+.chip{display:inline-flex;align-items:center;gap:9px;height:38px;padding:0 14px;border:1px solid var(--line);border-radius:99px;background:rgba(255,255,255,.03);color:var(--soft);font-size:13px;font-weight:600;white-space:nowrap}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}.dot.ok{background:var(--green);box-shadow:0 0 0 4px rgba(72,213,151,.16)}.dot.bad{background:var(--red);box-shadow:0 0 0 4px rgba(255,102,133,.16)}
+.btn{height:38px;padding:0 16px;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.03);color:#e9defa;font-size:13.5px;font-weight:600;transition:border-color .2s,background .2s}
+.btn:hover{border-color:rgba(179,108,255,.5);background:rgba(139,61,255,.1)}
+
+.content{display:flex;flex-direction:column;gap:22px;padding:28px 32px 56px;max-width:1280px}
+section{scroll-margin-top:90px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.stat{padding:22px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(180deg,var(--surface-2),var(--surface))}
+.stat-label{color:var(--soft);font-size:13.5px;font-weight:600}
+.stat-value{margin:10px 0 4px;font-family:var(--font-head);font-size:34px;font-weight:700;letter-spacing:-.04em;line-height:1.1}
+.stat-note{color:var(--muted);font-size:13px}
+.stat-note.bad{color:var(--red)}.stat-note.ok{color:var(--green)}
+
+.grid{display:grid;grid-template-columns:1.7fr 1fr;gap:14px}
+.card{border:1px solid var(--line);border-radius:20px;background:var(--surface);min-width:0}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 22px 0}
+.card-title{font-family:var(--font-head);font-size:16px;font-weight:600;letter-spacing:-.02em}
+.card-sub{margin-top:2px;color:var(--muted);font-size:13px}
+.card-pad{padding:18px 22px 22px}
+
+.chart{display:flex;align-items:flex-end;gap:14px;height:230px;padding:26px 22px 18px}
+.bar-wrap{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:8px;min-width:0}
+.bar-val{color:var(--soft);font-family:var(--font-mono);font-size:12px}
+.bar-col{width:100%;max-width:56px;flex:1;display:flex;align-items:flex-end}
+.bar{width:100%;min-height:4px;border-radius:9px 9px 4px 4px;background:linear-gradient(180deg,#b36cff,#5714b8);transition:height .6s cubic-bezier(.2,.7,.2,1)}
+.bar-label{color:var(--muted);font-size:12.5px;font-weight:600}
+
+.big{font-family:var(--font-head);font-size:44px;font-weight:700;letter-spacing:-.05em;line-height:1}
+.row{display:flex;justify-content:space-between;padding:13px 0;border-top:1px solid var(--line-2);color:var(--soft);font-size:14.5px}
+.row strong{color:#fff;font-family:var(--font-head)}
+
+.table-wrap{overflow-x:auto;padding:12px 8px 8px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{padding:10px 16px;text-align:left;color:var(--muted);font-size:12.5px;font-weight:600;white-space:nowrap}
+td{padding:13px 16px;border-top:1px solid var(--line-2);color:#d8cfe3;white-space:nowrap}
+tbody tr:hover td{background:rgba(255,255,255,.015)}
+td.path{font-family:var(--font-mono);font-size:13px;color:#e6d3ff}
+td small{display:block;color:var(--muted);font-size:12px;font-family:var(--font-body)}
+td.file{font-family:var(--font-mono);font-size:12.5px;color:var(--muted)}
+.ok{color:var(--green)}.bad{color:var(--red)}
+.method{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:7px;font-family:var(--font-mono);font-size:11.5px;font-weight:600;color:var(--green);background:rgba(72,213,151,.1);border:1px solid rgba(72,213,151,.25)}
+.method.post{color:var(--purple-light);background:rgba(139,61,255,.12);border-color:rgba(179,108,255,.3)}
+.method.put,.method.patch{color:var(--amber);background:rgba(255,180,84,.1);border-color:rgba(255,180,84,.28)}
+.method.delete{color:var(--red);background:rgba(255,102,133,.1);border-color:rgba(255,102,133,.28)}
+.empty{padding:34px 16px!important;text-align:center;color:var(--muted)!important}
+
+.scrim{display:none}
+
+@media (max-width:1100px){.stats{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  .sidebar{position:fixed;z-index:60;left:0;top:0;width:260px;transform:translateX(-100%);transition:transform .25s;box-shadow:30px 0 80px rgba(0,0,0,.7)}
+  .sidebar.open{transform:none}
+  .scrim.open{display:block;position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.6)}
+  .menu-btn{display:inline-flex}
+  .topbar,.content{padding-left:16px;padding-right:16px}
+  .topbar .chip.db{display:none}
+}
+@media (max-width:520px){.stats{grid-template-columns:1fr 1fr;gap:10px}.stat{padding:16px}.stat-value{font-size:26px}.chart{gap:8px;padding:22px 12px 14px}.topbar small}
+</style>
+</head>
+<body>
+  <div class="scrim" id="scrim"></div>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="/sila/dashboard"><svg viewBox="60 50 180 200" aria-hidden="true"><defs><linearGradient id="lg" x1="76" y1="61" x2="224" y2="239" gradientUnits="userSpaceOnUse"><stop stop-color="#B36CFF"/><stop offset=".5" stop-color="#7B2CFF"/><stop offset="1" stop-color="#4A0FAF"/></linearGradient></defs><path d="M150 61L224 104V196L150 239L76 196V104Z" fill="#0D0A13" stroke="url(#lg)" stroke-width="12" stroke-linejoin="round"/><path d="M150 91V209M101 120L199 180M101 180L199 120" stroke="url(#lg)" stroke-width="9" stroke-linecap="round"/><circle cx="150" cy="91" r="13" fill="#B36CFF"/><circle cx="101" cy="120" r="13" fill="#8B3DFF"/><circle cx="199" cy="120" r="13" fill="#8B3DFF"/><circle cx="101" cy="180" r="13" fill="#6C20D8"/><circle cx="199" cy="180" r="13" fill="#6C20D8"/><circle cx="150" cy="209" r="13" fill="#B36CFF"/><circle cx="150" cy="150" r="27" fill="#120B1D" stroke="url(#lg)" stroke-width="7"/><path d="M137 150H163M150 137V163" stroke="#E5D2FF" stroke-width="7" stroke-linecap="round"/></svg><span class="brand-name">SILA <span>API</span></span></a>
+
+      <div class="nav-label">Dashboard</div>
+      <nav class="nav" id="sideNav">
+        <a href="#overview" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Overview</a>
+        <a href="#endpoints"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 9-4 3 4 3M16 9l4 3-4 3M13.5 6l-3 12"/></svg>Endpoints</a>
+        <a href="#requests"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>Recent requests</a>
+        <a href="#failures"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4.5M12 16h.01"/></svg>Failed requests</a>
+      </nav>
+
+      <div class="spacer"></div>
+
+      <nav class="nav">
+        <a href="/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>View public site</a>
+        <button class="danger" type="button" id="logoutButton"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Sign out</button>
+      </nav>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div style="display:flex;align-items:center;gap:12px">
+          <button class="menu-btn" type="button" id="menuButton" aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+          <div>
+            <h1>Overview</h1>
+            <small id="updated">Loading…</small>
+          </div>
+        </div>
+        <div class="top-right">
+          <span class="chip db"><span class="dot" id="dbDot"></span><span id="dbText">Database</span></span>
+          <button class="btn refresh" type="button" onclick="loadDashboard()"><span>Refresh</span><svg style="display:none" viewBox="0 0 24 24"></svg></button>
+        </div>
+      </header>
+
+      <main class="content">
+        <section id="overview" class="stats">
+          <article class="stat"><div class="stat-label">Requests today</div><div class="stat-value" id="requestsToday">—</div><div class="stat-note" id="requestsNote">All API calls today</div></article>
+          <article class="stat"><div class="stat-label">Success rate</div><div class="stat-value" id="successRate">—</div><div class="stat-note" id="failedNote">Failed today: —</div></article>
+          <article class="stat"><div class="stat-label">Active visitors</div><div class="stat-value" id="activeVisitors">—</div><div class="stat-note">Seen in the last 30 minutes</div></article>
+          <article class="stat"><div class="stat-label">Endpoints live</div><div class="stat-value" id="endpointCount">—</div><div class="stat-note">Loaded from silatech/</div></article>
+        </section>
+
+        <div class="grid">
+          <article class="card">
+            <div class="card-head"><div><div class="card-title">Request activity</div><div class="card-sub">API calls over the last 7 days</div></div></div>
+            <div class="chart" id="requestChart"><div class="empty" style="width:100%">Loading activity…</div></div>
+          </article>
+
+          <article class="card">
+            <div class="card-head"><div><div class="card-title">Visitors</div><div class="card-sub">Public website traffic</div></div></div>
+            <div class="card-pad">
+              <div class="big" id="visitorTotal">—</div>
+              <div class="card-sub" style="margin:6px 0 16px">Total visitors recorded</div>
+              <div class="row"><span>Today</span><strong id="visitorsToday">—</strong></div>
+              <div class="row"><span>This week</span><strong id="visitorsWeek">—</strong></div>
+              <div class="row"><span>This month</span><strong id="visitorsMonth">—</strong></div>
+            </div>
+          </article>
+        </div>
+
+        <section id="endpoints" class="card">
+          <div class="card-head"><div><div class="card-title">Endpoints</div><div class="card-sub">Every endpoint loaded from silatech/, with its traffic</div></div></div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Endpoint</th><th>Method</th><th>Requests</th><th>Success</th><th>Failed</th><th>File</th></tr></thead>
+            <tbody id="endpointTable"><tr><td colspan="6" class="empty">Loading endpoints…</td></tr></tbody>
+          </table></div>
+        </section>
+
+        <section id="requests" class="card">
+          <div class="card-head"><div><div class="card-title">Recent requests</div><div class="card-sub">The latest 30 API calls</div></div></div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Time</th><th>Endpoint</th><th>Method</th><th>Status</th><th>Response time</th></tr></thead>
+            <tbody id="requestsTable"><tr><td colspan="5" class="empty">Loading requests…</td></tr></tbody>
+          </table></div>
+        </section>
+
+        <section id="failures" class="card">
+          <div class="card-head"><div><div class="card-title">Failed requests</div><div class="card-sub">Calls that returned an error</div></div></div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Time</th><th>Endpoint</th><th>Status</th><th>Error</th><th>IP</th></tr></thead>
+            <tbody id="failedTable"><tr><td colspan="5" class="empty">Loading failed requests…</td></tr></tbody>
+          </table></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = window.location.origin;
+    const LOGIN_URL = "/sila";
+
+    /* ---------- auth ---------- */
+    function getToken() { return sessionStorage.getItem("sila_admin_token"); }
+    function signOut() { sessionStorage.removeItem("sila_admin_token"); window.location.replace(LOGIN_URL); }
+
+    if (!getToken()) signOut();
+
+    async function adminFetch(path) {
+      const response = await fetch(API_BASE + path, {
+        headers: { Accept: "application/json", Authorization: "Bearer " + getToken() },
+        cache: "no-store"
+      });
+      if (response.status === 401 || response.status === 403) { signOut(); throw new Error("Session expired"); }
+      if (!response.ok) throw new Error("Request failed (" + response.status + ")");
+      return response.json();
+    }
+
+    /* ---------- helpers ---------- */
+    function esc(v) {
+      return String(v == null ? "" : v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+    function num(v) { return Number(v || 0).toLocaleString(); }
+    function setText(id, v) { const el = document.getElementById(id); if (el) el.textContent = v; }
+    function fmtDate(v) {
+      if (!v) return "—";
+      const d = new Date(v);
+      return Number.isNaN(d.getTime()) ? String(v) : d.toLocaleString();
+    }
+    function cleanPath(p) { return String(p || "").split("?")[0]; }
+    function methodTag(m) { m = String(m || "GET").toUpperCase(); return '<span class="method ' + m.toLowerCase() + '">' + esc(m) + "</span>"; }
+    function emptyRow(cols, text) { return '<tr><td colspan="' + cols + '" class="empty">' + text + "</td></tr>"; }
+
+    /* ---------- load ---------- */
+    async function loadDashboard() {
+      try {
+        const results = await Promise.all([adminFetch("/api/admin/dashboard"), adminFetch("/api/admin/endpoints")]);
+        const data = results[0];
+        const loaded = results[1].endpoints || [];
+        const stats = data.stats || {};
+        const visitors = data.visitors || {};
+
+        const requests = stats.requestsToday != null ? stats.requestsToday : (stats.totalRequestsToday || 0);
+        const failed = stats.failedRequests || 0;
+
+        setText("requestsToday", num(requests));
+        setText("successRate", requests ? Math.round(((requests - failed) / requests) * 1000) / 10 + "%" : "—");
+        setText("failedNote", "Failed today: " + num(failed));
+        document.getElementById("failedNote").className = "stat-note " + (failed ? "bad" : "ok");
+        setText("activeVisitors", num(stats.activeVisitors));
+        setText("endpointCount", num(data.endpointCount != null ? data.endpointCount : loaded.length));
+
+        setText("visitorTotal", num(visitors.total));
+        setText("visitorsToday", num(visitors.today));
+        setText("visitorsWeek", num(visitors.week));
+        setText("visitorsMonth", num(visitors.month));
+
+        const connected = data.database === "connected";
+        document.getElementById("dbDot").className = "dot " + (connected ? "ok" : "bad");
+        setText("dbText", connected ? "Database connected" : "Database offline");
+        setText("updated", "Updated " + new Date().toLocaleTimeString());
+
+        renderChart(data.chart || []);
+        renderEndpoints(loaded, data.endpoints || []);
+        renderRequests(data.recentRequests || []);
+        renderFailed(data.failedRequestsList || []);
+      } catch (error) {
+        console.error(error);
+        setText("updated", "Couldn't load data — try Refresh");
+        document.getElementById("requestChart").innerHTML = '<div class="empty" style="width:100%">Unable to load dashboard data.</div>';
+      }
+    }
+
+    function renderChart(chart) {
+      const box = document.getElementById("requestChart");
+      if (!chart.length) { box.innerHTML = '<div class="empty" style="width:100%">No request activity yet.</div>'; return; }
+      const values = chart.map(function (i) { return Number(i.requests != null ? i.requests : (i.value || 0)); });
+      const max = Math.max.apply(null, values.concat([1]));
+      box.innerHTML = chart.map(function (item, idx) {
+        const h = Math.max(2, (values[idx] / max) * 100);
+        return '<div class="bar-wrap"><div class="bar-val">' + num(values[idx]) + '</div><div class="bar-col"><div class="bar" title="' + values[idx] + ' requests" style="height:' + h + '%"></div></div><div class="bar-label">' + esc(item.label || item.day || "") + "</div></div>";
+      }).join("");
+    }
+
+    function renderEndpoints(loaded, stats) {
+      const tbody = document.getElementById("endpointTable");
+      const byPath = {};
+      stats.forEach(function (s) { byPath[cleanPath(s.path)] = s; });
+
+      if (!loaded.length) { tbody.innerHTML = emptyRow(6, "No endpoints loaded. Add a .js file inside silatech/."); return; }
+
+      const rows = loaded.map(function (e) {
+        const s = byPath[cleanPath(e.path)] || {};
+        return { e: e, requests: Number(s.requests || 0), success: Number(s.success || 0), failed: Number(s.failed || 0) };
+      }).sort(function (a, b) { return b.requests - a.requests; });
+
+      tbody.innerHTML = rows.map(function (r) {
+        return "<tr><td class=\"path\">" + esc(r.e.path) + "<small>" + esc(r.e.name || "") + "</small></td><td>" + methodTag(r.e.method) + "</td><td>" + num(r.requests) + '</td><td class="ok">' + num(r.success) + '</td><td class="' + (r.failed ? "bad" : "") + '">' + num(r.failed) + '</td><td class="file">' + esc(r.e.source || "") + "</td></tr>";
+      }).join("");
+    }
+
+    function renderRequests(list) {
+      const tbody = document.getElementById("requestsTable");
+      if (!list.length) { tbody.innerHTML = emptyRow(5, "No requests recorded yet."); return; }
+      tbody.innerHTML = list.slice(0, 30).map(function (r) {
+        const status = Number(r.status != null ? r.status : (r.statusCode || 200));
+        return "<tr><td>" + esc(fmtDate(r.createdAt || r.time)) + '</td><td class="path">' + esc(r.path || "—") + "</td><td>" + methodTag(r.method) + '</td><td class="' + (status >= 400 ? "bad" : "ok") + '">' + status + "</td><td>" + (r.responseTime != null ? r.responseTime + " ms" : "—") + "</td></tr>";
+      }).join("");
+    }
+
+    function renderFailed(list) {
+      const tbody = document.getElementById("failedTable");
+      if (!list.length) { tbody.innerHTML = emptyRow(5, "No failed requests. Everything is running smoothly."); return; }
+      tbody.innerHTML = list.slice(0, 30).map(function (r) {
+        return "<tr><td>" + esc(fmtDate(r.createdAt || r.time)) + '</td><td class="path">' + esc(r.path || "—") + '</td><td class="bad">' + esc(r.status != null ? r.status : "ERROR") + '</td><td class="bad">' + esc(r.error || "Request failed") + "</td><td>" + esc(r.ip || "—") + "</td></tr>";
+      }).join("");
+    }
+
+    /* ---------- sidebar ---------- */
+    const sidebar = document.getElementById("sidebar");
+    const scrim = document.getElementById("scrim");
+    function toggleMenu(open) { sidebar.classList.toggle("open", open); scrim.classList.toggle("open", open); }
+    document.getElementById("menuButton").addEventListener("click", function () { toggleMenu(!sidebar.classList.contains("open")); });
+    scrim.addEventListener("click", function () { toggleMenu(false); });
+    document.querySelectorAll("#sideNav a").forEach(function (a) {
+      a.addEventListener("click", function () {
+        document.querySelectorAll("#sideNav a").forEach(function (x) { x.classList.remove("active"); });
+        a.classList.add("active");
+        toggleMenu(false);
+      });
+    });
+    document.getElementById("logoutButton").addEventListener("click", signOut);
+
+    loadDashboard();
+    setInterval(loadDashboard, 30000);
+  </script>
+</body>
+</html>
