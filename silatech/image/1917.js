@@ -34,26 +34,23 @@ router.get("/", async (req, res) => {
 
     const response = await fetch(apiUrl, {
       method: "GET",
-      headers: {
-        Accept: "application/json"
-      },
       signal: AbortSignal.timeout(60000)
     });
-
-    const contentType = response.headers.get("content-type") || "";
 
     if (!response.ok) {
       return res.status(502).json({
         success: false,
         creator: "Sila Tech",
-        error: "Style1917 provider request failed",
+        error: "Style1917 provider failed",
         upstreamStatus: response.status
       });
     }
 
+    const contentType = response.headers.get("content-type") || "";
+
+    // Kama ni JSON basi rudisha JSON
     if (contentType.includes("application/json")) {
       const data = await response.json();
-
       return res.status(200).json({
         success: true,
         creator: "Sila Tech",
@@ -61,20 +58,20 @@ router.get("/", async (req, res) => {
       });
     }
 
-    const result = await response.text();
+    // Kama ni image (jpeg/png) - hii ndio inayotokea sasa
+    const imageBuffer = Buffer.from(await response.arrayBuffer());
 
-    return res.status(200).json({
-      success: true,
-      creator: "Sila Tech",
-      result
-    });
+    res.status(200);
+    res.setHeader("Content-Type", contentType || "image/jpeg");
+    res.setHeader("Content-Length", imageBuffer.length);
+    res.setHeader("Content-Disposition", "inline; filename=\"style1917.jpg\"");
+    res.setHeader("Cache-Control", "public, max-age=86400");
+    
+    return res.end(imageBuffer);
 
   } catch (error) {
     console.error("[SILA API] Style1917:", error.message);
-
-    return res.status(
-      error.name === "TimeoutError" || error.name === "AbortError" ? 504 : 502
-    ).json({
+    return res.status(502).json({
       success: false,
       creator: "Sila Tech",
       error: "Unable to generate Style1917 right now."
