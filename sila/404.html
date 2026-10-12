@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page not found — SILA API</title>
+  <meta name="robots" content="noindex, follow">
+  <meta name="theme-color" content="#0a0a1a">
+  <link rel="icon" type="image/svg+xml" href="/silaapi.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/sila.css">
+</head>
+<body>
+  <div class="ambient"></div>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="bar">
+        <a class="brand" href="/" aria-label="SILA API home">
+          <svg viewBox="60 50 180 200" aria-hidden="true"><defs><linearGradient id="lg" x1="76" y1="61" x2="224" y2="239" gradientUnits="userSpaceOnUse"><stop stop-color="#67E8F9"/><stop offset=".5" stop-color="#06B6D4"/><stop offset="1" stop-color="#2563EB"/></linearGradient></defs><path d="M150 61L224 104V196L150 239L76 196V104Z" fill="#0A0A1A" stroke="url(#lg)" stroke-width="12" stroke-linejoin="round"/><path d="M150 91V209M101 120L199 180M101 180L199 120" stroke="url(#lg)" stroke-width="9" stroke-linecap="round"/><circle cx="150" cy="91" r="13" fill="#67E8F9"/><circle cx="101" cy="120" r="13" fill="#38BDF8"/><circle cx="199" cy="120" r="13" fill="#38BDF8"/><circle cx="101" cy="180" r="13" fill="#2563EB"/><circle cx="199" cy="180" r="13" fill="#2563EB"/><circle cx="150" cy="209" r="13" fill="#67E8F9"/><circle cx="150" cy="150" r="27" fill="#0A0A1A" stroke="url(#lg)" stroke-width="7"/><path d="M137 150H163M150 137V163" stroke="#E0F2FE" stroke-width="7" stroke-linecap="round"/></svg>
+          <span class="brand-name">SILA <span>API</span></span>
+        </a>
+
+        <nav class="nav-links" aria-label="Main">
+          <a href="/">Home</a>
+          <a href="/endpoints">Endpoints</a>
+          <a href="/about">About</a>
+        </nav>
+
+        <div class="nav-actions">
+          <a class="btn btn-primary btn-sm" href="/endpoints">Explore APIs</a>
+          <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        </div>
+      </div>
+
+      <nav class="mobile-menu" aria-label="Mobile">
+        <a href="/">Home</a>
+        <a href="/endpoints">Endpoints</a>
+        <a href="/about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="container notfound">
+      <div>
+        <div class="code gradient-text">404</div>
+        <h1 class="display" style="font-size:clamp(24px,3.4vw,36px)">This page does not exist</h1>
+        <p>The address you opened is not part of SILA API. Check the endpoint list or head back home.</p>
+        <div class="hero-buttons" style="justify-content:center">
+          <a class="btn btn-primary" href="/">Back to home</a>
+          <a class="btn btn-ghost" href="/endpoints">Endpoint list</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-bottom">
+        <span>SILA API — Powered by Sila Tech</span>
+        <span>© <span id="year">2026</span> Sila Tech</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/sila.js"></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>

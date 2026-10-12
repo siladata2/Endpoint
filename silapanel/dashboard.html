@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="theme-color" content="#0a0a1a">
+  <title>Dashboard — SILA API admin</title>
+  <link rel="icon" type="image/svg+xml" href="/silaapi.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/sila.css">
+</head>
+<body class="admin">
+  <div class="ambient"></div>
+  <div class="scrim" id="scrim"></div>
+
+  <div class="shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="/sila/dashboard">
+        <svg viewBox="60 50 180 200" aria-hidden="true"><defs><linearGradient id="lg" x1="76" y1="61" x2="224" y2="239" gradientUnits="userSpaceOnUse"><stop stop-color="#67E8F9"/><stop offset=".5" stop-color="#06B6D4"/><stop offset="1" stop-color="#2563EB"/></linearGradient></defs><path d="M150 61L224 104V196L150 239L76 196V104Z" fill="#0A0A1A" stroke="url(#lg)" stroke-width="12" stroke-linejoin="round"/><path d="M150 91V209M101 120L199 180M101 180L199 120" stroke="url(#lg)" stroke-width="9" stroke-linecap="round"/><circle cx="150" cy="91" r="13" fill="#67E8F9"/><circle cx="101" cy="120" r="13" fill="#38BDF8"/><circle cx="199" cy="120" r="13" fill="#38BDF8"/><circle cx="101" cy="180" r="13" fill="#2563EB"/><circle cx="199" cy="180" r="13" fill="#2563EB"/><circle cx="150" cy="209" r="13" fill="#67E8F9"/><circle cx="150" cy="150" r="27" fill="#0A0A1A" stroke="url(#lg)" stroke-width="7"/><path d="M137 150H163M150 137V163" stroke="#E0F2FE" stroke-width="7" stroke-linecap="round"/></svg>
+        <span class="brand-name">SILA <span>API</span></span>
+      </a>
+
+      <nav class="side-nav" id="sideNav">
+        <a href="#overview" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Overview</a>
+        <a href="#endpoints"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>Endpoints</a>
+        <a href="#requests"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l6-6-6-6M12 19h8"/></svg>Requests</a>
+        <a href="#visitors"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Visitors</a>
+        <a href="#failures"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>Failures</a>
+        <a href="#security"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Security</a>
+      </nav>
+
+      <button class="danger" type="button" id="logoutButton">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        Sign out
+      </button>
+    </aside>
+
+    <div class="admin-main">
+      <div class="topbar">
+        <div style="display:flex;align-items:center;gap:14px">
+          <button class="menu-btn" type="button" id="menuButton" aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+          <div>
+            <h1>Dashboard</h1>
+            <div class="sub">Signed in as <strong id="adminName">—</strong> · updated <span id="updated">loading…</span></div>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <span class="chip"><span class="dot" id="dbDot"></span><span id="dbText">Database</span></span>
+          <a class="btn btn-ghost btn-sm" href="/" target="_blank" rel="noopener">Open website</a>
+          <button class="btn btn-ghost btn-sm" type="button" id="refreshButton">Refresh</button>
+        </div>
+      </div>
+
+      <section id="overview" class="admin-section">
+        <div class="cards">
+          <article class="stat"><div class="stat-label">Requests today</div><div class="stat-value" id="requestsToday">—</div><div class="stat-note" id="requestsNote">All API calls today</div></article>
+          <article class="stat"><div class="stat-label">Requests all time</div><div class="stat-value" id="requestsTotal">—</div><div class="stat-note">Logged in MongoDB</div></article>
+          <article class="stat"><div class="stat-label">Success rate today</div><div class="stat-value" id="successRate">—</div><div class="stat-note" id="failedNote">Failed today: —</div></article>
+          <article class="stat"><div class="stat-label">Endpoints live</div><div class="stat-value" id="endpointCount">—</div><div class="stat-note">Loaded from silatech/</div></article>
+        </div>
+
+        <div class="split">
+          <div class="card">
+            <h3>Activity — last 7 days</h3>
+            <p class="muted" style="font-size:13.5px;margin-top:6px">Requests per day, oldest first.</p>
+            <div style="margin-top:16px" id="requestChart"><div class="empty">Loading activity…</div></div>
+          </div>
+          <div class="card">
+            <h3>Visitors</h3>
+            <div class="visitor-big" id="visitorTotal">—</div>
+            <div class="kv"><span>Online now (15 min)</span><strong id="visitorsOnline">—</strong></div>
+            <div class="kv"><span>Today</span><strong id="visitorsToday">—</strong></div>
+            <div class="kv"><span>This week</span><strong id="visitorsWeek">—</strong></div>
+            <div class="kv"><span>This month</span><strong id="visitorsMonth">—</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="endpoints" class="admin-section card">
+        <h3>Endpoints</h3>
+        <p class="muted" style="font-size:13.5px;margin:6px 0 14px">Everything the server loaded from <span class="mono">silatech/</span>, with requests in the last 30 days.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Method</th><th>Path</th><th>Name</th><th>Source file</th><th>Requests</th><th>Failed</th></tr></thead>
+            <tbody id="endpointTable"><tr><td colspan="6" class="empty">Loading endpoints…</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="requests" class="admin-section card">
+        <h3>Recent requests</h3>
+        <p class="muted" style="font-size:13.5px;margin:6px 0 14px">The newest endpoint calls, straight from the database.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>When</th><th>Method</th><th>Path</th><th>Status</th><th>Time</th><th>IP</th></tr></thead>
+            <tbody id="requestsTable"><tr><td colspan="6" class="empty">Loading requests…</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="visitors" class="admin-section card">
+        <h3>Visitors</h3>
+        <p class="muted" style="font-size:13.5px;margin:6px 0 14px">People who opened the website, with their page views.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>First seen</th><th>Last seen</th><th>Views</th><th>IP</th><th>User agent</th></tr></thead>
+            <tbody id="visitorsTable"><tr><td colspan="5" class="empty">Loading visitors…</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="failures" class="admin-section card">
+        <h3>Failed requests</h3>
+        <p class="muted" style="font-size:13.5px;margin:6px 0 14px">Calls that returned an error status.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>When</th><th>Method</th><th>Path</th><th>Status</th><th>IP</th></tr></thead>
+            <tbody id="failedTable"><tr><td colspan="5" class="empty">Loading failed requests…</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="security" class="admin-section card">
+        <h3>Security</h3>
+        <p class="muted" style="font-size:13.5px;margin:6px 0 14px">Change the admin PIN. It is stored in MongoDB hashed with scrypt.</p>
+        <div class="grid-3" style="max-width:900px">
+          <div class="field"><label for="currentPin">Current PIN</label><input id="currentPin" type="password" autocomplete="current-password"></div>
+          <div class="field"><label for="newPin">New PIN</label><input id="newPin" type="password" autocomplete="new-password"></div>
+          <div class="field"><label for="repeatPin">Repeat new PIN</label><input id="repeatPin" type="password" autocomplete="new-password"></div>
+        </div>
+        <button class="btn btn-primary btn-sm" type="button" id="savePin">Update PIN</button>
+        <div class="error" id="pinError" role="alert"></div>
+        <div class="notice" id="pinNotice" role="status"></div>
+      </section>
+    </div>
+  </div>
+
+  <script src="/assets/sila.js"></script>
+  <script>
+    (function () {
+      var LOGIN_URL = "/sila";
+      var token = sessionStorage.getItem("sila_admin_token");
+
+      function signOut() {
+        sessionStorage.removeItem("sila_admin_token");
+        window.location.replace(LOGIN_URL);
+      }
+
+      if (!token) { signOut(); return; }
+
+      function adminFetch(path) {
+        return fetch(SILA.BASE + path, {
+          headers: { Authorization: "Bearer " + token, Accept: "application/json" },
+          cache: "no-store"
+        }).then(function (response) {
+          if (response.status === 401) { signOut(); throw new Error("Session expired"); }
+          return response.json();
+        });
+      }
+
+      function setText(id, value) { var el = document.getElementById(id); if (el) el.textContent = value; }
+      function esc(v) { return SILA.esc(v); }
+      function methodTag(m) {
+        m = String(m || "GET").toUpperCase();
+        return '<span class="method ' + esc(m.toLowerCase()) + '">' + esc(m) + "</span>";
+      }
+      function row(cols, text) { return '<tr><td colspan="' + cols + '" class="empty">' + text + "</td></tr>"; }
+
+      /* ---------- overview ---------- */
+      function renderDashboard(data) {
+        var stats = data.stats || {};
+        var visitors = data.visitors || {};
+        var live = data.database === "connected";
+
+        document.getElementById("dbDot").className = "dot " + (live ? "live" : "amber");
+        setText("dbText", live ? "MongoDB connected" : "MongoDB offline");
+
+        setText("requestsToday", SILA.num(stats.requestsToday));
+        setText("requestsTotal", SILA.numShort(stats.requestsTotal));
+        setText("successRate", stats.successRate == null ? "—" : stats.successRate + "%");
+        setText("failedNote", "Failed today: " + SILA.num(stats.failedRequests));
+        setText("endpointCount", SILA.num(data.endpointCount));
+
+        setText("visitorTotal", SILA.numShort(visitors.total));
+        setText("visitorsOnline", SILA.num(stats.activeVisitors));
+        setText("visitorsToday", SILA.num(visitors.today));
+        setText("visitorsWeek", SILA.num(visitors.week));
+        setText("visitorsMonth", SILA.num(visitors.month));
+
+        setText("updated", new Date().toLocaleTimeString("en-GB"));
+        renderChart(data.chart || []);
+        renderRequests(data.recentRequests || []);
+        renderFailed(data.failedRequestsList || []);
+      }
+
+      function renderChart(chart) {
+        var box = document.getElementById("requestChart");
+        if (!chart.length) { box.innerHTML = '<div class="empty">No activity recorded yet.</div>'; return; }
+
+        var max = Math.max.apply(null, chart.map(function (i) { return Number(i.requests || 0); })) || 1;
+        box.innerHTML = '<div class="bars">' + chart.map(function (item) {
+          var value = Number(item.requests || 0);
+          var height = Math.max(4, Math.round((value / max) * 100));
+          return '<div class="bar-col">' +
+            '<span class="bar-val">' + (value ? SILA.num(value) : "") + "</span>" +
+            '<div class="bar-fill" style="height:' + height + '%"></div>' +
+            '<span class="bar-lbl">' + esc(item.label || "") + "</span>" +
+          "</div>";
+        }).join("") + "</div>";
+      }
+
+      function renderRequests(list) {
+        var tbody = document.getElementById("requestsTable");
+        if (!list.length) { tbody.innerHTML = row(6, "No requests recorded yet."); return; }
+        tbody.innerHTML = list.map(function (r) {
+          return "<tr>" +
+            "<td>" + esc(SILA.fmtDate(r.createdAt)) + "</td>" +
+            "<td>" + methodTag(r.method) + "</td>" +
+            '<td class="cell-mono">' + esc(r.path) + "</td>" +
+            '<td class="' + (r.success ? "ok" : "bad") + '">' + esc(r.status) + "</td>" +
+            "<td>" + esc(r.responseTime) + " ms</td>" +
+            '<td class="cell-mono">' + esc(r.ip) + "</td>" +
+          "</tr>";
+        }).join("");
+      }
+
+      function renderFailed(list) {
+        var tbody = document.getElementById("failedTable");
+        if (!list.length) { tbody.innerHTML = row(5, "No failed requests. Everything is healthy."); return; }
+        tbody.innerHTML = list.map(function (r) {
+          return "<tr>" +
+            "<td>" + esc(SILA.fmtDate(r.createdAt)) + "</td>" +
+            "<td>" + methodTag(r.method) + "</td>" +
+            '<td class="cell-mono">' + esc(r.path) + "</td>" +
+            '<td class="bad">' + esc(r.status) + "</td>" +
+            '<td class="cell-mono">' + esc(r.ip) + "</td>" +
+          "</tr>";
+        }).join("");
+      }
+
+      /* ---------- endpoints ---------- */
+      function renderEndpoints(loaded, stats) {
+        var tbody = document.getElementById("endpointTable");
+        var list = (loaded && loaded.endpoints) || [];
+        if (!list.length) { tbody.innerHTML = row(6, "No endpoints loaded."); return; }
+
+        var byPath = {};
+        (stats || []).forEach(function (s) { byPath[String(s.path || "").split("?")[0]] = s; });
+
+        var rows = list.map(function (e) {
+          var hit = byPath[e.path] || {};
+          return { item: e, requests: Number(hit.requests || 0), failed: Number(hit.failed || 0) };
+        }).sort(function (a, b) { return b.requests - a.requests; });
+
+        tbody.innerHTML = rows.map(function (entry) {
+          var e = entry.item;
+          return "<tr>" +
+            "<td>" + methodTag(e.method) + "</td>" +
+            '<td class="cell-mono"><a href="' + esc(e.path) + '" target="_blank" rel="noopener">' + esc(e.path) + "</a></td>" +
+            "<td>" + esc(e.name) + "</td>" +
+            '<td class="cell-mono">' + esc(e.source) + "</td>" +
+            "<td>" + SILA.num(entry.requests) + "</td>" +
+            "<td>" + (entry.failed ? '<span class="bad">' + SILA.num(entry.failed) + "</span>" : "0") + "</td>" +
+          "</tr>";
+        }).join("");
+      }
+
+      /* ---------- visitors ---------- */
+      function renderVisitors(list) {
+        var tbody = document.getElementById("visitorsTable");
+        if (!list.length) { tbody.innerHTML = row(5, "No visitors recorded yet."); return; }
+        tbody.innerHTML = list.slice(0, 50).map(function (v) {
+          return "<tr>" +
+            "<td>" + esc(SILA.fmtDate(v.firstSeen)) + "</td>" +
+            "<td>" + esc(SILA.timeAgo(v.lastSeen)) + "</td>" +
+            "<td>" + SILA.num(v.views || 0) + "</td>" +
+            '<td class="cell-mono">' + esc(v.ip) + "</td>" +
+            '<td class="cell-mono" style="max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(v.userAgent || "—") + "</td>" +
+          "</tr>";
+        }).join("");
+      }
+
+      /* ---------- load (polls, so the panel stays live) ---------- */
+      function loadAll(silent) {
+        if (!silent) setText("updated", "loading…");
+        return Promise.all([
+          adminFetch("/api/admin/dashboard"),
+          adminFetch("/api/admin/endpoints"),
+          adminFetch("/api/admin/requests?limit=50"),
+          adminFetch("/api/admin/visitors?limit=50")
+        ]).then(function (results) {
+          var dash = results[0], eps = results[1], reqs = results[2], vis = results[3];
+          renderDashboard(dash);
+          renderEndpoints(eps, dash.endpoints || []);
+          renderVisitors(vis.visitors || []);
+          if (reqs && reqs.requests && reqs.requests.length) renderRequests(reqs.requests);
+        }).catch(function () {
+          document.getElementById("dbDot").className = "dot down";
+          setText("dbText", "Offline");
+        });
+      }
+
+      loadAll();
+      setInterval(function () { if (!document.hidden) loadAll(true); }, 10000);
+      document.addEventListener("visibilitychange", function () { if (!document.hidden) loadAll(true); });
+
+      /* ---------- chrome ---------- */
+      var sidebar = document.getElementById("sidebar");
+      var scrim = document.getElementById("scrim");
+      function toggleMenu(open) { sidebar.classList.toggle("open", open); scrim.classList.toggle("open", open); }
+      document.getElementById("menuButton").addEventListener("click", function () { toggleMenu(!sidebar.classList.contains("open")); });
+      scrim.addEventListener("click", function () { toggleMenu(false); });
+
+      document.querySelectorAll("#sideNav a").forEach(function (link) {
+        link.addEventListener("click", function () {
+          document.querySelectorAll("#sideNav a").forEach(function (x) { x.classList.remove("active"); });
+          link.classList.add("active");
+          toggleMenu(false);
+        });
+      });
+
+      document.getElementById("logoutButton").addEventListener("click", signOut);
+      document.getElementById("refreshButton").addEventListener("click", function () { loadAll(); SILA.toast("Refreshing…"); });
+
+      adminFetch("/api/admin/me").then(function (data) {
+        setText("adminName", (data.admin && data.admin.username) || "admin");
+      }).catch(function () {});
+
+      /* ---------- change PIN ---------- */
+      var pinError = document.getElementById("pinError");
+      var pinNotice = document.getElementById("pinNotice");
+
+      document.getElementById("savePin").addEventListener("click", function () {
+        pinError.classList.remove("show");
+        pinNotice.classList.remove("show");
+
+        var current = document.getElementById("currentPin").value;
+        var next = document.getElementById("newPin").value;
+        var repeat = document.getElementById("repeatPin").value;
+
+        if (!current || !next) { pinError.textContent = "Fill in all three fields."; pinError.classList.add("show"); return; }
+        if (next !== repeat) { pinError.textContent = "The two new PIN values do not match."; pinError.classList.add("show"); return; }
+
+        fetch(SILA.BASE + "/api/admin/change-pin", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: "Bearer " + token, Accept: "application/json" },
+          body: JSON.stringify({ currentPin: current, newPin: next })
+        }).then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+          .then(function (result) {
+            if (!result.ok || result.data.success === false) {
+              pinError.textContent = result.data.error || "Could not update the PIN.";
+              pinError.classList.add("show");
+              return;
+            }
+            pinNotice.textContent = "PIN updated. Use the new PIN next time you sign in.";
+            pinNotice.classList.add("show");
+            document.getElementById("currentPin").value = "";
+            document.getElementById("newPin").value = "";
+            document.getElementById("repeatPin").value = "";
+          })
+          .catch(function () {
+            pinError.textContent = "Could not update the PIN.";
+            pinError.classList.add("show");
+          });
+      });
+    })();
+  </script>
+</body>
+</html>

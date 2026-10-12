@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API endpoints — SILA API</title>
+  <meta name="description" content="Browse and test every SILA API endpoint in your browser. Search by name, fill the parameters and read the live JSON response.">
+  <meta name="theme-color" content="#0a0a1a">
+  <meta property="og:title" content="API endpoints — SILA API">
+  <meta property="og:description" content="Browse and test every SILA API endpoint live in your browser.">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/svg+xml" href="/silaapi.svg">
+  <link rel="apple-touch-icon" href="/silaapi.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/sila.css">
+</head>
+<body>
+  <div class="ambient"></div>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="bar">
+        <a class="brand" href="/" aria-label="SILA API home">
+          <svg viewBox="60 50 180 200" aria-hidden="true"><defs><linearGradient id="lg" x1="76" y1="61" x2="224" y2="239" gradientUnits="userSpaceOnUse"><stop stop-color="#67E8F9"/><stop offset=".5" stop-color="#06B6D4"/><stop offset="1" stop-color="#2563EB"/></linearGradient></defs><path d="M150 61L224 104V196L150 239L76 196V104Z" fill="#0A0A1A" stroke="url(#lg)" stroke-width="12" stroke-linejoin="round"/><path d="M150 91V209M101 120L199 180M101 180L199 120" stroke="url(#lg)" stroke-width="9" stroke-linecap="round"/><circle cx="150" cy="91" r="13" fill="#67E8F9"/><circle cx="101" cy="120" r="13" fill="#38BDF8"/><circle cx="199" cy="120" r="13" fill="#38BDF8"/><circle cx="101" cy="180" r="13" fill="#2563EB"/><circle cx="199" cy="180" r="13" fill="#2563EB"/><circle cx="150" cy="209" r="13" fill="#67E8F9"/><circle cx="150" cy="150" r="27" fill="#0A0A1A" stroke="url(#lg)" stroke-width="7"/><path d="M137 150H163M150 137V163" stroke="#E0F2FE" stroke-width="7" stroke-linecap="round"/></svg>
+          <span class="brand-name">SILA <span>API</span></span>
+        </a>
+
+        <nav class="nav-links" aria-label="Main">
+          <a href="/">Home</a>
+          <a href="/endpoints" class="active">Endpoints</a>
+          <a href="/about">About</a>
+        </nav>
+
+        <div class="nav-actions">
+          <a class="btn btn-ghost btn-sm" href="/api/endpoints">Raw JSON</a>
+          <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        </div>
+      </div>
+
+      <nav class="mobile-menu" aria-label="Mobile">
+        <a href="/">Home</a>
+        <a href="/endpoints" class="active">Endpoints</a>
+        <a href="/about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-head">
+      <div class="container">
+        <span class="eyebrow">Documentation</span>
+        <h1>API endpoints</h1>
+        <p>Every endpoint currently published on SILA API, with a live tester. Open one, fill the parameters and press send.</p>
+      </div>
+    </section>
+
+    <section class="container" style="padding-bottom:70px">
+      <div class="urlbar">
+        <span class="lbl">Base URL</span>
+        <div class="base-url" id="baseUrlText">https://api.silatech.site</div>
+        <button class="btn btn-ghost btn-sm" type="button" id="copyBase">Copy base URL</button>
+      </div>
+
+      <div class="toolbar">
+        <div class="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input id="searchInput" type="search" placeholder="Search APIs…  (press / to focus)" autocomplete="off" aria-label="Search APIs">
+        </div>
+        <div class="chips" id="categoryChips"></div>
+      </div>
+
+      <div class="endpoint-list" id="endpointList">
+        <div class="skeleton" style="min-height:96px"></div>
+        <div class="skeleton" style="min-height:96px"></div>
+        <div class="skeleton" style="min-height:96px"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <a class="brand" href="/"><svg viewBox="60 50 180 200" aria-hidden="true"><defs><linearGradient id="lg2" x1="76" y1="61" x2="224" y2="239" gradientUnits="userSpaceOnUse"><stop stop-color="#67E8F9"/><stop offset=".5" stop-color="#06B6D4"/><stop offset="1" stop-color="#2563EB"/></linearGradient></defs><path d="M150 61L224 104V196L150 239L76 196V104Z" fill="#0A0A1A" stroke="url(#lg2)" stroke-width="12" stroke-linejoin="round"/><path d="M150 91V209M101 120L199 180M101 180L199 120" stroke="url(#lg2)" stroke-width="9" stroke-linecap="round"/><circle cx="150" cy="91" r="13" fill="#67E8F9"/><circle cx="101" cy="120" r="13" fill="#38BDF8"/><circle cx="199" cy="120" r="13" fill="#38BDF8"/><circle cx="101" cy="180" r="13" fill="#2563EB"/><circle cx="199" cy="180" r="13" fill="#2563EB"/><circle cx="150" cy="209" r="13" fill="#67E8F9"/><circle cx="150" cy="150" r="27" fill="#0A0A1A" stroke="url(#lg2)" stroke-width="7"/><path d="M137 150H163M150 137V163" stroke="#E0F2FE" stroke-width="7" stroke-linecap="round"/></svg><span class="brand-name">SILA <span>API</span></span></a>
+          <p>Simple HTTP endpoints with clear JSON responses, built by Sila Tech for apps and WhatsApp bots.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Platform</h4>
+          <a href="/">Home</a>
+          <a href="/about">About</a>
+          <a href="/api/endpoints">Endpoint list (JSON)</a>
+        </div>
+        <div class="footer-col">
+          <h4>Sila Tech</h4>
+          <a href="https://silatech.site" target="_blank" rel="noopener">silatech.site</a>
+          <a href="https://host.silatech.site" target="_blank" rel="noopener">Bot hosting</a>
+        </div>
+        <div class="footer-col">
+          <h4>Community</h4>
+          <a href="https://whatsapp.com/channel/0029VbBG4gfISTkCpKxyMH02" target="_blank" rel="noopener">WhatsApp channel</a>
+          <a href="https://chat.whatsapp.com/Db9YMXctmLG2BZs4aNuwRi" target="_blank" rel="noopener">WhatsApp group</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>SILA API — Powered by Sila Tech</span>
+        <span>© <span id="year">2026</span> Sila Tech</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/sila.js"></script>
+  <script>
+    (function () {
+      document.getElementById("year").textContent = new Date().getFullYear();
+      var BASE = SILA.BASE;
+
+      var allEndpoints = [];
+      var activeCategory = "all";
+
+      document.getElementById("baseUrlText").textContent = BASE;
+      document.getElementById("copyBase").addEventListener("click", function () { SILA.copy(BASE); });
+
+      /* ---------- helpers ---------- */
+      function sampleValue(parameter) {
+        if (parameter.example != null) return String(parameter.example);
+        var type = String(parameter.type || "text").toLowerCase();
+        if (type === "number") return "1";
+        if (type === "boolean") return "true";
+        return "hello";
+      }
+
+      function buildQuery(api) {
+        var parameters = (api.parameters || []).filter(function (p) { return p.required; });
+        if (!parameters.length) return "";
+        return "?" + parameters.map(function (p) {
+          return encodeURIComponent(p.name) + "=" + encodeURIComponent(sampleValue(p));
+        }).join("&");
+      }
+
+      function sampleUrl(api) { return BASE + (api.path || "") + buildQuery(api); }
+
+      /* ---------- categories ---------- */
+      function renderCategories() {
+        var counts = { all: allEndpoints.length };
+        allEndpoints.forEach(function (e) {
+          var c = e.category || "general";
+          counts[c] = (counts[c] || 0) + 1;
+        });
+
+        var box = document.getElementById("categoryChips");
+        box.innerHTML = Object.keys(counts).sort(function (a, b) {
+          if (a === "all") return -1;
+          if (b === "all") return 1;
+          return a.localeCompare(b);
+        }).map(function (c) {
+          var label = c === "all" ? "All" : SILA.catLabel(c);
+          return '<button class="chip' + (c === activeCategory ? " active" : "") + '" type="button" data-cat="' + SILA.esc(c) + '">' +
+            SILA.esc(label) + " <em>" + counts[c] + "</em></button>";
+        }).join("");
+
+        box.querySelectorAll(".chip").forEach(function (chip) {
+          chip.addEventListener("click", function () {
+            activeCategory = chip.dataset.cat;
+            box.querySelectorAll(".chip").forEach(function (c) { c.classList.toggle("active", c === chip); });
+            applyFilter();
+          });
+        });
+      }
+
+      /* ---------- list ---------- */
+      function createEndpoint(api, index) {
+        var method = String(api.method || "GET").toUpperCase();
+        var category = api.category || "general";
+        var el = document.createElement("article");
+        el.className = "endpoint";
+        el.id = "endpoint-" + index;
+        el.dataset.category = category;
+        el.dataset.method = method;
+        el.dataset.search = ((api.name || "") + " " + (api.path || "") + " " + (api.description || "") + " " + category).toLowerCase();
+        el.dataset.path = api.path || "";
+        el.dataset.api = JSON.stringify(api);
+
+        el.innerHTML =
+          '<div class="endpoint-head" role="button" tabindex="0" aria-expanded="false">' +
+            '<span class="method ' + SILA.esc(method.toLowerCase()) + '">' + SILA.esc(method) + "</span>" +
+            '<div class="endpoint-info">' +
+              "<div class=\"endpoint-name\">" + SILA.esc(api.name || api.path || "SILA API") + "</div>" +
+              '<div class="endpoint-path">' + SILA.esc(api.path || "") + "</div>" +
+            "</div>" +
+            '<span class="tag">' + SILA.esc(SILA.catLabel(category)) + "</span>" +
+            '<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>' +
+          "</div>" +
+          '<div class="tester">' +
+            '<div class="endpoint-desc">' + SILA.esc(api.description || "SILA API endpoint.") + "</div>" +
+            '<div class="parameter-title">Parameters</div>' +
+            '<div class="parameters" id="parameters-' + index + '"></div>' +
+            '<div class="tester-actions">' +
+              '<button class="send-btn" type="button" data-action="send">Send request</button>' +
+              '<button class="action-btn" type="button" data-action="curl">Copy cURL</button>' +
+              '<button class="action-btn" type="button" data-action="url">Copy URL</button>' +
+              '<button class="action-btn" type="button" data-action="json">Copy JSON</button>' +
+            "</div>" +
+            '<div class="url-preview" id="url-' + index + '"></div>' +
+            '<div class="response-box" id="response-' + index + '">' +
+              '<div class="response-head"><span class="t">Live response</span><span class="response-status" id="response-status-' + index + '"></span></div>' +
+              '<pre class="response-content" id="response-content-' + index + '"></pre>' +
+              '<div class="media-preview" id="media-' + index + '"></div>' +
+            "</div>" +
+          "</div>";
+
+        setupTester(api, index, el);
+        return el;
+      }
+
+      function setupTester(api, index, el) {
+        var container = el.querySelector("#parameters-" + index);
+        var parameters = api.parameters || [];
+        var method = String(api.method || "GET").toUpperCase();
+
+        if (!parameters.length) {
+          container.innerHTML = '<div class="muted" style="font-size:14px">This endpoint takes no parameters — just send the request.</div>';
+        } else {
+          container.innerHTML = parameters.map(function (p, i) {
+            var input;
+            if (p.type === "select" && Array.isArray(p.options) && p.options.length) {
+              input = '<select data-index="' + index + '" data-name="' + SILA.esc(p.name) + '" data-type="text">' +
+                p.options.map(function (o) { return '<option value="' + SILA.esc(o) + '">' + SILA.esc(o) + "</option>"; }).join("") + "</select>";
+            } else {
+              input = '<input data-index="' + index + '" data-name="' + SILA.esc(p.name) + '" data-type="' + SILA.esc(p.type || "text") + '" ' +
+                'type="' + (p.type === "number" ? "number" : "text") + '" ' +
+                'placeholder="' + SILA.esc(p.placeholder || p.description || "Enter " + p.name) + '" ' +
+                'value="' + SILA.esc(sampleValue(p)) + '"' + (i === 0 ? " autocomplete=\"off\"" : "") + ">";
+            }
+            return '<div class="parameter">' +
+              '<div class="parameter-top"><span class="parameter-name">' + SILA.esc(p.name) + "</span>" +
+              (p.required ? '<span class="required">required</span>' : '<span class="tag">optional</span>') + "</div>" +
+              input + "</div>";
+          }).join("");
+        }
+
+        var urlBox = el.querySelector("#url-" + index);
+        var statusEl = el.querySelector("#response-status-" + index);
+        var contentEl = el.querySelector("#response-content-" + index);
+        var mediaEl = el.querySelector("#media-" + index);
+        var boxEl = el.querySelector("#response-" + index);
+
+        function collect() {
+          var values = {};
+          container.querySelectorAll("[data-name]").forEach(function (input) {
+            var name = input.getAttribute("data-name");
+            var value = String(input.value || "").trim();
+            if (value) values[name] = value;
+          });
+          return values;
+        }
+
+        function buildUrl() {
+          var values = collect();
+          var query = Object.keys(values).map(function (name) {
+            return encodeURIComponent(name) + "=" + encodeURIComponent(values[name]);
+          }).join("&");
+          return BASE + (api.path || "") + (query ? "?" + query : "");
+        }
+
+        function refreshUrl() {
+          var url = buildUrl();
+          urlBox.textContent = url;
+          return url;
+        }
+
+        container.addEventListener("input", refreshUrl);
+        container.addEventListener("change", refreshUrl);
+        refreshUrl();
+
+        el.querySelector('[data-action="send"]').addEventListener("click", function () {
+          var url = refreshUrl();
+          var button = el.querySelector('[data-action="send"]');
+          button.disabled = true;
+          button.textContent = "Sending…";
+          statusEl.textContent = "…";
+          statusEl.classList.remove("bad");
+          contentEl.textContent = "Waiting for the response…";
+          mediaEl.innerHTML = "";
+          boxEl.classList.add("show");
+
+          var started = performance.now();
+          fetch(url, { headers: { Accept: "application/json" }, cache: "no-store" })
+            .then(function (res) {
+              var ms = Math.round(performance.now() - started);
+              statusEl.textContent = res.status + " " + (res.statusText || "") + " · " + ms + " ms";
+              if (!res.ok) statusEl.classList.add("bad");
+              var type = res.headers.get("content-type") || "";
+              if (type.indexOf("application/json") === 0 || type.indexOf("application/json") > -1) {
+                return res.text().then(function (text) {
+                  try { contentEl.innerHTML = SILA.highlight(JSON.stringify(JSON.parse(text), null, 2)); }
+                  catch (e) { contentEl.textContent = text; }
+                });
+              }
+              if (type.indexOf("image/") === 0) {
+                contentEl.textContent = "Image response — preview below.";
+                mediaEl.innerHTML = '<img src="' + url + '" alt="Endpoint image response">';
+                return null;
+              }
+              return res.text().then(function (text) { contentEl.textContent = text.slice(0, 4000); });
+            })
+            .catch(function (error) {
+              statusEl.textContent = "request failed";
+              statusEl.classList.add("bad");
+              contentEl.textContent = String(error && error.message ? error.message : error);
+            })
+            .then(function () {
+              button.disabled = false;
+              button.textContent = "Send request";
+            });
+        });
+
+        el.querySelector('[data-action="curl"]').addEventListener("click", function () {
+          SILA.copy('curl "' + refreshUrl() + '"');
+        });
+        el.querySelector('[data-action="url"]').addEventListener("click", function () { SILA.copy(refreshUrl()); });
+        el.querySelector('[data-action="json"]').addEventListener("click", function () {
+          SILA.copy(JSON.stringify(api, null, 2));
+        });
+      }
+
+      function toggleEndpoint(index) {
+        document.querySelectorAll(".endpoint").forEach(function (el) {
+          var open = el.id === "endpoint-" + index && !el.classList.contains("open");
+          el.classList.toggle("open", open);
+          var head = el.querySelector(".endpoint-head");
+          if (head) head.setAttribute("aria-expanded", open ? "true" : "false");
+        });
+      }
+
+      function applyFilter() {
+        var term = String(document.getElementById("searchInput").value || "").trim().toLowerCase();
+        var shown = 0;
+        document.querySelectorAll(".endpoint").forEach(function (item) {
+          var matchesCategory = activeCategory === "all" || item.dataset.category === activeCategory;
+          var matchesTerm = !term || item.dataset.search.indexOf(term) > -1;
+          var visible = matchesCategory && matchesTerm;
+          item.style.display = visible ? "" : "none";
+          if (visible) shown++;
+        });
+        var empty = document.getElementById("noResult");
+        if (!shown) {
+          if (!empty) {
+            empty = document.createElement("div");
+            empty.id = "noResult";
+            empty.className = "empty";
+            empty.textContent = "No endpoints match your search.";
+            document.getElementById("endpointList").appendChild(empty);
+          }
+        } else if (empty) {
+          empty.remove();
+        }
+      }
+
+      /* ---------- load ---------- */
+      function loadEndpoints() {
+        var list = document.getElementById("endpointList");
+        SILA.getJSON("/api/endpoints").then(function (data) {
+          allEndpoints = data.endpoints || [];
+          list.innerHTML = "";
+          if (!allEndpoints.length) {
+            list.innerHTML = '<div class="empty">No endpoints are published yet. Drop a .js file on the server and it appears here.</div>';
+            return;
+          }
+          allEndpoints.forEach(function (api, index) {
+            var el = createEndpoint(api, index);
+            list.appendChild(el);
+            var head = el.querySelector(".endpoint-head");
+            head.addEventListener("click", function () { toggleEndpoint(index); });
+            head.addEventListener("keydown", function (event) {
+              if (event.key === "Enter" || event.key === " ") { event.preventDefault(); toggleEndpoint(index); }
+            });
+          });
+          renderCategories();
+          applyFilter();
+          applyDeepLink();
+        }).catch(function () {
+          list.innerHTML = '<div class="empty">Failed to load the endpoint list. Refresh the page to try again.</div>';
+        });
+      }
+
+      function applyDeepLink() {
+        var params = new URLSearchParams(window.location.search);
+        var open = params.get("open");
+        var cat = params.get("cat");
+        if (cat) {
+          activeCategory = cat;
+          document.querySelectorAll("#categoryChips .chip").forEach(function (c) {
+            c.classList.toggle("active", c.dataset.cat === cat);
+          });
+          applyFilter();
+        }
+        if (!open) return;
+        var index = allEndpoints.findIndex(function (e) { return (e.path || "") === open; });
+        if (index < 0) return;
+        toggleEndpoint(index);
+        var el = document.getElementById("endpoint-" + index);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+
+      document.getElementById("searchInput").addEventListener("input", applyFilter);
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "/" && document.activeElement !== document.getElementById("searchInput")) {
+          event.preventDefault();
+          document.getElementById("searchInput").focus();
+        }
+      });
+
+      loadEndpoints();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="theme-color" content="#0a0a1a">
+  <title>Sign in — SILA API admin</title>
+  <link rel="icon" type="image/svg+xml" href="/silaapi.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/sila.css">
+</head>
+<body class="admin">
+  <div class="ambient"></div>
+
+  <div class="auth">
+    <div class="auth-wrap">
+      <div class="auth-top">
+        <svg viewBox="60 50 180 200" aria-hidden="true"><defs><linearGradient id="lg" x1="76" y1="61" x2="224" y2="239" gradientUnits="userSpaceOnUse"><stop stop-color="#67E8F9"/><stop offset=".5" stop-color="#06B6D4"/><stop offset="1" stop-color="#2563EB"/></linearGradient></defs><path d="M150 61L224 104V196L150 239L76 196V104Z" fill="#0A0A1A" stroke="url(#lg)" stroke-width="12" stroke-linejoin="round"/><path d="M150 91V209M101 120L199 180M101 180L199 120" stroke="url(#lg)" stroke-width="9" stroke-linecap="round"/><circle cx="150" cy="91" r="13" fill="#67E8F9"/><circle cx="101" cy="120" r="13" fill="#38BDF8"/><circle cx="199" cy="120" r="13" fill="#38BDF8"/><circle cx="101" cy="180" r="13" fill="#2563EB"/><circle cx="199" cy="180" r="13" fill="#2563EB"/><circle cx="150" cy="209" r="13" fill="#67E8F9"/><circle cx="150" cy="150" r="27" fill="#0A0A1A" stroke="url(#lg)" stroke-width="7"/><path d="M137 150H163M150 137V163" stroke="#E0F2FE" stroke-width="7" stroke-linecap="round"/></svg>
+        <div class="brand-name">SILA <span>API</span></div>
+        <p id="pageSub">Administration</p>
+      </div>
+
+      <div class="auth-card">
+        <h1 id="cardTitle">Sign in</h1>
+        <p class="sub" id="cardSub">Enter your admin username and PIN to open the dashboard.</p>
+
+        <form id="authForm" autocomplete="on">
+          <div class="field">
+            <label for="username">Username</label>
+            <input id="username" name="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+          </div>
+
+          <div class="field">
+            <label for="pin">PIN</label>
+            <div class="input">
+              <input id="pin" name="pin" type="password" inputmode="numeric" autocomplete="current-password" required style="padding-right:78px">
+              <button class="toggle" type="button" id="togglePin">Show</button>
+            </div>
+          </div>
+
+          <div class="field" id="confirmField" style="display:none">
+            <label for="confirmPin">Confirm PIN</label>
+            <input id="confirmPin" name="confirmPin" type="password" inputmode="numeric" autocomplete="new-password">
+          </div>
+
+          <button class="submit" type="submit" id="submitButton">Sign in</button>
+          <div class="error" id="errorMessage" role="alert"></div>
+          <div class="notice" id="noticeMessage" role="status"></div>
+        </form>
+      </div>
+
+      <div class="auth-foot">SILA API · Powered by Sila Tech</div>
+    </div>
+  </div>
+
+  <script src="/assets/sila.js"></script>
+  <script>
+    (function () {
+      var form = document.getElementById("authForm");
+      var username = document.getElementById("username");
+      var pin = document.getElementById("pin");
+      var confirmPin = document.getElementById("confirmPin");
+      var confirmField = document.getElementById("confirmField");
+      var submitButton = document.getElementById("submitButton");
+      var errorMessage = document.getElementById("errorMessage");
+      var noticeMessage = document.getElementById("noticeMessage");
+      var togglePin = document.getElementById("togglePin");
+
+      var mode = "login"; /* "login" | "setup" */
+
+      function showError(message) { errorMessage.textContent = message; errorMessage.classList.add("show"); }
+      function clearError() { errorMessage.classList.remove("show"); errorMessage.textContent = ""; }
+      function showNotice(message) { noticeMessage.textContent = message; noticeMessage.classList.add("show"); }
+      function clearNotice() { noticeMessage.classList.remove("show"); noticeMessage.textContent = ""; }
+
+      function setMode(next) {
+        mode = next;
+        var setup = mode === "setup";
+        confirmField.style.display = setup ? "" : "none";
+        confirmPin.required = setup;
+        document.getElementById("cardTitle").textContent = setup ? "Create the admin account" : "Sign in";
+        document.getElementById("cardSub").textContent = setup
+          ? "This is the first run. Choose a username and a PIN — they are stored in MongoDB."
+          : "Enter your admin username and PIN to open the dashboard.";
+        submitButton.textContent = setup ? "Create account" : "Sign in";
+        document.getElementById("pageSub").textContent = setup ? "First-run setup" : "Administration";
+        clearError();
+      }
+
+      /* ---------- go straight to the dashboard when a session exists ---------- */
+      var token = sessionStorage.getItem("sila_admin_token");
+      if (token) {
+        fetch(SILA.BASE + "/api/admin/me", { headers: { Authorization: "Bearer " + token } })
+          .then(function (res) {
+            if (res.ok) window.location.replace("/sila/dashboard");
+            else sessionStorage.removeItem("sila_admin_token");
+          })
+          .catch(function () {});
+      }
+
+      /* ---------- does an admin account exist yet? ---------- */
+      function checkSetup() {
+        SILA.getJSON("/api/admin/status").then(function (data) {
+          if (data.configured) { setMode("login"); return; }
+          setMode("setup");
+          if (data.database !== "connected") {
+            showNotice("MongoDB is not connected yet. Set MONGODB_URI in .env, restart the server, then create the account.");
+          }
+        }).catch(function () {
+          setMode("login");
+        });
+      }
+
+      togglePin.addEventListener("click", function () {
+        var hidden = pin.type === "password";
+        pin.type = hidden ? "text" : "password";
+        togglePin.textContent = hidden ? "Hide" : "Show";
+      });
+
+      form.addEventListener("submit", async function (event) {
+        event.preventDefault();
+        clearError();
+        clearNotice();
+
+        var user = username.value.trim();
+        var password = pin.value;
+
+        if (!user || !password) { showError("Enter your username and PIN."); return; }
+        if (mode === "setup" && password !== confirmPin.value) { showError("The two PIN values do not match."); return; }
+
+        submitButton.disabled = true;
+        submitButton.textContent = mode === "setup" ? "Creating…" : "Signing in…";
+
+        var url = SILA.BASE + (mode === "setup" ? "/api/admin/setup" : "/api/admin/login");
+        var body = mode === "setup"
+          ? { username: user, pin: password, confirmPin: confirmPin.value }
+          : { username: user, pin: password };
+
+        try {
+          var response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: JSON.stringify(body)
+          });
+
+          var data = {};
+          try { data = await response.json(); } catch (e) { data = {}; }
+
+          if (!response.ok || data.success === false) {
+            if (data.needsSetup) { setMode("setup"); }
+            throw new Error(data.error || data.message || "Could not sign in.");
+          }
+
+          if (data.token) sessionStorage.setItem("sila_admin_token", data.token);
+          window.location.href = "/sila/dashboard";
+        } catch (error) {
+          showError(error.message || "Unable to sign in.");
+          submitButton.disabled = false;
+          submitButton.textContent = mode === "setup" ? "Create account" : "Sign in";
+        }
+      });
+
+      checkSetup();
+    })();
+  </script>
+</body>
+</html>

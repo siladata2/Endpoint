@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — SILA API</title>
+  <meta name="description" content="SILA API is an API platform by Sila Tech for apps and WhatsApp bots. Contact details and official links.">
+  <meta name="theme-color" content="#0a0a1a">
+  <meta property="og:title" content="About — SILA API">
+  <meta property="og:description" content="SILA API is an API platform by Sila Tech for apps and WhatsApp bots.">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/svg+xml" href="/silaapi.svg">
+  <link rel="apple-touch-icon" href="/silaapi.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/sila.css">
+</head>
+<body>
+  <div class="ambient"></div>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="bar">
+        <a class="brand" href="/" aria-label="SILA API home">
+          <svg viewBox="60 50 180 200" aria-hidden="true"><defs><linearGradient id="lg" x1="76" y1="61" x2="224" y2="239" gradientUnits="userSpaceOnUse"><stop stop-color="#67E8F9"/><stop offset=".5" stop-color="#06B6D4"/><stop offset="1" stop-color="#2563EB"/></linearGradient></defs><path d="M150 61L224 104V196L150 239L76 196V104Z" fill="#0A0A1A" stroke="url(#lg)" stroke-width="12" stroke-linejoin="round"/><path d="M150 91V209M101 120L199 180M101 180L199 120" stroke="url(#lg)" stroke-width="9" stroke-linecap="round"/><circle cx="150" cy="91" r="13" fill="#67E8F9"/><circle cx="101" cy="120" r="13" fill="#38BDF8"/><circle cx="199" cy="120" r="13" fill="#38BDF8"/><circle cx="101" cy="180" r="13" fill="#2563EB"/><circle cx="199" cy="180" r="13" fill="#2563EB"/><circle cx="150" cy="209" r="13" fill="#67E8F9"/><circle cx="150" cy="150" r="27" fill="#0A0A1A" stroke="url(#lg)" stroke-width="7"/><path d="M137 150H163M150 137V163" stroke="#E0F2FE" stroke-width="7" stroke-linecap="round"/></svg>
+          <span class="brand-name">SILA <span>API</span></span>
+        </a>
+
+        <nav class="nav-links" aria-label="Main">
+          <a href="/">Home</a>
+          <a href="/endpoints">Endpoints</a>
+          <a href="/about" class="active">About</a>
+        </nav>
+
+        <div class="nav-actions">
+          <a class="btn btn-primary btn-sm" href="/endpoints">Explore APIs</a>
+          <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        </div>
+      </div>
+
+      <nav class="mobile-menu" aria-label="Mobile">
+        <a href="/">Home</a>
+        <a href="/endpoints">Endpoints</a>
+        <a href="/about" class="active">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-head">
+      <div class="container">
+        <span class="eyebrow">About</span>
+        <h1>Built by Sila Tech for developers</h1>
+        <p>SILA API is an API platform that gives developers simple, reliable and easy-to-integrate services for their applications and WhatsApp bots.</p>
+      </div>
+    </section>
+
+    <section class="container" style="padding-bottom:20px">
+      <div class="stats" style="margin-bottom:20px">
+        <div class="stat-card"><div class="lbl">APIs live</div><div class="val" id="aboutApis">—</div><div class="sub">Picked up from the server folder</div></div>
+        <div class="stat-card"><div class="lbl">Requests served</div><div class="val" id="aboutRequests">—</div><div class="sub" id="aboutToday">Today: —</div></div>
+        <div class="stat-card"><div class="lbl">Developers reached</div><div class="val" id="aboutVisitors">—</div><div class="sub" id="aboutOnline">Online now: —</div></div>
+        <div class="stat-card"><div class="lbl">Platform status</div><div class="val" id="aboutState">—</div><div class="sub" id="aboutUptime">Uptime —</div></div>
+      </div>
+
+      <div class="grid-2">
+        <article class="card">
+          <h2>SILA API</h2>
+          <p>One place to reach many services through plain HTTP endpoints. Add them to websites, apps, automations and WhatsApp bots with a single request. Every response is JSON shaped the same way, so integration stays predictable.</p>
+        </article>
+
+        <article class="card">
+          <h2>Sila Tech</h2>
+          <p>SILA API is powered and maintained by Sila Tech. The platform is designed with developers in mind: simple endpoints, clear responses, live statistics and practical integration.</p>
+        </article>
+
+        <article class="card full">
+          <h2>API base URL</h2>
+          <p>Every public SILA API endpoint starts with this address.</p>
+          <div class="urlbar" style="margin-top:18px">
+            <span class="lbl">Base</span>
+            <div class="base-url" id="baseUrlText">https://api.silatech.site</div>
+            <button class="btn btn-ghost btn-sm" type="button" id="copyBase">Copy base URL</button>
+          </div>
+        </article>
+
+        <article class="card full">
+          <h2>Contact and official links</h2>
+          <p>Use the official Sila Tech channels for updates, support and more information.</p>
+          <div class="contact-grid">
+            <a class="contact-item" href="tel:+255789661031"><span class="contact-label">Phone</span><span class="contact-value">+255 789 661 031</span></a>
+            <a class="contact-item" href="tel:+255637351031"><span class="contact-label">Phone</span><span class="contact-value">+255 637 351 031</span></a>
+            <a class="contact-item" href="tel:+255636341031"><span class="contact-label">Phone</span><span class="contact-value">+255 636 341 031</span></a>
+            <a class="contact-item" href="tel:+255780251031"><span class="contact-label">Phone</span><span class="contact-value">+255 780 251 031</span></a>
+            <a class="contact-item" href="https://whatsapp.com/channel/0029VbBG4gfISTkCpKxyMH02" target="_blank" rel="noopener"><span class="contact-label">Channel</span><span class="contact-value">WhatsApp channel</span></a>
+            <a class="contact-item" href="https://chat.whatsapp.com/Db9YMXctmLG2BZs4aNuwRi" target="_blank" rel="noopener"><span class="contact-label">Group</span><span class="contact-value">WhatsApp group</span></a>
+            <a class="contact-item" href="https://silatech.site" target="_blank" rel="noopener"><span class="contact-label">Website</span><span class="contact-value">silatech.site</span></a>
+            <a class="contact-item" href="https://host.silatech.site" target="_blank" rel="noopener"><span class="contact-label">Bot hosting</span><span class="contact-value">host.silatech.site</span></a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section tight">
+      <div class="container">
+        <div class="cta">
+          <div>
+            <h2>Start building</h2>
+            <p>Explore the available endpoints and add them to your project.</p>
+          </div>
+          <div class="cta-buttons"><a class="btn btn-primary" href="/endpoints">Explore APIs</a></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <a class="brand" href="/"><svg viewBox="60 50 180 200" aria-hidden="true"><defs><linearGradient id="lg2" x1="76" y1="61" x2="224" y2="239" gradientUnits="userSpaceOnUse"><stop stop-color="#67E8F9"/><stop offset=".5" stop-color="#06B6D4"/><stop offset="1" stop-color="#2563EB"/></linearGradient></defs><path d="M150 61L224 104V196L150 239L76 196V104Z" fill="#0A0A1A" stroke="url(#lg2)" stroke-width="12" stroke-linejoin="round"/><path d="M150 91V209M101 120L199 180M101 180L199 120" stroke="url(#lg2)" stroke-width="9" stroke-linecap="round"/><circle cx="150" cy="91" r="13" fill="#67E8F9"/><circle cx="101" cy="120" r="13" fill="#38BDF8"/><circle cx="199" cy="120" r="13" fill="#38BDF8"/><circle cx="101" cy="180" r="13" fill="#2563EB"/><circle cx="199" cy="180" r="13" fill="#2563EB"/><circle cx="150" cy="209" r="13" fill="#67E8F9"/><circle cx="150" cy="150" r="27" fill="#0A0A1A" stroke="url(#lg2)" stroke-width="7"/><path d="M137 150H163M150 137V163" stroke="#E0F2FE" stroke-width="7" stroke-linecap="round"/></svg><span class="brand-name">SILA <span>API</span></span></a>
+          <p>Simple HTTP endpoints with clear JSON responses, built by Sila Tech for apps and WhatsApp bots.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Platform</h4>
+          <a href="/endpoints">Endpoints</a>
+          <a href="/">Home</a>
+          <a href="/api/endpoints">Endpoint list (JSON)</a>
+        </div>
+        <div class="footer-col">
+          <h4>Sila Tech</h4>
+          <a href="https://silatech.site" target="_blank" rel="noopener">silatech.site</a>
+          <a href="https://host.silatech.site" target="_blank" rel="noopener">Bot hosting</a>
+        </div>
+        <div class="footer-col">
+          <h4>Community</h4>
+          <a href="https://whatsapp.com/channel/0029VbBG4gfISTkCpKxyMH02" target="_blank" rel="noopener">WhatsApp channel</a>
+          <a href="https://chat.whatsapp.com/Db9YMXctmLG2BZs4aNuwRi" target="_blank" rel="noopener">WhatsApp group</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>SILA API — Powered by Sila Tech</span>
+        <span>© <span id="year">2026</span> Sila Tech</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/sila.js"></script>
+  <script>
+    (function () {
+      document.getElementById("year").textContent = new Date().getFullYear();
+      document.getElementById("baseUrlText").textContent = SILA.BASE;
+      document.getElementById("copyBase").addEventListener("click", function () { SILA.copy(SILA.BASE); });
+
+      function setText(id, value) { var el = document.getElementById(id); if (el) el.textContent = value; }
+
+      SILA.live("/api/public/stats", 10000, function (data) {
+        var status = data.status || {};
+        setText("aboutApis", SILA.num(status.endpointCount || 0));
+        setText("aboutRequests", SILA.numShort(data.requests.total));
+        setText("aboutToday", "Today: " + SILA.num(data.requests.today));
+        setText("aboutVisitors", SILA.numShort(data.visitors.total));
+        setText("aboutOnline", "Online now: " + SILA.num(data.visitors.online));
+        setText("aboutState", status.database === "connected" ? "Online" : "Degraded");
+        setText("aboutUptime", "Uptime " + SILA.uptime(status.uptime));
+      }, function () {
+        setText("aboutState", "Offline");
+      });
+    })();
+  </script>
+</body>
+</html>
