@@ -3,7 +3,7 @@ const router = express.Router();
 
 router.apiInfo = {
   name: "XVIDEOS Search NSFW",
-  description: "Search XVIDEOS videos via Prexzy API - 18+",
+  description: "Search XVIDEOS videos - 18+",
   method: "GET",
   parameters: [
     { name: "query", required: true, description: "Search keyword" }
