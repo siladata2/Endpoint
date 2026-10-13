@@ -1,707 +1,736 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SILA API — Ready-made APIs by Sila Tech</title>
-  <meta name="description" content="SILA API by Sila Tech provides ready-made APIs for AI, image generation, media, downloaders, search and developer tools.">
-  <meta name="keywords" content="SILA API, Sila Tech, REST API, AI API, WhatsApp bot API, downloader API">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SILA API — Free, Unlimited APIs, No API Key Required | Sila Tech</title>
+  <meta name="description" content="SILA API — free, unlimited public APIs for developers. AI chat, image tools, downloaders, search, text-to-speech and more. Simple HTTP endpoints with clear JSON responses for apps and WhatsApp bots. No API key required.">
+  <meta name="keywords" content="sila api, free api, free apis, free public api, api no key, unlimited api, free ai api, whatsapp bot api, downloader api, text to speech api, sila tech, developer api, rest api, no api key required">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+  <meta name="author" content="Sila Tech">
   <meta name="theme-color" content="#0a0a1a">
-  <meta property="og:title" content="SILA API — Ready-made APIs by Sila Tech">
-  <meta property="og:description" content="Powerful ready-made APIs for your apps and WhatsApp bots.">
+  <link rel="canonical" href="https://api.silatech.site/">
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="SILA API">
+  <meta property="og:title" content="SILA API — Free, Unlimited APIs, No API Key Required">
+  <meta property="og:description" content="Free, unlimited public APIs for developers. Simple HTTP endpoints with clear JSON responses for apps and WhatsApp bots. No API key required.">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://api.silatech.site/">
+  <meta property="og:image" content="https://api.silatech.site/silaapi.svg">
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SILA API — Free, Unlimited APIs, No API Key Required">
+  <meta name="twitter:description" content="Free, unlimited public APIs for developers. No API key required.">
+  <meta name="twitter:image" content="https://api.silatech.site/silaapi.svg">
   <link rel="icon" type="image/svg+xml" href="/silaapi.svg">
-
+  <link rel="apple-touch-icon" href="/silaapi.svg">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif']
-          }
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
         }
       }
-    };
-
-    try {
-      if (localStorage.getItem('sila-theme') === 'light') {
-        document.documentElement.classList.remove('dark');
-      } else {
-        document.documentElement.classList.add('dark');
-      }
-    } catch(e) {
-      document.documentElement.classList.add('dark');
     }
   </script>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      overflow-x: hidden;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
     .gradient-text {
       background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-
     .gradient-bg {
       background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
     }
-
     .glass {
-      background: rgba(255,255,255,.72);
+      background: rgba(255, 255, 255, 0.7);
       backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,.3);
+      border: 1px solid rgba(255, 255, 255, 0.3);
     }
-
     .dark .glass {
-      background: rgba(30,30,50,.72);
-      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(30, 30, 50, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
-
     .hero-glow {
       position: absolute;
       width: 600px;
       height: 600px;
       border-radius: 50%;
       filter: blur(120px);
-      opacity: .25;
+      opacity: 0.3;
       pointer-events: none;
     }
 
     @keyframes float {
-      0%,100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-20px);
-      }
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
     }
-
     @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(24px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-
-    .animate-float {
-      animation: float 6s ease-in-out infinite;
+    @keyframes pulse-ring {
+      0% { transform: scale(0.8); opacity: 1; }
+      100% { transform: scale(2); opacity: 0; }
     }
-
-    .animate-fade-up {
-      animation: fadeUp .75s ease-out both;
-    }
-
-    .delay-100 { animation-delay: .1s; }
-    .delay-200 { animation-delay: .2s; }
-    .delay-300 { animation-delay: .3s; }
-    .delay-400 { animation-delay: .4s; }
-
+    .animate-float { animation: float 6s ease-in-out infinite; }
+    .animate-fade-up { animation: fadeUp 0.8s ease-out forwards; opacity: 0; }
+    .delay-100 { animation-delay: 0.1s; }
+    .delay-200 { animation-delay: 0.2s; }
+    .delay-300 { animation-delay: 0.3s; }
+    .delay-400 { animation-delay: 0.4s; }
+    .delay-500 { animation-delay: 0.5s; }
+    .delay-600 { animation-delay: 0.6s; }
     .bento-card {
-      transition: all .25s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
     .bento-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0,0,0,.12);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
     }
-
     .dark .bento-card:hover {
-      box-shadow: 0 20px 40px rgba(0,0,0,.35);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
     }
-
     .feature-icon {
       width: 48px;
       height: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 14px;
+      border-radius: 12px;
     }
-
-    .api-card {
-      min-width: 0;
+    .tab { cursor: pointer; }
+    .tab.active { background: rgba(255, 255, 255, 0.14); color: #fff; }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 5.5rem;
+      transform: translateX(-50%) translateY(10px);
+      background: rgba(17, 24, 39, 0.92);
+      color: #f9fafb;
+      font-size: 0.8rem;
+      padding: 0.55rem 1rem;
+      border-radius: 9999px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s ease;
+      z-index: 300;
     }
-
-    @media(prefers-reduced-motion:reduce) {
-      *,
-      *::before,
-      *::after {
-        animation-duration: .01ms !important;
-        transition-duration: .01ms !important;
-        scroll-behavior: auto !important;
-      }
-    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"SILA API","alternateName":"SILA API — Free Unlimited APIs by Sila Tech","url":"https://api.silatech.site","description":"Free, unlimited public APIs by Sila Tech — simple HTTP endpoints with clear JSON responses for apps and WhatsApp bots. No API key required."}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"SILA API","url":"https://api.silatech.site","logo":"https://api.silatech.site/silaapi.svg","description":"Free, unlimited public API platform by Sila Tech with simple HTTP endpoints and no API key required.","sameAs":["https://silatech.site","https://host.silatech.site","https://whatsapp.com/channel/0029VbBG4gfISTkCpKxyMH02","https://chat.whatsapp.com/Db9YMXctmLG2BZs4aNuwRi"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Are SILA APIs really free?","acceptedAnswer":{"@type":"Answer","text":"Yes. Every SILA API endpoint is 100% free to use, with no paid tiers, no credit card, and no hidden limits."}},{"@type":"Question","name":"Do I need an API key to use SILA API?","acceptedAnswer":{"@type":"Answer","text":"No. SILA API requires no API key, no signup, and no authentication. Just call the endpoint URL and read the JSON response."}},{"@type":"Question","name":"Is there a rate limit on the free APIs?","acceptedAnswer":{"@type":"Answer","text":"No enforced rate limits for normal use — the APIs are free and unlimited."}},{"@type":"Question","name":"What can I build with SILA API?","acceptedAnswer":{"@type":"Answer","text":"SILA API covers AI chat, image tools, downloaders, search, text-to-speech and more — everything from bot commands to full apps, with simple GET requests and clear JSON responses."}}]}</script>
 </head>
 
 <body class="bg-gray-50 dark:bg-[#0a0a1a] text-gray-900 dark:text-gray-100 transition-colors duration-300">
 
-  <!-- NAVIGATION -->
+  <!-- Navigation -->
   <nav class="fixed top-0 w-full z-50 glass">
-    <div class="max-w-7xl mx-auto px-5 sm:px-6 py-4 flex justify-between items-center gap-4">
-
-      <a href="/" class="flex items-center gap-3 min-w-0" aria-label="SILA API home">
-        <img src="/silaapi.svg" alt="" class="w-9 h-9 object-contain">
-
-        <span class="text-lg font-extrabold text-gray-900 dark:text-white whitespace-nowrap">
-          SILA <span class="gradient-text">API</span>
-        </span>
-
-        <span id="nav-status" class="hidden sm:inline-flex text-xs font-semibold px-2 py-1 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
-          Checking…
-        </span>
-      </a>
-
-      <div class="flex items-center gap-3 sm:gap-4">
-
-        <a href="/endpoints" class="hidden sm:flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800">
-          <i class="fas fa-code text-blue-500"></i>
-          Endpoints
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-3">
+          <div class="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">
+            <img src="/silaapi.svg" alt="SILA API logo" class="w-5 h-5">
+          </div>
+          <span class="text-lg font-bold text-gray-900 dark:text-white">SILA API</span>
         </a>
-
-        <a href="/about" class="hidden sm:flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800">
-          <i class="fas fa-circle-info text-cyan-500"></i>
-          About
-        </a>
-
-        <button id="theme-toggle" aria-label="Toggle light and dark mode" class="w-10 h-10 rounded-xl flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700">
-          <i id="theme-icon" class="fas fa-sun text-amber-400"></i>
+        <span id="navStatus" class="text-xs font-medium px-2 py-0.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">Online</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <button id="theme-toggle" class="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+          <i class="fas fa-moon text-gray-600 dark:hidden"></i>
+          <i class="fas fa-sun text-yellow-400 hidden dark:block"></i>
         </button>
-
-        <a href="/endpoints" class="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white gradient-bg rounded-lg hover:opacity-90">
-          <i class="fas fa-rocket"></i>
-          Explore APIs
+        <a href="/endpoints" class="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 transition-colors">
+          <i class="fas fa-plug text-blue-500"></i> Endpoints
         </a>
-
+        <a href="/about" class="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-medium text-white gradient-bg rounded-lg hover:opacity-90 transition-opacity">
+          <i class="fas fa-circle-info"></i> About
+        </a>
       </div>
     </div>
   </nav>
 
-  <main>
+  <!-- Hero Section -->
+  <section class="relative min-h-screen flex items-center justify-center pt-20 px-6 overflow-hidden">
+    <!-- Background Glows -->
+    <div class="hero-glow bg-blue-500 top-20 -left-40"></div>
+    <div class="hero-glow bg-cyan-400 bottom-20 -right-40"></div>
 
-    <!-- HERO SECTION -->
-    <section class="relative min-h-[92vh] flex items-center justify-center pt-28 pb-16 px-5 sm:px-6 overflow-hidden">
+    <!-- Floating Elements -->
+    <div class="absolute top-32 left-10 w-16 h-16 rounded-2xl gradient-bg opacity-20 animate-float hidden md:block"></div>
+    <div class="absolute bottom-32 right-20 w-12 h-12 rounded-xl bg-blue-400 opacity-20 animate-float hidden md:block" style="animation-delay: 2s;"></div>
+    <div class="absolute top-1/2 right-10 w-8 h-8 rounded-lg bg-cyan-400 opacity-20 animate-float hidden md:block" style="animation-delay: 4s;"></div>
 
-      <div class="hero-glow bg-blue-500 top-20 -left-40"></div>
-      <div class="hero-glow bg-cyan-400 bottom-0 -right-40"></div>
+    <div class="relative z-10 text-center max-w-4xl mx-auto">
+      <div class="animate-fade-up">
+        <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 mb-6">
+          <span id="stateDot" class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+          <span id="stateText">Checking status…</span>
+        </span>
+      </div>
+      
+      <h1 class="text-5xl sm:text-6xl md:text-7xl font-black leading-tight mb-6 animate-fade-up delay-100">
+        Build Faster with<br>
+        <span class="gradient-text">SILA API</span>
+      </h1>
+      
+      <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-8 animate-fade-up delay-200">
+        Simple HTTP endpoints with clear JSON responses for apps and WhatsApp bots. 
+        Currently serving <span id="total-endpoint" class="font-bold text-gray-900 dark:text-white">0</span> active endpoints.
+      </p>
 
-      <div class="absolute top-36 left-8 w-16 h-16 rounded-2xl gradient-bg opacity-20 animate-float hidden md:block"></div>
+      <div class="flex flex-wrap justify-center gap-4 animate-fade-up delay-300">
+        <a href="/endpoints" class="group px-8 py-3.5 gradient-bg text-white font-semibold rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2">
+          <i class="fas fa-rocket"></i> Explore APIs
+          <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+        </a>
+        <a href="https://whatsapp.com/channel/0029VbBG4gfISTkCpKxyMH02" target="_blank" rel="noopener" class="px-8 py-3.5 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-semibold rounded-xl border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-300 hover:-translate-y-0.5 flex items-center gap-2 shadow-sm">
+          <i class="fab fa-whatsapp text-green-500"></i> WhatsApp Channel
+        </a>
+      </div>
 
-      <div class="absolute bottom-28 right-16 w-12 h-12 rounded-xl bg-blue-400 opacity-20 animate-float hidden md:block" style="animation-delay:2s"></div>
-
-      <div class="relative z-10 text-center max-w-5xl mx-auto">
-
-        <div class="animate-fade-up">
-          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 mb-6">
-            <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-            Built by Sila Tech ·
-            <span id="hero-status">Loading platform status</span>
-          </span>
+      <!-- Quick Stats Row -->
+      <div class="flex flex-wrap justify-center gap-8 mt-12 animate-fade-up delay-400">
+        <div class="text-center">
+          <p class="text-2xl font-bold text-gray-900 dark:text-white" id="stat-endpoints">50+</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Endpoints</p>
         </div>
-
-        <h1 class="text-5xl sm:text-6xl md:text-7xl font-black leading-tight tracking-tight mb-6 animate-fade-up delay-100">
-          Build Faster with<br>
-          <span class="gradient-text">SILA API</span>
-        </h1>
-
-        <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-8 animate-fade-up delay-200">
-          Ready-made APIs for apps, websites and WhatsApp bots. Integrate AI, media, search and developer tools with simple HTTP requests and clear JSON responses.
-        </p>
-
-        <div class="flex flex-wrap justify-center gap-4 animate-fade-up delay-300">
-
-          <a href="/endpoints" class="group px-7 sm:px-8 py-3.5 gradient-bg text-white font-semibold rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all hover:-translate-y-0.5 flex items-center gap-2">
-            <i class="fas fa-rocket"></i>
-            Explore APIs
-            <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
-          </a>
-
-          <a href="/about" class="px-7 sm:px-8 py-3.5 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-semibold rounded-xl border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 transition-all hover:-translate-y-0.5 flex items-center gap-2 shadow-sm">
-            <i class="fas fa-user-gear text-blue-500"></i>
-            About Sila Tech
-          </a>
-
+        <div class="w-px h-12 bg-gray-200 dark:bg-gray-700 hidden sm:block"></div>
+        <div class="text-center">
+          <p class="text-2xl font-bold text-gray-900 dark:text-white" id="stat-requests">—</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Requests Served</p>
         </div>
-
-        <div class="flex flex-wrap justify-center gap-8 sm:gap-12 mt-12 animate-fade-up delay-400">
-
-          <div class="text-center">
-            <p id="stat-endpoints" class="text-2xl font-extrabold text-gray-900 dark:text-white">—</p>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Active endpoints</p>
-          </div>
-
-          <div class="text-center">
-            <p id="stat-requests" class="text-2xl font-extrabold text-gray-900 dark:text-white">—</p>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Requests served</p>
-          </div>
-
-          <div class="text-center">
-            <p id="stat-visitors" class="text-2xl font-extrabold text-gray-900 dark:text-white">—</p>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Developers reached</p>
-          </div>
-
+        <div class="w-px h-12 bg-gray-200 dark:bg-gray-700 hidden sm:block"></div>
+        <div class="text-center">
+          <p class="text-2xl font-bold text-gray-900 dark:text-white" id="stat-uptime">99.9%</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Uptime</p>
+        </div>
+        <div class="w-px h-12 bg-gray-200 dark:bg-gray-700 hidden sm:block"></div>
+        <div class="text-center">
+          <p class="text-2xl font-bold text-gray-900 dark:text-white">Free</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">No API Key</p>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- STATISTICS CARDS -->
-    <section class="py-8 px-5 sm:px-6">
-      <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+  <!-- Features Bento Grid -->
+  <section class="py-20 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-4">Why Developers Love Us</h2>
+        <p class="text-gray-600 dark:text-gray-400 max-w-xl mx-auto">Everything you need to supercharge your projects, all in one place.</p>
+      </div>
 
-        <div class="bento-card bg-white dark:bg-gray-900/70 rounded-2xl p-6 border border-gray-200 dark:border-gray-800">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Feature 1 -->
+        <div class="bento-card bg-white dark:bg-gray-800/50 rounded-2xl p-6 border border-gray-200 dark:border-gray-700/50">
           <div class="feature-icon bg-blue-100 dark:bg-blue-900/30 mb-4">
-            <i class="fas fa-code text-blue-600 dark:text-blue-400 text-xl"></i>
+            <i class="fas fa-key text-blue-600 dark:text-blue-400 text-xl"></i>
           </div>
-          <p class="text-sm text-gray-500 dark:text-gray-400">Endpoints published</p>
-          <p id="card-endpoints" class="text-3xl font-extrabold mt-1">—</p>
-          <p id="card-categories" class="text-xs text-gray-500 dark:text-gray-400 mt-2">Across all categories</p>
+          <h3 class="text-lg font-semibold mb-2">No API key needed</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Open every endpoint straight away. No sign-up, no dashboard to unlock, no key to rotate.</p>
         </div>
 
-        <div class="bento-card bg-white dark:bg-gray-900/70 rounded-2xl p-6 border border-gray-200 dark:border-gray-800">
-          <div class="feature-icon bg-cyan-100 dark:bg-cyan-900/30 mb-4">
-            <i class="fas fa-bolt text-cyan-600 dark:text-cyan-400 text-xl"></i>
+        <!-- Feature 2 -->
+        <div class="bento-card bg-white dark:bg-gray-800/50 rounded-2xl p-6 border border-gray-200 dark:border-gray-700/50">
+          <div class="feature-icon bg-purple-100 dark:bg-purple-900/30 mb-4">
+            <i class="fab fa-whatsapp text-purple-600 dark:text-purple-400 text-xl"></i>
           </div>
-          <p class="text-sm text-gray-500 dark:text-gray-400">Requests served</p>
-          <p id="card-requests" class="text-3xl font-extrabold mt-1">—</p>
-          <p id="card-today" class="text-xs text-gray-500 dark:text-gray-400 mt-2">Today: —</p>
+          <h3 class="text-lg font-semibold mb-2">Built for WhatsApp bots</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Plain GET requests, ready for bot commands, automations and any language that can speak HTTP.</p>
         </div>
 
-        <div class="bento-card bg-white dark:bg-gray-900/70 rounded-2xl p-6 border border-gray-200 dark:border-gray-800">
-          <div class="feature-icon bg-indigo-100 dark:bg-indigo-900/30 mb-4">
-            <i class="fas fa-users text-indigo-600 dark:text-indigo-400 text-xl"></i>
-          </div>
-          <p class="text-sm text-gray-500 dark:text-gray-400">Developers reached</p>
-          <p id="card-visitors" class="text-3xl font-extrabold mt-1">—</p>
-          <p id="card-visitors-today" class="text-xs text-gray-500 dark:text-gray-400 mt-2">New today: —</p>
-        </div>
-
-        <div class="bento-card bg-white dark:bg-gray-900/70 rounded-2xl p-6 border border-gray-200 dark:border-gray-800">
+        <!-- Feature 3 -->
+        <div class="bento-card bg-white dark:bg-gray-800/50 rounded-2xl p-6 border border-gray-200 dark:border-gray-700/50">
           <div class="feature-icon bg-green-100 dark:bg-green-900/30 mb-4">
-            <i class="fas fa-shield-halved text-green-600 dark:text-green-400 text-xl"></i>
+            <i class="fas fa-chart-line text-green-600 dark:text-green-400 text-xl"></i>
           </div>
-          <p class="text-sm text-gray-500 dark:text-gray-400">Success rate</p>
-          <p id="card-success" class="text-3xl font-extrabold mt-1">—</p>
-          <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Successful responses</p>
+          <h3 class="text-lg font-semibold mb-2">Live statistics</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Every call is logged to the database, so the activity numbers on this page are always real and current.</p>
         </div>
 
-      </div>
-    </section>
-
-    <!-- FEATURES -->
-    <section class="py-20 px-5 sm:px-6">
-      <div class="max-w-6xl mx-auto">
-
-        <div class="text-center mb-12">
-          <p class="text-sm font-bold uppercase tracking-[.2em] text-blue-600 dark:text-cyan-400 mb-3">Why SILA API</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-4">Everything you need to build</h2>
-          <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            A simple API platform designed for developers, apps, websites, automations and WhatsApp bots.
-          </p>
+        <!-- Feature 4 -->
+        <div class="bento-card bg-white dark:bg-gray-800/50 rounded-2xl p-6 border border-gray-200 dark:border-gray-700/50">
+          <div class="feature-icon bg-orange-100 dark:bg-orange-900/30 mb-4">
+            <i class="fas fa-code text-orange-600 dark:text-orange-400 text-xl"></i>
+          </div>
+          <h3 class="text-lg font-semibold mb-2">One pattern to learn</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Every endpoint answers the same way: a JSON body with success and your data. Learn one, and you know all of them.</p>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-
-          <div class="bento-card bg-white dark:bg-gray-900/70 rounded-2xl p-6 border border-gray-200 dark:border-gray-800">
-            <div class="feature-icon bg-blue-100 dark:bg-blue-900/30 mb-4">
-              <i class="fas fa-link text-blue-600 dark:text-blue-400 text-xl"></i>
-            </div>
-            <h3 class="font-bold text-lg mb-2">Easy integration</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-400">Use simple HTTP requests and connect endpoints to your own projects.</p>
+        <!-- Feature 5 -->
+        <div class="bento-card bg-white dark:bg-gray-800/50 rounded-2xl p-6 border border-gray-200 dark:border-gray-700/50">
+          <div class="feature-icon bg-pink-100 dark:bg-pink-900/30 mb-4">
+            <i class="fas fa-seedling text-pink-600 dark:text-pink-400 text-xl"></i>
           </div>
+          <h3 class="text-lg font-semibold mb-2">Grows on its own</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">New endpoints are picked up from the server folder automatically — no restart, no redeploy.</p>
+        </div>
 
-          <div class="bento-card bg-white dark:bg-gray-900/70 rounded-2xl p-6 border border-gray-200 dark:border-gray-800">
-            <div class="feature-icon bg-cyan-100 dark:bg-cyan-900/30 mb-4">
-              <i class="fas fa-brain text-cyan-600 dark:text-cyan-400 text-xl"></i>
-            </div>
-            <h3 class="font-bold text-lg mb-2">AI and automation</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-400">Add AI-powered capabilities and automation to compatible applications and bots.</p>
+        <!-- Feature 6 -->
+        <div class="bento-card bg-white dark:bg-gray-800/50 rounded-2xl p-6 border border-gray-200 dark:border-gray-700/50">
+          <div class="feature-icon bg-cyan-100 dark:bg-cyan-900/30 mb-4">
+            <i class="fas fa-flask text-cyan-600 dark:text-cyan-400 text-xl"></i>
           </div>
-
-          <div class="bento-card bg-white dark:bg-gray-900/70 rounded-2xl p-6 border border-gray-200 dark:border-gray-800">
-            <div class="feature-icon bg-indigo-100 dark:bg-indigo-900/30 mb-4">
-              <i class="fas fa-mobile-screen-button text-indigo-600 dark:text-indigo-400 text-xl"></i>
-            </div>
-            <h3 class="font-bold text-lg mb-2">Made for developers</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-400">Use SILA API with websites, Android and iOS apps, and WhatsApp bots.</p>
-          </div>
-
-          <div class="bento-card bg-white dark:bg-gray-900/70 rounded-2xl p-6 border border-gray-200 dark:border-gray-800">
-            <div class="feature-icon bg-violet-100 dark:bg-violet-900/30 mb-4">
-              <i class="fas fa-layer-group text-violet-600 dark:text-violet-400 text-xl"></i>
-            </div>
-            <h3 class="font-bold text-lg mb-2">Organized endpoints</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-400">Explore endpoint categories and find the right route for your project.</p>
-          </div>
-
-          <div class="bento-card bg-white dark:bg-gray-900/70 rounded-2xl p-6 border border-gray-200 dark:border-gray-800">
-            <div class="feature-icon bg-green-100 dark:bg-green-900/30 mb-4">
-              <i class="fas fa-chart-line text-green-600 dark:text-green-400 text-xl"></i>
-            </div>
-            <h3 class="font-bold text-lg mb-2">Live statistics</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-400">View platform activity and request statistics when the database is connected.</p>
-          </div>
-
-          <div class="bento-card bg-white dark:bg-gray-900/70 rounded-2xl p-6 border border-gray-200 dark:border-gray-800">
-            <div class="feature-icon bg-amber-100 dark:bg-amber-900/30 mb-4">
-              <i class="fas fa-shield-halved text-amber-600 dark:text-amber-400 text-xl"></i>
-            </div>
-            <h3 class="font-bold text-lg mb-2">Straightforward responses</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-400">Endpoints are documented with their methods, paths and available parameters.</p>
-          </div>
-
+          <h3 class="text-lg font-semibold mb-2">Test in the browser</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Open the endpoints page, fill the fields, press send and see the live response before you write a line of code.</p>
         </div>
       </div>
-    </section>    <!-- API CATEGORIES -->
-    <section class="py-20 px-5 sm:px-6 bg-white dark:bg-gray-900/50">
-      <div class="max-w-6xl mx-auto">
+    </div>
+  </section>
 
-        <div class="text-center mb-10">
-          <p class="text-sm font-bold uppercase tracking-[.2em] text-blue-600 dark:text-cyan-400 mb-3">Explore the platform</p>
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-4">Browse by Category</h2>
-
-          <p class="text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
-            <span id="category-count" class="font-bold text-gray-900 dark:text-white">—</span>
-            categories ·
-            <span id="category-total" class="font-bold text-gray-900 dark:text-white">—</span>
-            endpoints available in SILA API.
-          </p>
-        </div>
-
-        <div id="category-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          <div class="col-span-full text-center text-gray-400 py-8">
-            <i class="fas fa-spinner fa-spin mr-2"></i>
-            Loading your API categories…
-          </div>
-        </div>
-
-        <div class="text-center mt-9">
-          <a href="/endpoints" class="inline-flex items-center gap-2 px-7 py-3.5 gradient-bg text-white font-semibold rounded-xl hover:opacity-90">
-            <i class="fas fa-list"></i>
-            View all endpoints
-            <i class="fas fa-arrow-right"></i>
-          </a>
-        </div>
-
+  <!-- Browse by Category Section -->
+  <section class="py-20 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-4">Browse by Category</h2>
+        <p class="text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
+          <span id="category-count" class="font-semibold text-gray-900 dark:text-white">0</span> categories,
+          <span id="category-total" class="font-semibold text-gray-900 dark:text-white">0</span> endpoints — all free, no key required.
+        </p>
       </div>
-    </section>
+      <div id="category-grid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        <!-- Populated by JS -->
+        <div class="col-span-full text-center text-gray-400 dark:text-gray-500 text-sm py-8">
+          <i class="fas fa-spinner fa-spin mr-2"></i> Loading categories...
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <!-- DEVELOPER SECTION -->
-    <section class="py-20 px-5 sm:px-6">
-      <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
+  <!-- Code Example Section -->
+  <section class="py-20 px-6 bg-white dark:bg-gray-900/50">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div>
-          <p class="text-sm font-bold uppercase tracking-[.2em] text-blue-600 dark:text-cyan-400 mb-3">Developer friendly</p>
-
-          <h2 class="text-3xl sm:text-4xl font-extrabold mb-4">Simple to integrate</h2>
-
-          <p class="text-gray-600 dark:text-gray-400 mb-6">
-            Choose an endpoint, provide the required parameters and send a request to the route. Check the endpoint documentation for details.
-          </p>
-
-          <ul class="space-y-3 text-sm text-gray-700 dark:text-gray-300">
-            <li class="flex items-center gap-3">
-              <i class="fas fa-check-circle text-green-500"></i>
-              REST-style HTTP endpoints
+          <h2 class="text-3xl sm:text-4xl font-bold mb-4">Simple to Integrate</h2>
+          <p class="text-gray-600 dark:text-gray-400 mb-6">Just make a GET request. That's it. No SDKs, no tokens, no complex setup.</p>
+          <ul class="space-y-3">
+            <li class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300">
+              <span class="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-check text-green-600 dark:text-green-400 text-xs"></i>
+              </span>
+              RESTful JSON responses
             </li>
-
-            <li class="flex items-center gap-3">
-              <i class="fas fa-check-circle text-green-500"></i>
-              Built for apps and WhatsApp bots
+            <li class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300">
+              <span class="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-check text-green-600 dark:text-green-400 text-xs"></i>
+              </span>
+              Works with any language or framework
             </li>
-
-            <li class="flex items-center gap-3">
-              <i class="fas fa-check-circle text-green-500"></i>
-              Browse paths and parameters in one place
+            <li class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300">
+              <span class="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-check text-green-600 dark:text-green-400 text-xs"></i>
+              </span>
+              Test directly in your browser
             </li>
-
-            <li class="flex items-center gap-3">
-              <i class="fas fa-check-circle text-green-500"></i>
-              API response examples and documentation
+            <li class="flex items-center gap-3 text-sm text-gray-700 dark:text-gray-300">
+              <span class="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-check text-green-600 dark:text-green-400 text-xs"></i>
+              </span>
+              Comprehensive error handling
             </li>
           </ul>
         </div>
-
-        <div class="bg-gray-900 rounded-2xl p-6 shadow-2xl border border-gray-700 overflow-hidden">
-
-          <div class="flex items-center gap-2 mb-5">
-            <span class="w-3 h-3 rounded-full bg-red-400"></span>
-            <span class="w-3 h-3 rounded-full bg-amber-400"></span>
-            <span class="w-3 h-3 rounded-full bg-green-400"></span>
-            <span class="text-xs text-gray-400 ml-2">Example request</span>
+        <div class="bg-gray-900 rounded-2xl p-6 shadow-2xl border border-gray-700">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="w-3 h-3 rounded-full bg-red-500"></span>
+            <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+            <span class="w-3 h-3 rounded-full bg-green-500"></span>
+            <div class="ml-2 flex items-center gap-1" role="tablist">
+              <button class="tab active text-xs font-medium px-3 py-1.5 rounded-lg text-gray-400 hover:text-white transition-colors" type="button" data-lang="curl">cURL</button>
+              <button class="tab text-xs font-medium px-3 py-1.5 rounded-lg text-gray-400 hover:text-white transition-colors" type="button" data-lang="js">JavaScript</button>
+              <button class="tab text-xs font-medium px-3 py-1.5 rounded-lg text-gray-400 hover:text-white transition-colors" type="button" data-lang="py">Python</button>
+            </div>
+            <button id="copyCode" type="button" class="ml-auto text-xs font-medium text-gray-300 border border-gray-700 rounded-lg px-3 py-1.5 hover:bg-gray-800 transition-colors flex items-center gap-1.5">
+              <i class="fas fa-copy"></i> Copy
+            </button>
           </div>
-
-          <div class="text-sm font-mono text-green-300 mb-3">
-            GET <span class="text-cyan-300" id="example-url">/api</span>
-          </div>
-
-          <pre id="example-json" class="text-xs sm:text-sm text-gray-300 whitespace-pre-wrap break-words">{
-  "success": true,
-  "name": "SILA API",
-  "developer": "Sila Tech",
-  "status": "online"
-}</pre>
-
-          <a href="/api" class="inline-flex mt-5 text-sm text-cyan-300 hover:text-cyan-200 items-center gap-2">
-            Try the API
-            <i class="fas fa-arrow-up-right-from-square"></i>
-          </a>
-
+          <pre class="text-sm font-mono text-gray-300 overflow-x-auto"><code id="codeOut"></code></pre>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="border-t border-gray-200 dark:border-gray-800 px-5 sm:px-6 py-8">
-    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-
-      <a href="/" class="font-bold text-gray-800 dark:text-white">
-        SILA <span class="gradient-text">API</span>
-        <span class="font-normal text-gray-500">by Sila Tech</span>
-      </a>
-
-      <div class="flex flex-wrap justify-center gap-5">
-        <a href="/endpoints" class="hover:text-blue-500">Endpoints</a>
-        <a href="/about" class="hover:text-blue-500">About</a>
-        <a href="/privacy" class="hover:text-blue-500">Privacy</a>
-        <a href="/terms" class="hover:text-blue-500">Terms</a>
+  <!-- CTA Section -->
+  <section class="py-20 px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="gradient-bg rounded-3xl p-12 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+        <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+        <div class="relative z-10">
+          <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Ready to Start Building?</h2>
+          <p class="text-white/80 mb-8 max-w-lg mx-auto">Browse every SILA API endpoint, test it live in your browser and start integrating in minutes.</p>
+          <a href="/endpoints" class="inline-flex items-center gap-2 px-8 py-3.5 bg-white text-gray-900 font-semibold rounded-xl hover:bg-gray-100 transition-colors shadow-lg">
+            <i class="fas fa-rocket"></i> Explore APIs
+          </a>
+        </div>
       </div>
+    </div>
+  </section>
 
-      <span>© <span id="year"></span> Sila Tech. All rights reserved.</span>
+  <section id="free-api-catalog" class="py-20 px-6 border-t border-gray-200 dark:border-gray-800">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-3">Free APIs — No API Key, Unlimited</h2>
+    <p class="text-gray-600 dark:text-gray-400 mb-10 max-w-2xl">SILA API is a free, unlimited public API platform by Sila Tech. Browse every free API below — no key, no signup, no rate limits. Each endpoint returns clear JSON and can be tested live on the endpoints page.</p>
+    <div id="catalog-lists">
+      <div class="col-span-full text-center text-gray-400 dark:text-gray-500 text-sm py-8">
+        <i class="fas fa-spinner fa-spin mr-2"></i> Loading the API catalogue...
+      </div>
+    </div>
+    <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mt-16 mb-8">Frequently Asked Questions</h2>
+    <div class="mb-5"><h3 class="font-semibold text-gray-900 dark:text-white mb-1">Are SILA APIs really free?</h3><p class="text-sm text-gray-600 dark:text-gray-400">Yes. Every SILA API endpoint is 100% free to use. There are no paid tiers, no credit card, and no hidden limits.</p></div>
+<div class="mb-5"><h3 class="font-semibold text-gray-900 dark:text-white mb-1">Do I need an API key?</h3><p class="text-sm text-gray-600 dark:text-gray-400">No. SILA API requires no API key, no signup, and no authentication. Just call the endpoint URL and read the JSON response.</p></div>
+<div class="mb-5"><h3 class="font-semibold text-gray-900 dark:text-white mb-1">What can I build with SILA API?</h3><p class="text-sm text-gray-600 dark:text-gray-400">SILA API covers AI chat, image tools, downloaders, search, text-to-speech and more — everything from WhatsApp bot commands to full apps, all through simple HTTP calls.</p></div>
+<div class="mb-5"><h3 class="font-semibold text-gray-900 dark:text-white mb-1">Is there a rate limit?</h3><p class="text-sm text-gray-600 dark:text-gray-400">No enforced rate limits for normal use — the APIs are free and unlimited. Please be reasonable so the service stays fast for everyone.</p></div>
+<div class="mb-5"><h3 class="font-semibold text-gray-900 dark:text-white mb-1">How do I use a SILA API?</h3><p class="text-sm text-gray-600 dark:text-gray-400">Send a GET request to the endpoint URL (for example https://api.silatech.site/ai/talkai?prompt=hello) and read the JSON response. The full list with a live tester is on the endpoints page.</p></div>
+  </div>
+</section>
 
+  <!-- Footer -->
+  <footer class="py-8 px-6 border-t border-gray-200 dark:border-gray-800">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-6 gradient-bg rounded-md flex items-center justify-center">
+          <img src="/silaapi.svg" alt="" class="w-4 h-4">
+        </div>
+        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">SILA API — Powered by Sila Tech</span>
+      </div>
+      <p class="text-sm text-gray-500 dark:text-gray-400">&copy; <span data-year>2026</span> Sila Tech. Made with <span class="text-red-500">&hearts;</span> by Sila Tech.</p>
+      <div class="flex items-center gap-4">
+        <a href="/api/public/stats" class="text-gray-400 hover:text-blue-500 transition-colors" title="Live statistics (JSON)">
+          <i class="fas fa-chart-line text-lg"></i>
+        </a>
+        <a href="/api/endpoints" class="text-gray-400 hover:text-blue-500 transition-colors" title="Endpoint list (JSON)">
+          <i class="fas fa-code text-lg"></i>
+        </a>
+        <a href="https://silatech.site" target="_blank" rel="noopener" class="text-gray-400 hover:text-blue-500 transition-colors" title="Sila Tech">
+          <i class="fas fa-globe text-lg"></i>
+        </a>
+        <a href="https://whatsapp.com/channel/0029VbBG4gfISTkCpKxyMH02" target="_blank" rel="noopener" class="text-gray-400 hover:text-blue-500 transition-colors" title="WhatsApp channel">
+          <i class="fab fa-whatsapp text-lg"></i>
+        </a>
+        <a href="https://chat.whatsapp.com/Db9YMXctmLG2BZs4aNuwRi" target="_blank" rel="noopener" class="text-gray-400 hover:text-blue-500 transition-colors" title="WhatsApp group">
+          <i class="fas fa-users text-lg"></i>
+        </a>
+      </div>
     </div>
   </footer>
 
-  <!-- JAVASCRIPT -->
+  <!-- Floating channel button — always visible so people can join -->
+  <a href="https://whatsapp.com/channel/0029VbBG4gfISTkCpKxyMH02" target="_blank" rel="noopener"
+     class="fixed bottom-5 right-5 z-[150] flex items-center gap-2 px-4 py-3 rounded-full gradient-bg text-white font-semibold shadow-lg shadow-blue-500/30 hover:opacity-90 hover:-translate-y-0.5 transition-all duration-300">
+    <i class="fab fa-whatsapp"></i>
+    <span class="hidden sm:inline text-sm">Join the channel</span>
+  </a>
+
+  <!-- Community Welcome Modal -->
+  <div id="welcome-modal" class="fixed inset-0 z-[200] hidden items-center justify-center p-4">
+    <div id="welcome-backdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
+    <div id="welcome-card" class="relative w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-2xl p-6 sm:p-7 text-center transform scale-95 opacity-0 transition-all duration-300">
+      <button id="welcome-close" aria-label="Close" class="absolute top-3 right-3 w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"><i class="fas fa-times"></i></button>
+      <div class="w-14 h-14 mx-auto mb-4 rounded-2xl gradient-bg flex items-center justify-center shadow-lg">
+        <i class="fab fa-whatsapp text-white text-2xl"></i>
+      </div>
+      <h3 class="text-xl font-bold mb-2">Welcome to SILA API</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Free &amp; unlimited, no API key. Explore every endpoint, test it live in your browser, and join the Sila Tech community.</p>
+      <div class="space-y-3">
+        <a href="/endpoints" class="flex items-center justify-center gap-2 w-full py-3 rounded-xl gradient-bg text-white font-semibold hover:opacity-90 transition-opacity">
+          <i class="fas fa-rocket"></i> Explore APIs <span class="opacity-70 text-xs font-normal">all endpoints</span>
+        </a>
+        <a href="https://whatsapp.com/channel/0029VbBG4gfISTkCpKxyMH02" target="_blank" rel="noopener" class="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-gray-200 dark:border-gray-700 font-semibold hover:border-blue-400 dark:hover:border-blue-500 transition-colors">
+          <i class="fab fa-whatsapp text-green-500"></i> Join the Channel <span class="opacity-60 text-xs font-normal">updates</span>
+        </a>
+        <a href="https://chat.whatsapp.com/Db9YMXctmLG2BZs4aNuwRi" target="_blank" rel="noopener" class="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-gray-200 dark:border-gray-700 font-semibold hover:border-blue-400 dark:hover:border-blue-500 transition-colors">
+          <i class="fas fa-users text-blue-500"></i> Join the Group <span class="opacity-60 text-xs font-normal">discussion</span>
+        </a>
+      </div>
+      <button id="welcome-later" class="mt-4 text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Maybe later</button>
+    </div>
+  </div>
+
+  <script src="/assets/sila.js"></script>
   <script>
-  (function() {
+    // Dark Mode Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const html = document.documentElement;
 
-    const $ = id => document.getElementById(id);
-
-    const fmt = n => Number(n || 0).toLocaleString('en-US');
-
-    const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
-    }[c]));
-
-    const icons = {
-      ai: 'fa-brain',
-      image: 'fa-image',
-      media: 'fa-photo-film',
-      download: 'fa-download',
-      downloader: 'fa-download',
-      tools: 'fa-screwdriver-wrench',
-      search: 'fa-magnifying-glass',
-      data: 'fa-database',
-      general: 'fa-code',
-      tts: 'fa-volume-high',
-      texttospeech: 'fa-volume-high'
-    };
-
-    function label(s) {
-      return String(s || 'general')
-        .replace(/[-_]+/g, ' ')
-        .replace(/\b\w/g, c => c.toUpperCase());
+    if (localStorage.getItem('theme') === 'dark' || 
+        (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      html.classList.add('dark');
     }
-
-    function categoryIcon(s) {
-      return icons[String(s || 'general').toLowerCase().replace(/[\s_-]/g, '')]
-        || icons[String(s || 'general').toLowerCase()]
-        || 'fa-cubes';
-    }
-
-    $('year').textContent = new Date().getFullYear();
-
-    function setTheme() {
-      const dark = document.documentElement.classList.contains('dark');
-
-      $('theme-icon').className = dark
-        ? 'fas fa-sun text-amber-400'
-        : 'fas fa-moon text-gray-600';
-    }
-
-    $('theme-toggle').addEventListener('click', () => {
-      const dark = document.documentElement.classList.toggle('dark');
-
-      try {
-        localStorage.setItem('sila-theme', dark ? 'dark' : 'light');
-      } catch(e) {}
-
-      setTheme();
+    
+    themeToggle.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
     });
 
-    setTheme();
-
-    async function load() {
-
-      let endpointData = {
-        endpoints: []
-      };
-
-      let stats = {};
-
-      try {
-        endpointData = await (
-          await fetch('/api/endpoints', {
-            cache: 'no-store'
-          })
-        ).json();
-      } catch(e) {}
-
-      try {
-        stats = await (
-          await fetch('/api/public/stats', {
-            cache: 'no-store'
-          })
-        ).json();
-      } catch(e) {}
-
-      const eps = Array.isArray(endpointData.endpoints)
-        ? endpointData.endpoints
-        : [];
-
-      const cats = {};
-
-      eps.forEach(e => {
-        const c = String(e.category || 'general').toLowerCase();
-        cats[c] = (cats[c] || 0) + 1;
-      });
-
-      const count = Number(endpointData.total ?? eps.length);
-
-      const requests = stats.requests || {};
-      const visitors = stats.visitors || {};
-      const status = stats.status || {};
-
-      [
-        'stat-endpoints',
-        'card-endpoints',
-        'category-total'
-      ].forEach(id => {
-        if ($(id)) {
-          $(id).textContent = fmt(count);
+    // Animated endpoint counter
+    function animateCount(el, target) {
+      let current = 0;
+      const increment = Math.ceil(target / 40);
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          current = target;
+          clearInterval(timer);
         }
-      });
+        el.textContent = current;
+      }, 40);
+    }
 
-      $('category-count').textContent = fmt(Object.keys(cats).length);
+    // ===== Category icon + colour helpers =====
+    function getCategoryIcon(name) {
+      const icons = {
+        'artificial intelligence': 'fa-brain', 'ai': 'fa-brain', 'download': 'fa-download',
+        'search': 'fa-search', 'anime': 'fa-tv', 'movie': 'fa-film', 'random': 'fa-shuffle',
+        'game': 'fa-gamepad', 'image creator': 'fa-palette', 'image': 'fa-image',
+        'nsfw': 'fa-lock', 'tools': 'fa-wrench', 'tool': 'fa-wrench', 'stalk': 'fa-user-secret',
+        'text to speech': 'fa-volume-high', 'speech': 'fa-volume-high', 'audio': 'fa-music',
+        'sound': 'fa-music', 'sport': 'fa-futbol', 'virtual number': 'fa-mobile-screen',
+        'number': 'fa-hashtag', 'style text': 'fa-font', 'text maker': 'fa-pen-nib',
+        'text': 'fa-font', 'url': 'fa-link', 'screenshot': 'fa-camera',
+        'tts': 'fa-volume-high', 'media': 'fa-photo-film', 'data': 'fa-database',
+      };
+      const lower = (name || '').toLowerCase();
+      for (const [key, icon] of Object.entries(icons)) if (lower.includes(key)) return icon;
+      return 'fa-cube';
+    }
+    const CATEGORY_PALETTE = ['#3b82f6','#06b6d4','#059669','#f59e0b','#ef4444','#ec4899','#8b5cf6','#14b8a6','#f97316','#22c55e','#84cc16','#a855f7','#0ea5e9','#e11d48','#6366f1'];
+    function getCategoryColor(name) {
+      const overrides = {
+        'artificial intelligence':'#3b82f6','ai':'#3b82f6','downloader':'#3b82f6','download':'#3b82f6',
+        'search':'#06b6d4','anime':'#ec4899','tools':'#f59e0b','text to speech':'#06b6d4','tts':'#06b6d4',
+        'image':'#8b5cf6','image creator':'#8b5cf6','media':'#f97316','data':'#22c55e'
+      };
+      const lower = (name || '').toLowerCase();
+      if (overrides[lower]) return overrides[lower];
+      let hash = 0;
+      for (let i = 0; i < lower.length; i++) hash = (hash * 31 + lower.charCodeAt(i)) >>> 0;
+      return CATEGORY_PALETTE[hash % CATEGORY_PALETTE.length];
+    }
 
-      $('card-categories').textContent =
-        fmt(Object.keys(cats).length) + ' categories';
+    function prettyNum(n) {
+      n = Number(n || 0);
+      return n >= 1e6 ? (n / 1e6).toFixed(n >= 1e7 ? 0 : 1) + 'M'
+           : n >= 1e3 ? Math.floor(n / 1e3) + 'K'
+           : String(n);
+    }
 
-      $('stat-requests').textContent = fmt(requests.total);
-      $('stat-visitors').textContent = fmt(visitors.total);
+    // ===== Safe fallbacks: real helpers from /assets/sila.js are used when loaded;
+    // these shims only kick in if that file ever fails to load =====
+    window.SILA = window.SILA || {};
+    SILA.esc = SILA.esc || function (v) { return String(v == null ? '' : v); };
+    SILA.catLabel = SILA.catLabel || function (n) { return String(n || 'General'); };
+    SILA.uptime = SILA.uptime || function (s) { return Math.floor(Number(s || 0) / 3600) + 'h'; };
+    SILA.copy = SILA.copy || function (t) { if (navigator.clipboard) navigator.clipboard.writeText(String(t == null ? '' : t)); };
+    SILA.live = SILA.live || function (path, ms, onData, onError) {
+      function tick() {
+        fetch(path, { cache: 'no-store' }).then(r => r.json()).then(d => onData && onData(d)).catch(() => onError && onError());
+      }
+      tick();
+      setInterval(function () { if (!document.hidden) tick(); }, ms || 10000);
+      document.addEventListener('visibilitychange', function () { if (!document.hidden) tick(); });
+    };
 
-      $('card-requests').textContent = fmt(requests.total);
-
-      $('card-today').textContent =
-        'Today: ' + fmt(requests.today);
-
-      $('card-visitors').textContent = fmt(visitors.total);
-
-      $('card-visitors-today').textContent =
-        'New today: ' + fmt(visitors.today);
-
-      $('card-success').textContent =
-        requests.successRate == null
-          ? '—'
-          : Number(requests.successRate).toFixed(1) + '%';
-
-      $('nav-status').textContent =
-        status.database === 'connected'
-          ? 'Platform online'
-          : 'API available';
-
-      $('hero-status').textContent =
-        status.database === 'connected'
-          ? 'Platform online'
-          : 'APIs ready to explore';
-
-      $('nav-status').className =
-        'hidden sm:inline-flex text-xs font-semibold px-2 py-1 rounded-full ' +
-        (
-          status.database === 'connected'
-            ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-            : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-        );
-
-      const grid = $('category-grid');
-
-      const sorted = Object.entries(cats).sort(
-        (a, b) => b[1] - a[1] || a[0].localeCompare(b[0])
-      );
-
-      if (!sorted.length) {
-
-        grid.innerHTML =
-          '<div class="col-span-full text-center text-gray-500 py-8">' +
-          'No endpoints were returned. Please try the Endpoints page.' +
-          '</div>';
-
-      } else {
-
-        grid.innerHTML = sorted.map(([cat, n]) => `
-          <a href="/endpoints" class="bento-card api-card bg-white dark:bg-gray-900/70 rounded-2xl border border-gray-200 dark:border-gray-800 p-5 sm:p-6 block">
-
-            <div class="flex items-center justify-between gap-3 mb-4">
-
-              <div class="feature-icon bg-blue-100 dark:bg-blue-900/30">
-                <i class="fas ${categoryIcon(cat)} text-blue-600 dark:text-blue-400 text-lg"></i>
-              </div>
-
-              <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-cyan-50 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-300">
-                ${fmt(n)} API${n === 1 ? '' : 's'}
-              </span>
-
-            </div>
-
-            <h3 class="font-bold text-base sm:text-lg mb-1">
-              ${esc(label(cat))}
-            </h3>
-
-            <p class="text-sm text-gray-500 dark:text-gray-400">
-              Explore ${fmt(n)} endpoint${n === 1 ? '' : 's'} in this category.
-            </p>
-
-            <div class="mt-4 text-sm font-semibold text-blue-600 dark:text-cyan-400 flex items-center gap-2">
-              Browse endpoints
-              <i class="fas fa-arrow-right text-xs"></i>
-            </div>
-
-          </a>
-        `).join('');
-
+    // ===== Live status badge (nav + hero) — real time from the database =====
+    function setStatus(state, text) {
+      const dot = document.getElementById('stateDot');
+      const label = document.getElementById('stateText');
+      const nav = document.getElementById('navStatus');
+      if (dot) {
+        dot.className = 'w-2 h-2 rounded-full animate-pulse ' +
+          (state === 'live' ? 'bg-green-500' : state === 'amber' ? 'bg-yellow-400' : 'bg-red-500');
+      }
+      if (label) label.textContent = text;
+      if (nav) {
+        nav.textContent = state === 'live' ? 'Online' : (state === 'amber' ? 'Starting' : 'Offline');
+        nav.className = 'text-xs font-medium px-2 py-0.5 rounded-full ' +
+          (state === 'live' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+          : state === 'amber' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
+          : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400');
       }
     }
 
-    load();
+    // ===== Live statistics (MongoDB backed — same API the old homepage used) =====
+    SILA.live('/api/public/stats', 8000, function (data) {
+      const status = data.status || {};
+      const live = String(status.database) === 'connected';
+      setStatus(live ? 'live' : 'amber', live ? 'All systems operational' : 'API online · database connecting');
 
-    setInterval(load, 30000);
+      const el = document.getElementById('stat-requests');
+      if (el) el.textContent = prettyNum(data.requests.total) + '+';
 
-  })();
+      if (typeof status.uptime === 'number' && status.uptime > 0) {
+        const up = document.getElementById('stat-uptime');
+        if (up) up.textContent = SILA.uptime(status.uptime);
+      }
+      if (typeof status.endpointCount === 'number' && status.endpointCount > 0) {
+        const se = document.getElementById('stat-endpoints');
+        if (se && !se.dataset.live) { se.textContent = status.endpointCount + '+'; se.dataset.live = '1'; }
+      }
+    }, function () {
+      setStatus('down', "Can't reach the API right now");
+    });
+
+    // ===== Endpoint count + category grid + catalogue (from your own endpoint registry) =====
+    fetch('/api/endpoints')
+      .then(res => res.json())
+      .then(data => {
+        const total = Number(data.total || 0);
+        const list = Array.isArray(data.endpoints) ? data.endpoints : [];
+
+        animateCount(document.getElementById('total-endpoint'), total);
+        const se = document.getElementById('stat-endpoints');
+        if (se && !se.dataset.live) se.textContent = total + '+';
+
+        // group the flat endpoint list by category
+        const byCat = new Map();
+        list.forEach(e => {
+          const key = e.category || 'general';
+          if (!byCat.has(key)) byCat.set(key, []);
+          byCat.get(key).push(e);
+        });
+        const cats = Array.from(byCat.entries())
+          .map(([name, items]) => ({ name, items }))
+          .sort((a, b) => b.items.length - a.items.length);
+
+        const grid = document.getElementById('category-grid');
+        const countEl = document.getElementById('category-count');
+        const totalEl = document.getElementById('category-total');
+        if (countEl) countEl.textContent = String(cats.length);
+        if (totalEl) totalEl.textContent = String(total);
+
+        if (grid) {
+          if (!cats.length) {
+            grid.innerHTML = '<div class="col-span-full text-center text-gray-400 text-sm py-8">No categories available</div>';
+          } else {
+            grid.innerHTML = '';
+            cats.forEach(cat => {
+              const color = getCategoryColor(cat.name || '');
+              const count = cat.items.length;
+              const a = document.createElement('a');
+              a.href = '/endpoints';
+              a.className = 'bento-card group bg-white dark:bg-gray-800/50 rounded-2xl p-5 border border-gray-200 dark:border-gray-700/50 flex flex-col gap-3';
+              a.innerHTML = `
+                <div class="feature-icon" style="background:${color}1a">
+                  <i class="fas ${getCategoryIcon(cat.name || '')} text-lg" style="color:${color}"></i>
+                </div>
+                <div>
+                  <h3 class="text-sm font-semibold text-gray-900 dark:text-white leading-tight">${SILA.esc(SILA.catLabel(cat.name))}</h3>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${count} endpoint${count !== 1 ? 's' : ''}</p>
+                </div>`;
+              grid.appendChild(a);
+            });
+          }
+        }
+
+        // full catalogue (grouped lists, same look as the SEO catalogue)
+        const catalog = document.getElementById('catalog-lists');
+        if (catalog) {
+          catalog.innerHTML = '';
+          if (!cats.length) {
+            catalog.innerHTML = '<div class="text-center text-gray-400 text-sm py-8">No endpoints available right now.</div>';
+          } else {
+            cats.forEach(cat => {
+              const box = document.createElement('div');
+              box.className = 'mb-8';
+              const h3 = document.createElement('h3');
+              h3.className = 'text-lg font-bold text-gray-900 dark:text-white mb-3';
+              h3.innerHTML = `${SILA.esc(SILA.catLabel(cat.name))} APIs <span class="text-sm font-normal text-gray-500">(${cat.items.length} free endpoints)</span>`;
+              const ul = document.createElement('ul');
+              ul.className = 'space-y-1.5 text-sm list-disc pl-5';
+              ul.innerHTML = cat.items.map(e =>
+                `<li><a href="/endpoints" class="text-blue-600 dark:text-blue-400 hover:underline"><strong>${SILA.esc(e.method || 'GET')} ${SILA.esc(e.path)}</strong></a> — <span class="text-gray-600 dark:text-gray-400">${SILA.esc(e.name)}: ${SILA.esc(e.description)}</span></li>`
+              ).join('');
+              box.appendChild(h3);
+              box.appendChild(ul);
+              catalog.appendChild(box);
+            });
+          }
+        }
+      })
+      .catch(() => {
+        document.getElementById('total-endpoint').textContent = '0';
+        const grid = document.getElementById('category-grid');
+        if (grid) grid.innerHTML = '<div class="col-span-full text-center text-gray-400 text-sm py-8"><i class="fas fa-triangle-exclamation mr-2"></i> Could not load categories</div>';
+        const catalog = document.getElementById('catalog-lists');
+        if (catalog) catalog.innerHTML = '<div class="text-center text-gray-400 text-sm py-8"><i class="fas fa-triangle-exclamation mr-2"></i> Could not load the catalogue</div>';
+      });
+
+    // ===== Code samples (cURL / JavaScript / Python) =====
+    const SAMPLE_URL = window.location.origin + '/api/endpoints';
+    const snippets = {
+      curl: u => 'curl "' + u + '"',
+      js: u => 'const response = await fetch("' + u + '");\nconst data = await response.json();\n\nconsole.log(data);',
+      py: u => 'import requests\n\nresponse = requests.get("' + u + '")\nprint(response.json())'
+    };
+    let lang = 'curl';
+
+    function renderCode() { document.getElementById('codeOut').textContent = snippets[lang](SAMPLE_URL); }
+
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        lang = tab.dataset.lang;
+        renderCode();
+      });
+    });
+    document.getElementById('copyCode').addEventListener('click', () => {
+      SILA.copy(document.getElementById('codeOut').textContent);
+    });
+    renderCode();
+
+    // Dynamic copyright year
+    document.querySelectorAll('[data-year]').forEach(el => {
+      el.textContent = new Date().getFullYear();
+    });
+
+    // Intersection Observer for scroll animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-fade-up');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.bento-card').forEach(card => {
+      observer.observe(card);
+    });
+
+    // ===== Welcome modal (shown on every visit) =====
+    (function(){
+      const modal = document.getElementById('welcome-modal'),
+            card = document.getElementById('welcome-card'),
+            bd = document.getElementById('welcome-backdrop');
+      if (!modal) return;
+      function open(){ modal.classList.remove('hidden'); modal.classList.add('flex');
+        requestAnimationFrame(function(){ bd.classList.add('opacity-100'); card.classList.remove('scale-95','opacity-0'); card.classList.add('scale-100','opacity-100'); }); }
+      function close(){ bd.classList.remove('opacity-100'); card.classList.add('scale-95','opacity-0');
+        setTimeout(function(){ modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300); }
+      document.getElementById('welcome-close').onclick = close;
+      document.getElementById('welcome-later').onclick = close;
+      bd.onclick = close;
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+      setTimeout(open, 1200);
+    })();
   </script>
-
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920" integrity="sha512-L0ha0OXavK/8okipN9F8BtP84dg9DUhPERbBXzwI6dgTA55d2+yweo3pn5CSFYs45/r8md2+xvUPtTdvTNRfjA==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","spa":2}' crossorigin="anonymous"></script>
 </body>
 </html>
