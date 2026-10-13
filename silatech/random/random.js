@@ -1,129 +1,191 @@
 const express = require("express");
 
-const router = express.Router();
+// ==========================================
+// API 1: SILA BLUE ARCHIVE
+// ==========================================
 
-const API_BASE = "https://prexzyapis.com/random";
+const blueArchiveRouter = express.Router();
 
-// API 1: Blue Archive
-const blueArchiveInfo = {
+blueArchiveRouter.apiInfo = {
   name: "Sila Blue Archive",
   description: "Get random Blue Archive images.",
-  category: "Random",
   method: "GET",
   endpoint: "/random/bluearchive",
-  parameters: [],
-  example: "/random/bluearchive"
+  parameters: []
 };
 
-// API 2: Boy Pic
-const boyPicInfo = {
-  name: "Sila Boy Pic",
-  description: "Get random boy pictures.",
-  category: "Random",
-  method: "GET",
-  endpoint: "/random/boypic",
-  parameters: [],
-  example: "/random/boypic"
-};
-
-// API 3: Random Car
-const carInfo = {
-  name: "Sila Random Car",
-  description: "Get random car images.",
-  category: "Random",
-  method: "GET",
-  endpoint: "/random/car",
-  parameters: [],
-  example: "/random/car"
-};
-
-// Hifadhi metadata zote kwa ajili ya UI loader.
-router.apiInfo = [
-  blueArchiveInfo,
-  boyPicInfo,
-  carInfo
-];
-
-// Function ya kuunda route kwa kila API.
-function createRandomEndpoint(path, info) {
-  router.get(path, async (req, res) => {
+blueArchiveRouter.get("/", async (req, res) => {
+  try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 30000);
 
+    let response;
+
     try {
-      const upstreamUrl = `${API_BASE}${path}`;
-
-      const response = await fetch(upstreamUrl, {
-        method: "GET",
-        headers: {
-          Accept: "application/json"
-        },
-        signal: controller.signal
-      });
-
-      if (!response.ok) {
-        console.error(
-          `[${info.name}] Service status:`,
-          response.status
-        );
-
-        return res.status(502).json({
-          success: false,
-          creator: "Sila Tech",
-          message: "The service is temporarily unavailable."
-        });
-      }
-
-      const contentType = response.headers.get("content-type") || "";
-
-      if (!contentType.includes("application/json")) {
-        return res.status(502).json({
-          success: false,
-          creator: "Sila Tech",
-          message: "Unsupported response format."
-        });
-      }
-
-      const data = await response.json();
-
-      if (data?.success === false || data?.error) {
-        return res.status(502).json({
-          success: false,
-          creator: "Sila Tech",
-          message: "Unable to retrieve the requested result."
-        });
-      }
-
-      return res.status(200).json({
-        success: true,
-        creator: "Sila Tech",
-        name: info.name,
-        result: data
-      });
-    } catch (error) {
-      const timedOut = error.name === "AbortError";
-
-      console.error(
-        `[${info.name}]`,
-        timedOut ? "Request timed out" : "Request failed"
+      response = await fetch(
+        "https://prexzyapis.com/random/bluearchive",
+        {
+          headers: { Accept: "application/json" },
+          signal: controller.signal
+        }
       );
-
-      return res.status(timedOut ? 504 : 500).json({
-        success: false,
-        creator: "Sila Tech",
-        message: timedOut
-          ? "Request timed out. Please try again."
-          : "An unexpected error occurred."
-      });
     } finally {
       clearTimeout(timeout);
     }
-  });
-}
 
-// Sajili kila API kwa metadata yake.
-createRandomEndpoint("/bluearchive", blueArchiveInfo);
-createRandomEndpoint("/boypic", boyPicInfo);
-createRandomEndpoint("/car", carInfo);
+    if (!response.ok) {
+      return res.status(502).json({
+        success: false,
+        creator: "Sila Tech",
+        message: "Blue Archive service is unavailable."
+      });
+    }
 
-module.exports = router;
+    const data = await response.json();
+
+    return res.json({
+      success: true,
+      creator: "Sila Tech",
+      result: data
+    });
+  } catch (error) {
+    return res.status(error.name === "AbortError" ? 504 : 500).json({
+      success: false,
+      creator: "Sila Tech",
+      message: error.name === "AbortError"
+        ? "Request timed out."
+        : "Failed to retrieve Blue Archive images."
+    });
+  }
+});
+
+
+// ==========================================
+// API 2: SILA BOY PIC
+// ==========================================
+
+const boyPicRouter = express.Router();
+
+boyPicRouter.apiInfo = {
+  name: "Sila Boy Pic",
+  description: "Get random boy pictures.",
+  method: "GET",
+  endpoint: "/random/boypic",
+  parameters: []
+};
+
+boyPicRouter.get("/", async (req, res) => {
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 30000);
+
+    let response;
+
+    try {
+      response = await fetch(
+        "https://prexzyapis.com/random/boypic",
+        {
+          headers: { Accept: "application/json" },
+          signal: controller.signal
+        }
+      );
+    } finally {
+      clearTimeout(timeout);
+    }
+
+    if (!response.ok) {
+      return res.status(502).json({
+        success: false,
+        creator: "Sila Tech",
+        message: "Boy Pic service is unavailable."
+      });
+    }
+
+    const data = await response.json();
+
+    return res.json({
+      success: true,
+      creator: "Sila Tech",
+      result: data
+    });
+  } catch (error) {
+    return res.status(error.name === "AbortError" ? 504 : 500).json({
+      success: false,
+      creator: "Sila Tech",
+      message: error.name === "AbortError"
+        ? "Request timed out."
+        : "Failed to retrieve boy pictures."
+    });
+  }
+});
+
+
+// ==========================================
+// API 3: SILA RANDOM CAR
+// ==========================================
+
+const carRouter = express.Router();
+
+carRouter.apiInfo = {
+  name: "Sila Random Car",
+  description: "Get random car images.",
+  method: "GET",
+  endpoint: "/random/car",
+  parameters: []
+};
+
+carRouter.get("/", async (req, res) => {
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 30000);
+
+    let response;
+
+    try {
+      response = await fetch(
+        "https://prexzyapis.com/random/car",
+        {
+          headers: { Accept: "application/json" },
+          signal: controller.signal
+        }
+      );
+    } finally {
+      clearTimeout(timeout);
+    }
+
+    if (!response.ok) {
+      return res.status(502).json({
+        success: false,
+        creator: "Sila Tech",
+        message: "Random Car service is unavailable."
+      });
+    }
+
+    const data = await response.json();
+
+    return res.json({
+      success: true,
+      creator: "Sila Tech",
+      result: data
+    });
+  } catch (error) {
+    return res.status(error.name === "AbortError" ? 504 : 500).json({
+      success: false,
+      creator: "Sila Tech",
+      message: error.name === "AbortError"
+        ? "Request timed out."
+        : "Failed to retrieve car images."
+    });
+  }
+});
+
+
+// ==========================================
+// EXPORT ROUTERS
+// ==========================================
+
+module.exports = {
+  blueArchiveRouter,
+  boyPicRouter,
+  carRouter
+};
