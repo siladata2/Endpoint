@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>API Endpoints — SILA API</title>
+  <title>API endpoints — SILA API</title>
   <meta name="description" content="Browse and test every SILA API endpoint in your browser. Search by name, fill the parameters and read the live JSON response.">
   <meta name="theme-color" content="#0a0a1a">
-  <meta property="og:title" content="API Endpoints — SILA API">
+  <meta property="og:title" content="API endpoints — SILA API">
   <meta property="og:description" content="Browse and test every SILA API endpoint live in your browser.">
   <meta property="og:type" content="website">
   <link rel="icon" type="image/svg+xml" href="/silaapi.svg">
@@ -14,1369 +14,817 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/sila.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          },
+          animation: {
+            'grid-move': 'grid-move 20s linear infinite',
+            'float': 'float 6s ease-in-out infinite',
+            'fade-up': 'fadeUp .75s ease-out both',
+            'blob': 'blob 7s infinite',
+          },
+          keyframes: {
+            'grid-move': {
+              '0%': { transform: 'translateY(0)' },
+              '100%': { transform: 'translateY(40px)' },
+            },
+            'float': {
+              '0%,100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-20px)' },
+            },
+            'fadeUp': {
+              from: { opacity: 0, transform: 'translateY(24px)' },
+              to: { opacity: 1, transform: 'translateY(0)' },
+            },
+            'blob': {
+              '0%': { transform: 'translate(0px, 0px) scale(1)' },
+              '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+              '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+              '100%': { transform: 'translate(0px, 0px) scale(1)' },
+            }
+          }
+        }
+      }
+    };
 
+    try {
+      if (localStorage.getItem('sila-theme') === 'light') {
+        document.documentElement.classList.remove('dark');
+      } else {
+        document.documentElement.classList.add('dark');
+      }
+    } catch(e) {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
   <style>
-    /* ============================================
-       SILA API — Premium Endpoints Page Styles
-       ============================================ */
-    :root {
-      --sila-bg: #07070f;
-      --sila-surface: #0f0f1a;
-      --sila-surface-2: #15151f;
-      --sila-border: #1f1f2e;
-      --sila-text: #e4e4e7;
-      --sila-muted: #71717a;
-      --sila-blue: #2563eb;
-      --sila-cyan: #06b6d4;
-      --sila-green: #10b981;
-      --sila-purple: #8b5cf6;
-      --sila-amber: #f59e0b;
-      --sila-red: #ef4444;
-    }
-
     * { box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: var(--sila-bg);
-      color: var(--sila-text);
-      font-family: 'Inter', sans-serif;
-      overflow-x: hidden;
-    }
-
-    /* Ambient Background */
-    .ambient {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      background: 
-        radial-gradient(circle at 15% 20%, rgba(37, 99, 235, 0.08), transparent 40%),
-        radial-gradient(circle at 85% 80%, rgba(6, 182, 212, 0.08), transparent 40%);
-    }
-
-    .ambient::before {
-      content: '';
-      position: absolute;
-      inset: 0;
+    /* Premium Grid Background */
+    .grid-bg {
       background-image: 
-        linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
-      background-size: 50px 50px;
-      mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
-      -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+        linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .dark .grid-bg {
+      background-image: 
+        linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
     }
 
-    .container {
-      max-width: 1240px;
-      margin: 0 auto;
-      padding: 0 24px;
-      position: relative;
-      z-index: 1;
+    .gradient-text {
+      background: linear-gradient(135deg, #2563eb 0%, #06b6d4 50%, #3b82f6 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shine 4s linear infinite;
+    }
+    @keyframes shine {
+      to { background-position: 200% center; }
     }
 
-    /* HEADER */
-    .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      background: rgba(7, 7, 15, 0.85);
+    .gradient-bg {
+      background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+    }
+
+    .glass {
+      background: rgba(255,255,255,.72);
       backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--sila-border);
+      border: 1px solid rgba(255,255,255,.3);
+    }
+    .dark .glass {
+      background: rgba(30,30,50,.72);
+      border: 1px solid rgba(255,255,255,.1);
     }
 
-    .bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 0;
-      gap: 16px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .brand svg {
-      width: 36px;
-      height: 36px;
-      flex-shrink: 0;
-    }
-
-    .brand-name {
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: white;
-      white-space: nowrap;
-    }
-
-    .brand-name span {
-      background: linear-gradient(135deg, #2563eb, #06b6d4);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .nav-links {
-      display: none;
-      gap: 4px;
-    }
-
-    @media (min-width: 768px) {
-      .nav-links { display: flex; }
-    }
-
-    .nav-links a {
-      padding: 8px 16px;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--sila-muted);
-      text-decoration: none;
-      border-radius: 10px;
-      transition: all 0.2s;
-    }
-
-    .nav-links a:hover {
-      color: white;
-      background: rgba(255,255,255,0.05);
-    }
-
-    .nav-links a.active {
-      color: white;
-      background: rgba(37, 99, 235, 0.15);
-    }
-
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .menu-toggle {
-      display: flex;
-      width: 40px;
-      height: 40px;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--sila-border);
-      background: transparent;
-      border-radius: 10px;
-      cursor: pointer;
-      color: var(--sila-text);
-    }
-
-    .menu-toggle svg { width: 20px; height: 20px; }
-
-    @media (min-width: 768px) {
-      .menu-toggle { display: none; }
-    }
-
-    .mobile-menu {
-      display: none;
-      flex-direction: column;
-      gap: 4px;
-      padding: 12px 0 20px;
-      border-top: 1px solid var(--sila-border);
-    }
-
-    .mobile-menu.show { display: flex; }
-
-    .mobile-menu a {
-      padding: 12px 16px;
-      color: var(--sila-muted);
-      text-decoration: none;
-      border-radius: 10px;
-      font-size: 14px;
-    }
-
-    .mobile-menu a.active { color: white; background: rgba(37,99,235,0.15); }
-
-    /* BUTTONS */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 10px 18px;
-      font-size: 13px;
-      font-weight: 600;
-      border-radius: 10px;
-      border: 1px solid transparent;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
-
-    .btn-sm { padding: 8px 14px; font-size: 12px; }
-
-    .btn-ghost {
-      background: rgba(255,255,255,0.04);
-      border-color: var(--sila-border);
-      color: var(--sila-text);
-    }
-
-    .btn-ghost:hover {
-      background: rgba(255,255,255,0.08);
-      border-color: rgba(255,255,255,0.15);
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #2563eb, #06b6d4);
-      color: white;
-      box-shadow: 0 8px 24px rgba(37,99,235,0.3);
-    }
-
-    .btn-primary:hover {
-      box-shadow: 0 12px 32px rgba(37,99,235,0.45);
-      transform: translateY(-1px);
-    }
-
-    /* PAGE HEAD */
-    .page-head {
-      padding: 56px 0 32px;
-      border-bottom: 1px solid var(--sila-border);
-      margin-bottom: 32px;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--sila-cyan);
-      margin-bottom: 16px;
-    }
-
-    .eyebrow::before {
-      content: '';
-      width: 20px;
-      height: 2px;
-      background: linear-gradient(90deg, #2563eb, #06b6d4);
-      border-radius: 2px;
-    }
-
-    .page-head h1 {
-      font-size: 48px;
-      font-weight: 900;
-      letter-spacing: -0.03em;
-      margin: 0 0 16px;
-      background: linear-gradient(135deg, #ffffff 30%, #94a3b8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 1.1;
-    }
-
-    .page-head p {
-      font-size: 16px;
-      color: var(--sila-muted);
-      max-width: 640px;
-      line-height: 1.6;
-      margin: 0;
-    }
-
-    /* STATS STRIP */
-    .stats-strip {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 12px;
-      margin-bottom: 32px;
-    }
-
-    .stat-box {
-      background: var(--sila-surface);
-      border: 1px solid var(--sila-border);
-      border-radius: 14px;
-      padding: 16px 20px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      transition: all 0.2s;
-    }
-
-    .stat-box:hover {
-      border-color: rgba(6, 182, 212, 0.3);
-      background: var(--sila-surface-2);
-    }
-
-    .stat-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-size: 16px;
-    }
-
-    .stat-icon.blue { background: rgba(37, 99, 235, 0.15); color: #60a5fa; }
-    .stat-icon.cyan { background: rgba(6, 182, 212, 0.15); color: #22d3ee; }
-    .stat-icon.purple { background: rgba(139, 92, 246, 0.15); color: #a78bfa; }
-    .stat-icon.green { background: rgba(16, 185, 129, 0.15); color: #34d399; }
-
-    .stat-info p {
-      margin: 0;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--sila-muted);
-    }
-
-    .stat-info strong {
-      display: block;
-      font-size: 20px;
-      font-weight: 800;
-      color: white;
-      letter-spacing: -0.02em;
-      margin-top: 2px;
-    }
-
-    /* URL BAR */
-    .urlbar {
-      background: var(--sila-surface);
-      border: 1px solid var(--sila-border);
-      border-radius: 14px;
-      padding: 14px 18px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-
-    .urlbar .lbl {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--sila-muted);
-    }
-
-    .base-url {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      color: #22d3ee;
-      flex: 1;
-      min-width: 200px;
-      padding: 6px 12px;
-      background: rgba(6, 182, 212, 0.08);
-      border: 1px solid rgba(6, 182, 212, 0.2);
-      border-radius: 8px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    /* TOOLBAR */
-    .toolbar {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-bottom: 24px;
-    }
-
-    .search {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .search svg {
+    .hero-glow {
       position: absolute;
-      left: 16px;
-      width: 18px;
-      height: 18px;
-      color: var(--sila-muted);
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: .25;
       pointer-events: none;
     }
 
-    .search input {
-      width: 100%;
-      padding: 14px 16px 14px 46px;
-      background: var(--sila-surface);
-      border: 1px solid var(--sila-border);
-      border-radius: 12px;
-      color: white;
-      font-size: 14px;
-      font-family: inherit;
-      outline: none;
-      transition: all 0.2s;
-    }
-
-    .search input:focus {
-      border-color: var(--sila-cyan);
-      box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
-    }
-
-    .search input::placeholder { color: var(--sila-muted); }
-
-    .chips {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-      scrollbar-width: thin;
-    }
-
-    .chips::-webkit-scrollbar { height: 4px; }
-    .chips::-webkit-scrollbar-thumb { background: var(--sila-border); border-radius: 4px; }
-
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 14px;
-      font-size: 13px;
-      font-weight: 600;
-      background: var(--sila-surface);
-      border: 1px solid var(--sila-border);
-      color: var(--sila-muted);
-      border-radius: 100px;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-      font-family: inherit;
-    }
-
-    .chip em {
-      font-style: normal;
-      font-size: 11px;
-      padding: 2px 7px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 100px;
-      color: var(--sila-muted);
-    }
-
-    .chip:hover {
-      color: white;
-      border-color: rgba(255,255,255,0.15);
-    }
-
-    .chip.active {
-      background: linear-gradient(135deg, rgba(37,99,235,0.2), rgba(6,182,212,0.2));
-      border-color: rgba(6, 182, 212, 0.4);
-      color: white;
-    }
-
-    .chip.active em {
-      background: rgba(6, 182, 212, 0.3);
-      color: #67e8f9;
-    }
-
-    /* ENDPOINT LIST */
-    .endpoint-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      padding-bottom: 70px;
-    }
-
-    .endpoint {
-      background: var(--sila-surface);
-      border: 1px solid var(--sila-border);
-      border-radius: 16px;
+    .bento-card {
+      transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
       overflow: hidden;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .bento-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,.12);
+    }
+    .dark .bento-card:hover {
+      box-shadow: 0 20px 40px rgba(0,0,0,.4);
     }
 
-    .endpoint:hover {
-      border-color: rgba(6, 182, 212, 0.25);
+    .feature-icon {
+      width: 48px; height: 48px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 14px;
+      transition: transform 0.3s ease;
+    }
+    .bento-card:hover .feature-icon {
+      transform: scale(1.1) rotate(-5deg);
     }
 
-    .endpoint.open {
-      border-color: rgba(6, 182, 212, 0.4);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    /* Endpoint card styles */
+    .endpoint-card {
+      transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .dark .endpoint-card {
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .endpoint-card:hover {
+      border-color: rgba(6,182,212,0.4);
+      box-shadow: 0 15px 30px rgba(0,0,0,.1);
+    }
+    .dark .endpoint-card:hover {
+      box-shadow: 0 15px 30px rgba(0,0,0,.4);
+    }
+    .endpoint-card.open {
+      border-color: rgba(6,182,212,0.6);
+      box-shadow: 0 20px 40px rgba(6,182,212,.08);
     }
 
-    .endpoint-head {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 18px 20px;
-      cursor: pointer;
-      user-select: none;
-      transition: background 0.2s;
-    }
-
-    .endpoint-head:hover { background: rgba(255,255,255,0.02); }
-
-    .method {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 5px 10px;
-      border-radius: 6px;
-      letter-spacing: 0.05em;
-      flex-shrink: 0;
-      min-width: 56px;
-      text-align: center;
-    }
-
-    .method.get { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
-    .method.post { background: rgba(37, 99, 235, 0.15); color: #60a5fa; border: 1px solid rgba(37, 99, 235, 0.3); }
-    .method.put { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
-    .method.delete { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
-    .method.patch { background: rgba(139, 92, 246, 0.15); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.3); }
-
-    .endpoint-info { flex: 1; min-width: 0; }
-
-    .endpoint-name {
-      font-size: 15px;
-      font-weight: 700;
-      color: white;
-      letter-spacing: -0.01em;
-      margin-bottom: 4px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .endpoint-path {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: var(--sila-muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .tag {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 100px;
-      background: rgba(255,255,255,0.05);
-      color: var(--sila-muted);
-      border: 1px solid var(--sila-border);
-      flex-shrink: 0;
-    }
-
-    .arrow {
-      width: 18px;
-      height: 18px;
-      color: var(--sila-muted);
-      transition: transform 0.3s;
-      flex-shrink: 0;
-    }
-
-    .endpoint.open .arrow { transform: rotate(180deg); color: #22d3ee; }
-
-    /* TESTER */
-    .tester {
-      display: none;
-      padding: 24px;
-      border-top: 1px solid var(--sila-border);
-      background: rgba(0,0,0,0.2);
-    }
-
-    .endpoint.open .tester { display: block; animation: slideDown 0.3s ease; }
-
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .endpoint-desc {
-      font-size: 14px;
-      color: #a1a1aa;
-      line-height: 1.6;
-      margin-bottom: 20px;
-      padding: 12px 16px;
-      background: rgba(6, 182, 212, 0.05);
-      border-left: 3px solid #06b6d4;
-      border-radius: 6px;
-    }
-
-    .parameter-title {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--sila-muted);
-      margin-bottom: 10px;
-    }
-
-    .parameters {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .parameter {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .parameter-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .parameter-name {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      font-weight: 600;
-      color: #67e8f9;
-    }
-
-    .required {
+    .method-badge {
       font-size: 10px;
       font-weight: 700;
-      text-transform: uppercase;
+      padding: 4px 8px;
+      border-radius: 6px;
       letter-spacing: 0.05em;
-      color: #f87171;
-      padding: 2px 6px;
-      background: rgba(239, 68, 68, 0.1);
-      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .method-get {
+      background: rgba(34,197,94,.15);
+      color: #22c55e;
+    }
+    .method-post {
+      background: rgba(59,130,246,.15);
+      color: #3b82f6;
     }
 
-    .parameter input, .parameter select {
-      padding: 10px 12px;
-      background: var(--sila-bg);
-      border: 1px solid var(--sila-border);
-      border-radius: 8px;
-      color: white;
-      font-size: 13px;
-      font-family: 'JetBrains Mono', monospace;
-      outline: none;
-      transition: all 0.2s;
-      width: 100%;
-    }
-
-    .parameter input:focus, .parameter select:focus {
-      border-color: #06b6d4;
-      box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
-    }
-
-    .tester-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-
-    .send-btn {
-      padding: 10px 20px;
-      background: linear-gradient(135deg, #2563eb, #06b6d4);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 700;
-      font-family: inherit;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 8px 20px rgba(37,99,235,0.3);
-    }
-
-    .send-btn:hover:not(:disabled) {
-      box-shadow: 0 12px 28px rgba(37,99,235,0.45);
-      transform: translateY(-1px);
-    }
-
-    .send-btn:disabled {
-      opacity: 0.6;
-      cursor: wait;
-      transform: none;
-    }
-
-    .action-btn {
-      padding: 10px 16px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--sila-border);
-      color: #a1a1aa;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .action-btn:hover {
-      background: rgba(255,255,255,0.08);
-      color: white;
-      border-color: rgba(255,255,255,0.15);
-    }
-
-    .url-preview {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      padding: 12px 14px;
-      background: var(--sila-bg);
-      border: 1px solid var(--sila-border);
-      border-radius: 10px;
-      color: #67e8f9;
-      word-break: break-all;
-      margin-bottom: 16px;
-      min-height: 20px;
-    }
-
-    /* RESPONSE BOX */
     .response-box {
-      display: none;
-      background: #07070f;
-      border: 1px solid var(--sila-border);
+      background: #0d1117;
       border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.05);
       overflow: hidden;
     }
-
-    .response-box.show { display: block; }
-
-    .response-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 16px;
-      background: var(--sila-surface-2);
-      border-bottom: 1px solid var(--sila-border);
-    }
-
-    .response-head .t {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--sila-muted);
-    }
-
-    .response-status {
+    .response-content {
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
-      font-weight: 600;
-      color: #34d399;
-    }
-
-    .response-status.bad { color: #f87171; }
-
-    .response-content {
+      line-height: 1.6;
+      color: #c9d1d9;
       padding: 16px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12.5px;
-      line-height: 1.7;
-      color: #cbd5e1;
-      max-height: 420px;
-      overflow: auto;
-      margin: 0;
+      overflow-x: auto;
+      max-height: 400px;
       white-space: pre-wrap;
       word-break: break-word;
     }
+    .json-key { color: #79c0ff; }
+    .json-string { color: #a5d6ff; }
+    .json-number { color: #f0883e; }
+    .json-boolean { color: #ff7b72; }
+    .json-null { color: #8b949e; }
 
-    .response-content::-webkit-scrollbar { width: 6px; height: 6px; }
-    .response-content::-webkit-scrollbar-thumb { background: var(--sila-border); border-radius: 6px; }
-
-    .media-preview { padding: 0 16px 16px; }
-    .media-preview img {
-      max-width: 100%;
-      border-radius: 10px;
-      border: 1px solid var(--sila-border);
+    /* Scrollbar */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.1);
+      border-radius: 3px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(255,255,255,0.2);
     }
 
-    /* SKELETON */
-    .skeleton {
-      background: linear-gradient(90deg, var(--sila-surface) 25%, var(--sila-surface-2) 50%, var(--sila-surface) 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite;
-      border-radius: 16px;
-      border: 1px solid var(--sila-border);
+    /* Status pulse */
+    .status-dot {
+      position: relative;
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+    }
+    .status-dot::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: #10b981;
+      animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes pulse-ring {
+      0% { transform: scale(1); opacity: 0.7; }
+      100% { transform: scale(3); opacity: 0; }
     }
 
-    @keyframes shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-
-    .empty {
-      padding: 60px 20px;
-      text-align: center;
-      color: var(--sila-muted);
-      font-size: 14px;
-      background: var(--sila-surface);
-      border: 1px dashed var(--sila-border);
-      border-radius: 16px;
-    }
-
-    .muted { color: var(--sila-muted); }
-
-    /* FOOTER */
-    footer {
-      border-top: 1px solid var(--sila-border);
-      padding: 48px 0 24px;
-      margin-top: 60px;
-      background: rgba(0,0,0,0.3);
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 32px;
-      margin-bottom: 32px;
-    }
-
-    @media (min-width: 640px) {
-      .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
-    }
-
-    .footer-col h4 {
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--sila-muted);
-      margin: 0 0 16px;
-    }
-
-    .footer-col a {
-      display: block;
-      font-size: 14px;
-      color: #a1a1aa;
-      text-decoration: none;
-      padding: 6px 0;
-      transition: color 0.2s;
-    }
-
-    .footer-col a:hover { color: #22d3ee; }
-
-    .footer-col p {
-      font-size: 13px;
-      color: var(--sila-muted);
-      line-height: 1.6;
-      margin: 12px 0 0;
-    }
-
-    .footer-bottom {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 24px;
-      border-top: 1px solid var(--sila-border);
-      font-size: 12px;
-      color: var(--sila-muted);
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    /* Responsive */
-    @media (max-width: 640px) {
-      .page-head h1 { font-size: 32px; }
-      .page-head { padding: 40px 0 24px; }
-      .endpoint-head { padding: 14px 16px; gap: 10px; }
-      .tester { padding: 16px; }
-      .endpoint-name { font-size: 14px; }
-      .tag { display: none; }
+    @media(prefers-reduced-motion:reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+      }
     }
   </style>
 </head>
-<body>
-  <div class="ambient"></div>
+<body class="bg-gray-50 dark:bg-[#0a0a1a] text-gray-900 dark:text-gray-100 transition-colors duration-300 grid-bg">
 
-  <header class="site-header">
-    <div class="container">
-      <div class="bar">
-        <a class="brand" href="/" aria-label="SILA API home">
-          <svg viewBox="60 50 180 200" aria-hidden="true"><defs><linearGradient id="lg" x1="76" y1="61" x2="224" y2="239" gradientUnits="userSpaceOnUse"><stop stop-color="#67E8F9"/><stop offset=".5" stop-color="#06B6D4"/><stop offset="1" stop-color="#2563EB"/></linearGradient></defs><path d="M150 61L224 104V196L150 239L76 196V104Z" fill="#0A0A1A" stroke="url(#lg)" stroke-width="12" stroke-linejoin="round"/><path d="M150 91V209M101 120L199 180M101 180L199 120" stroke="url(#lg)" stroke-width="9" stroke-linecap="round"/><circle cx="150" cy="91" r="13" fill="#67E8F9"/><circle cx="101" cy="120" r="13" fill="#38BDF8"/><circle cx="199" cy="120" r="13" fill="#38BDF8"/><circle cx="101" cy="180" r="13" fill="#2563EB"/><circle cx="199" cy="180" r="13" fill="#2563EB"/><circle cx="150" cy="209" r="13" fill="#67E8F9"/><circle cx="150" cy="150" r="27" fill="#0A0A1A" stroke="url(#lg)" stroke-width="7"/><path d="M137 150H163M150 137V163" stroke="#E0F2FE" stroke-width="7" stroke-linecap="round"/></svg>
-          <span class="brand-name">SILA <span>API</span></span>
+  <!-- NAVIGATION -->
+  <nav class="fixed top-0 w-full z-50 glass">
+    <div class="max-w-7xl mx-auto px-5 sm:px-6 py-3 flex justify-between items-center gap-4">
+      <a href="/" class="flex items-center gap-3 min-w-0" aria-label="SILA API home">
+        <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0">
+          <path d="M50 5L90 27.5V72.5L50 95L10 72.5V27.5L50 5Z" stroke="#22d3ee" stroke-width="6" stroke-linejoin="round" fill="none"/>
+          <circle cx="50" cy="50" r="12" fill="none" stroke="#22d3ee" stroke-width="4"/>
+          <path d="M50 38V20" stroke="#22d3ee" stroke-width="5" stroke-linecap="round"/>
+          <path d="M50 62V80" stroke="#22d3ee" stroke-width="5" stroke-linecap="round"/>
+          <path d="M38 50H20" stroke="#22d3ee" stroke-width="5" stroke-linecap="round"/>
+          <path d="M62 50H80" stroke="#22d3ee" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="50" cy="20" r="5" fill="#3b82f6"/>
+          <circle cx="50" cy="80" r="5" fill="#3b82f6"/>
+          <circle cx="20" cy="50" r="5" fill="#3b82f6"/>
+          <circle cx="80" cy="50" r="5" fill="#3b82f6"/>
+          <circle cx="50" cy="50" r="4" fill="#22d3ee"/>
+        </svg>
+        <span class="text-lg font-extrabold text-gray-900 dark:text-white whitespace-nowrap">
+          SILA <span class="gradient-text">API</span>
+        </span>
+      </a>
+
+      <div class="hidden md:flex items-center flex-1 max-w-md mx-6">
+        <div class="relative w-full">
+          <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+          <input type="text" id="searchInput" 
+            class="w-full pl-10 pr-12 py-2 text-sm bg-gray-100 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500 transition-all"
+            placeholder="Search APIs... (Ctrl+K)">
+          <kbd class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 bg-gray-200 dark:bg-gray-700 px-1.5 py-0.5 rounded">⌘K</kbd>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="theme-toggle" aria-label="Toggle light and dark mode" class="w-9 h-9 rounded-xl flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+          <i id="theme-icon" class="fas fa-sun text-amber-400"></i>
+        </button>
+        <a href="/" class="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white gradient-bg rounded-lg hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/25">
+          <i class="fas fa-home text-xs"></i> Home
         </a>
+      </div>
+    </div>
+  </nav>
 
-        <nav class="nav-links" aria-label="Main">
-          <a href="/">Home</a>
-          <a href="/endpoints" class="active">Endpoints</a>
-          <a href="/about">About</a>
+  <div class="flex pt-16 min-h-screen">
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="fixed left-0 top-16 bottom-0 w-64 bg-white/80 dark:bg-[#0f0f23]/80 backdrop-blur-xl border-r border-gray-200 dark:border-gray-800 overflow-y-auto z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 custom-scrollbar">
+      <div class="p-4">
+        <!-- API Stats -->
+        <div class="mb-6 p-3 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl border border-blue-100 dark:border-blue-800/30">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="status-dot"></span>
+            <span class="text-xs font-medium text-green-700 dark:text-green-400">All Systems Operational</span>
+          </div>
+          <p class="text-xs text-gray-600 dark:text-gray-400"><span id="sidebar-total" class="font-bold text-gray-900 dark:text-white">0</span> endpoints available</p>
+          <p class="text-xs text-gray-600 dark:text-gray-400"><span id="sidebar-cats" class="font-bold text-gray-900 dark:text-white">0</span> categories</p>
+        </div>
+
+        <!-- Categories -->
+        <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3 px-2">Categories</p>
+        <nav id="sidebar-nav" class="space-y-1">
+          <!-- Populated by JS -->
         </nav>
-
-        <div class="nav-actions">
-          <a class="btn btn-ghost btn-sm" href="/api/endpoints">Raw JSON</a>
-          <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-        </div>
       </div>
+    </aside>
 
-      <nav class="mobile-menu" aria-label="Mobile">
-        <a href="/">Home</a>
-        <a href="/endpoints" class="active">Endpoints</a>
-        <a href="/about">About</a>
-      </nav>
-    </div>
-  </header>
+    <!-- Sidebar Overlay (Mobile) -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden" onclick="closeSidebar()"></div>
 
-  <main>
-    <section class="page-head">
-      <div class="container">
-        <span class="eyebrow">Documentation</span>
-        <h1>API Endpoints</h1>
-        <p>Every endpoint currently published on SILA API, with a live tester. Open one, fill the parameters and press send.</p>
-      </div>
-    </section>
-
-    <section class="container">
-
-      <!-- STATS STRIP -->
-      <div class="stats-strip" id="statsStrip">
-        <div class="stat-box">
-          <div class="stat-icon blue"><i class="fas fa-code"></i></div>
-          <div class="stat-info">
-            <p>Endpoints</p>
-            <strong id="statEndpoints">—</strong>
+    <!-- MAIN CONTENT -->
+    <main class="lg:ml-64 flex-1 min-w-0">
+      <div class="p-5 md:p-8 max-w-6xl mx-auto">
+        
+        <!-- Header Card -->
+        <div class="mb-8 p-6 md:p-8 bg-white dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-gray-700/50 shadow-sm animate-fade-up">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <h1 class="text-2xl md:text-3xl font-bold mb-2">API endpoints</h1>
+              <p class="text-gray-600 dark:text-gray-400 text-sm">Browse, test, and integrate powerful APIs into your projects. Every endpoint supports <code class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded text-xs">GET</code> &amp; <code class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded text-xs">POST</code> · no key required.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="px-3 py-1.5 text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-lg flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Online
+              </span>
+              <span class="px-3 py-1.5 text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300 rounded-lg">REST API</span>
+            </div>
+          </div>
+          <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700/50 flex flex-wrap items-center gap-3">
+            <p class="text-xs text-gray-500 dark:text-gray-400 font-mono flex items-center gap-2">
+              Base URL:
+              <code id="baseUrlText" class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-blue-600 dark:text-blue-400">https://api.silatech.site</code>
+              <button id="copyBase" class="w-6 h-6 rounded-md flex items-center justify-center text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors" title="Copy base URL" aria-label="Copy base URL">
+                <i class="fas fa-copy text-[11px] pointer-events-none"></i>
+              </button>
+            </p>
           </div>
         </div>
-        <div class="stat-box">
-          <div class="stat-icon cyan"><i class="fas fa-layer-group"></i></div>
-          <div class="stat-info">
-            <p>Categories</p>
-            <strong id="statCategories">—</strong>
+
+        <!-- Mobile Search -->
+        <div class="md:hidden mb-4 animate-fade-up">
+          <div class="relative">
+            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+            <input type="text" id="searchInputMobile" 
+              class="w-full pl-10 pr-4 py-2.5 text-sm bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+              placeholder="Search APIs...">
           </div>
         </div>
-        <div class="stat-box">
-          <div class="stat-icon purple"><i class="fas fa-bolt"></i></div>
-          <div class="stat-info">
-            <p>Requests</p>
-            <strong id="statRequests">—</strong>
+
+        <!-- Mobile category chips -->
+        <div class="lg:hidden mb-4 overflow-x-auto pb-2 -mx-1 px-1 animate-fade-up">
+          <div id="mobileChips" class="flex gap-2 min-w-max"></div>
+        </div>
+
+        <!-- Endpoint List -->
+        <div id="endpointList" class="space-y-3">
+          <div class="skeleton h-24 rounded-2xl bg-gray-200 dark:bg-gray-800 animate-pulse"></div>
+          <div class="skeleton h-24 rounded-2xl bg-gray-200 dark:bg-gray-800 animate-pulse"></div>
+          <div class="skeleton h-24 rounded-2xl bg-gray-200 dark:bg-gray-800 animate-pulse"></div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer class="border-t border-gray-200 dark:border-gray-800 px-5 sm:px-6 py-8 mt-12">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+          <a href="/" class="font-bold text-gray-800 dark:text-white">
+            SILA <span class="gradient-text">API</span>
+            <span class="font-normal text-gray-500">by Sila Tech</span>
+          </a>
+          <div class="flex flex-wrap justify-center gap-5">
+            <a href="/endpoints" class="hover:text-blue-500 transition-colors">Endpoints</a>
+            <a href="/about" class="hover:text-blue-500 transition-colors">About</a>
+            <a href="/privacy" class="hover:text-blue-500 transition-colors">Privacy</a>
+            <a href="/terms" class="hover:text-blue-500 transition-colors">Terms</a>
           </div>
+          <span>© <span id="year"></span> Sila Tech. All rights reserved.</span>
         </div>
-        <div class="stat-box">
-          <div class="stat-icon green"><i class="fas fa-shield-halved"></i></div>
-          <div class="stat-info">
-            <p>Uptime</p>
-            <strong id="statUptime">—</strong>
-          </div>
-        </div>
-      </div>
+      </footer>
+    </main>
+  </div>
 
-      <!-- BASE URL -->
-      <div class="urlbar">
-        <span class="lbl">Base URL</span>
-        <div class="base-url" id="baseUrlText">https://api.silatech.site</div>
-        <button class="btn btn-ghost btn-sm" type="button" id="copyBase">Copy base URL</button>
-      </div>
+  <!-- Toast Container -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-[60] space-y-3"></div>
 
-      <!-- TOOLBAR -->
-      <div class="toolbar">
-        <div class="search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-          <input id="searchInput" type="search" placeholder="Search APIs…  (press / to focus)" autocomplete="off" aria-label="Search APIs">
-        </div>
-        <div class="chips" id="categoryChips"></div>
-      </div>
-
-      <!-- ENDPOINT LIST -->
-      <div class="endpoint-list" id="endpointList">
-        <div class="skeleton" style="min-height:96px"></div>
-        <div class="skeleton" style="min-height:96px"></div>
-        <div class="skeleton" style="min-height:96px"></div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-col">
-          <a class="brand" href="/"><svg viewBox="60 50 180 200" aria-hidden="true"><defs><linearGradient id="lg2" x1="76" y1="61" x2="224" y2="239" gradientUnits="userSpaceOnUse"><stop stop-color="#67E8F9"/><stop offset=".5" stop-color="#06B6D4"/><stop offset="1" stop-color="#2563EB"/></linearGradient></defs><path d="M150 61L224 104V196L150 239L76 196V104Z" fill="#0A0A1A" stroke="url(#lg2)" stroke-width="12" stroke-linejoin="round"/><path d="M150 91V209M101 120L199 180M101 180L199 120" stroke="url(#lg2)" stroke-width="9" stroke-linecap="round"/><circle cx="150" cy="91" r="13" fill="#67E8F9"/><circle cx="101" cy="120" r="13" fill="#38BDF8"/><circle cx="199" cy="120" r="13" fill="#38BDF8"/><circle cx="101" cy="180" r="13" fill="#2563EB"/><circle cx="199" cy="180" r="13" fill="#2563EB"/><circle cx="150" cy="209" r="13" fill="#67E8F9"/><circle cx="150" cy="150" r="27" fill="#0A0A1A" stroke="url(#lg2)" stroke-width="7"/><path d="M137 150H163M150 137V163" stroke="#E0F2FE" stroke-width="7" stroke-linecap="round"/></svg><span class="brand-name">SILA <span>API</span></span></a>
-          <p>Simple HTTP endpoints with clear JSON responses, built by Sila Tech for apps and WhatsApp bots.</p>
-        </div>
-        <div class="footer-col">
-          <h4>Platform</h4>
-          <a href="/">Home</a>
-          <a href="/about">About</a>
-          <a href="/api/endpoints">Endpoint list (JSON)</a>
-        </div>
-        <div class="footer-col">
-          <h4>Sila Tech</h4>
-          <a href="https://silatech.site" target="_blank" rel="noopener">silatech.site</a>
-          <a href="https://host.silatech.site" target="_blank" rel="noopener">Bot hosting</a>
-        </div>
-        <div class="footer-col">
-          <h4>Community</h4>
-          <a href="https://whatsapp.com/channel/0029VbBG4gfISTkCpKxyMH02" target="_blank" rel="noopener">WhatsApp channel</a>
-          <a href="https://chat.whatsapp.com/Db9YMXctmLG2BZs4aNuwRi" target="_blank" rel="noopener">WhatsApp group</a>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <span>SILA API — Powered by Sila Tech</span>
-        <span>© <span id="year">2026</span> Sila Tech</span>
-      </div>
-    </div>
-  </footer>
-
-  <script src="/assets/sila.js"></script>
   <script>
-    (function () {
-      document.getElementById("year").textContent = new Date().getFullYear();
-      var BASE = SILA.BASE;
+  (function() {
+    const $ = id => document.getElementById(id);
+    const BASE = 'https://api.silatech.site';
+    const fmt = n => Number(n || 0).toLocaleString('en-US');
+    const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
 
-      var allEndpoints = [];
-      var activeCategory = "all";
-      var uptimeSeconds = 0;
+    let allEndpoints = [];
+    let activeCategory = 'all';
 
-      document.getElementById("baseUrlText").textContent = BASE;
-      document.getElementById("copyBase").addEventListener("click", function () { SILA.copy(BASE); });
+    $('baseUrlText').textContent = BASE;
+    $('year').textContent = new Date().getFullYear();
 
-      /* ---------- HELPERS ---------- */
-      function sampleValue(parameter) {
-        if (parameter.example != null) return String(parameter.example);
-        var type = String(parameter.type || "text").toLowerCase();
-        if (type === "number") return "1";
-        if (type === "boolean") return "true";
-        return "hello";
-      }
+    function copy(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        toast('Copied to clipboard');
+      }).catch(() => {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+        toast('Copied to clipboard');
+      });
+    }
 
-      function buildQuery(api) {
-        var parameters = (api.parameters || []).filter(function (p) { return p.required; });
-        if (!parameters.length) return "";
-        return "?" + parameters.map(function (p) {
-          return encodeURIComponent(p.name) + "=" + encodeURIComponent(sampleValue(p));
-        }).join("&");
-      }
+    $('copyBase').addEventListener('click', () => copy(BASE));
 
-      function sampleUrl(api) { return BASE + (api.path || "") + buildQuery(api); }
+    function toast(message) {
+      const container = $('toast-container');
+      const el = document.createElement('div');
+      el.className = 'px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm font-medium rounded-xl shadow-2xl animate-fade-up';
+      el.textContent = message;
+      container.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        el.style.transition = 'opacity 0.3s';
+        setTimeout(() => el.remove(), 300);
+      }, 2000);
+    }
 
-      function formatUptime(seconds) {
-        var d = Math.floor(seconds / 86400);
-        var h = Math.floor((seconds % 86400) / 3600);
-        var m = Math.floor((seconds % 3600) / 60);
-        var s = seconds % 60;
-        if (d > 0) return d + "d " + h + "h";
-        if (h > 0) return h + "h " + m + "m";
-        if (m > 0) return m + "m " + s + "s";
-        return s + "s";
-      }
+    function setTheme() {
+      const dark = document.documentElement.classList.contains('dark');
+      $('theme-icon').className = dark ? 'fas fa-sun text-amber-400' : 'fas fa-moon text-gray-600';
+    }
 
-      // Local uptime timer
-      setInterval(function () {
-        uptimeSeconds++;
-        var el = document.getElementById("statUptime");
-        if (el) el.textContent = formatUptime(uptimeSeconds);
-      }, 1000);
+    $('theme-toggle').addEventListener('click', () => {
+      const dark = document.documentElement.classList.toggle('dark');
+      try { localStorage.setItem('sila-theme', dark ? 'dark' : 'light'); } catch(e) {}
+      setTheme();
+    });
+    setTheme();
 
-      /* ---------- CATEGORIES ---------- */
-      function renderCategories() {
-        var counts = { all: allEndpoints.length };
-        allEndpoints.forEach(function (e) {
-          var c = e.category || "general";
-          counts[c] = (counts[c] || 0) + 1;
-        });
+    /* ---------- helpers ---------- */
+    function catLabel(c) {
+      return String(c || 'general').replace(/[-_]+/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    }
 
-        var box = document.getElementById("categoryChips");
-        box.innerHTML = Object.keys(counts).sort(function (a, b) {
-          if (a === "all") return -1;
-          if (b === "all") return 1;
-          return a.localeCompare(b);
-        }).map(function (c) {
-          var label = c === "all" ? "All" : SILA.catLabel(c);
-          return '<button class="chip' + (c === activeCategory ? " active" : "") + '" type="button" data-cat="' + SILA.esc(c) + '">' +
-            SILA.esc(label) + " <em>" + counts[c] + "</em></button>";
-        }).join("");
+    function catIcon(c) {
+      const icons = {
+        ai: 'fa-brain', image: 'fa-image', media: 'fa-photo-film',
+        download: 'fa-download', downloader: 'fa-download',
+        tools: 'fa-screwdriver-wrench', search: 'fa-magnifying-glass',
+        data: 'fa-database', general: 'fa-code', tts: 'fa-volume-high',
+        texttospeech: 'fa-volume-high', nsfw: 'fa-eye-slash',
+        anime: 'fa-dragon', random: 'fa-shuffle', sports: 'fa-futbol',
+        movies: 'fa-film', audio: 'fa-music', stalk: 'fa-user-secret',
+        screenshot: 'fa-camera', urlshortener: 'fa-link'
+      };
+      const key = String(c || 'general').toLowerCase().replace(/[\s_-]/g, '');
+      return icons[key] || icons[String(c || 'general').toLowerCase()] || 'fa-cubes';
+    }
 
-        box.querySelectorAll(".chip").forEach(function (chip) {
-          chip.addEventListener("click", function () {
-            activeCategory = chip.dataset.cat;
-            box.querySelectorAll(".chip").forEach(function (c) { c.classList.toggle("active", c === chip); });
-            applyFilter();
-          });
-        });
-      }
+    function sampleValue(p) {
+      if (p.example != null) return String(p.example);
+      const type = String(p.type || 'text').toLowerCase();
+      if (type === 'number') return '1';
+      if (type === 'boolean') return 'true';
+      return 'hello';
+    }
 
-      /* ---------- ENDPOINT LIST ---------- */
-      function createEndpoint(api, index) {
-        var method = String(api.method || "GET").toUpperCase();
-        var category = api.category || "general";
-        var el = document.createElement("article");
-        el.className = "endpoint";
-        el.id = "endpoint-" + index;
-        el.dataset.category = category;
-        el.dataset.method = method;
-        el.dataset.search = ((api.name || "") + " " + (api.path || "") + " " + (api.description || "") + " " + category).toLowerCase();
-        el.dataset.path = api.path || "";
-        el.dataset.api = JSON.stringify(api);
+    function highlightJSON(json) {
+      return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, match => {
+        let cls = 'json-number';
+        if (/^"/.test(match)) {
+          if (/:$/.test(match)) cls = 'json-key';
+          else cls = 'json-string';
+        } else if (/true|false/.test(match)) cls = 'json-boolean';
+        else if (/null/.test(match)) cls = 'json-null';
+        return `<span class="${cls}">${match}</span>`;
+      });
+    }
 
-        el.innerHTML =
-          '<div class="endpoint-head" role="button" tabindex="0" aria-expanded="false">' +
-            '<span class="method ' + SILA.esc(method.toLowerCase()) + '">' + SILA.esc(method) + "</span>" +
-            '<div class="endpoint-info">' +
-              "<div class=\"endpoint-name\">" + SILA.esc(api.name || api.path || "SILA API") + "</div>" +
-              '<div class="endpoint-path">' + SILA.esc(api.path || "") + "</div>" +
-            "</div>" +
-            '<span class="tag">' + SILA.esc(SILA.catLabel(category)) + "</span>" +
-            '<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>' +
-          "</div>" +
-          '<div class="tester">' +
-            '<div class="endpoint-desc">' + SILA.esc(api.description || "SILA API endpoint.") + "</div>" +
-            '<div class="parameter-title">Parameters</div>' +
-            '<div class="parameters" id="parameters-' + index + '"></div>' +
-            '<div class="tester-actions">' +
-              '<button class="send-btn" type="button" data-action="send">Send request</button>' +
-              '<button class="action-btn" type="button" data-action="curl">Copy cURL</button>' +
-              '<button class="action-btn" type="button" data-action="url">Copy URL</button>' +
-              '<button class="action-btn" type="button" data-action="json">Copy JSON</button>' +
-            "</div>" +
-            '<div class="url-preview" id="url-' + index + '"></div>' +
-            '<div class="response-box" id="response-' + index + '">' +
-              '<div class="response-head"><span class="t">Live response</span><span class="response-status" id="response-status-' + index + '"></span></div>' +
-              '<pre class="response-content" id="response-content-' + index + '"></pre>' +
-              '<div class="media-preview" id="media-' + index + '"></div>' +
-            "</div>" +
-          "</div>";
-
-        setupTester(api, index, el);
-        return el;
-      }
-
-      function setupTester(api, index, el) {
-        var container = el.querySelector("#parameters-" + index);
-        var parameters = api.parameters || [];
-        var method = String(api.method || "GET").toUpperCase();
-
-        if (!parameters.length) {
-          container.innerHTML = '<div class="muted" style="font-size:14px; padding: 12px 0;">This endpoint takes no parameters — just send the request.</div>';
-        } else {
-          container.innerHTML = parameters.map(function (p, i) {
-            var input;
-            if (p.type === "select" && Array.isArray(p.options) && p.options.length) {
-              input = '<select data-index="' + index + '" data-name="' + SILA.esc(p.name) + '" data-type="text">' +
-                p.options.map(function (o) { return '<option value="' + SILA.esc(o) + '">' + SILA.esc(o) + "</option>"; }).join("") + "</select>";
-            } else {
-              input = '<input data-index="' + index + '" data-name="' + SILA.esc(p.name) + '" data-type="' + SILA.esc(p.type || "text") + '" ' +
-                'type="' + (p.type === "number" ? "number" : "text") + '" ' +
-                'placeholder="' + SILA.esc(p.placeholder || p.description || "Enter " + p.name) + '" ' +
-                'value="' + SILA.esc(sampleValue(p)) + '"' + (i === 0 ? " autocomplete=\"off\"" : "") + ">";
-            }
-            return '<div class="parameter">' +
-              '<div class="parameter-top"><span class="parameter-name">' + SILA.esc(p.name) + "</span>" +
-              (p.required ? '<span class="required">required</span>' : '<span class="tag">optional</span>') + "</div>" +
-              input + "</div>";
-          }).join("");
-        }
-
-        var urlBox = el.querySelector("#url-" + index);
-        var statusEl = el.querySelector("#response-status-" + index);
-        var contentEl = el.querySelector("#response-content-" + index);
-        var mediaEl = el.querySelector("#media-" + index);
-        var boxEl = el.querySelector("#response-" + index);
-
-        function collect() {
-          var values = {};
-          container.querySelectorAll("[data-name]").forEach(function (input) {
-            var name = input.getAttribute("data-name");
-            var value = String(input.value || "").trim();
-            if (value) values[name] = value;
-          });
-          return values;
-        }
-
-        function buildUrl() {
-          var values = collect();
-          var query = Object.keys(values).map(function (name) {
-            return encodeURIComponent(name) + "=" + encodeURIComponent(values[name]);
-          }).join("&");
-          return BASE + (api.path || "") + (query ? "?" + query : "");
-        }
-
-        function refreshUrl() {
-          var url = buildUrl();
-          urlBox.textContent = url;
-          return url;
-        }
-
-        container.addEventListener("input", refreshUrl);
-        container.addEventListener("change", refreshUrl);
-        refreshUrl();
-
-        el.querySelector('[data-action="send"]').addEventListener("click", function () {
-          var url = refreshUrl();
-          var button = el.querySelector('[data-action="send"]');
-          button.disabled = true;
-          button.textContent = "Sending…";
-          statusEl.textContent = "…";
-          statusEl.classList.remove("bad");
-          contentEl.textContent = "Waiting for the response…";
-          mediaEl.innerHTML = "";
-          boxEl.classList.add("show");
-
-          var started = performance.now();
-          fetch(url, { headers: { Accept: "application/json" }, cache: "no-store" })
-            .then(function (res) {
-              var ms = Math.round(performance.now() - started);
-              statusEl.textContent = res.status + " " + (res.statusText || "") + " · " + ms + " ms";
-              if (!res.ok) statusEl.classList.add("bad");
-              var type = res.headers.get("content-type") || "";
-              if (type.indexOf("application/json") === 0 || type.indexOf("application/json") > -1) {
-                return res.text().then(function (text) {
-                  try { contentEl.innerHTML = SILA.highlight(JSON.stringify(JSON.parse(text), null, 2)); }
-                  catch (e) { contentEl.textContent = text; }
-                });
-              }
-              if (type.indexOf("image/") === 0) {
-                contentEl.textContent = "Image response — preview below.";
-                mediaEl.innerHTML = '<img src="' + url + '" alt="Endpoint image response">';
-                return null;
-              }
-              return res.text().then(function (text) { contentEl.textContent = text.slice(0, 4000); });
-            })
-            .catch(function (error) {
-              statusEl.textContent = "request failed";
-              statusEl.classList.add("bad");
-              contentEl.textContent = String(error && error.message ? error.message : error);
-            })
-            .then(function () {
-              button.disabled = false;
-              button.textContent = "Send request";
-            });
-        });
-
-        el.querySelector('[data-action="curl"]').addEventListener("click", function () {
-          SILA.copy('curl "' + refreshUrl() + '"');
-        });
-        el.querySelector('[data-action="url"]').addEventListener("click", function () { SILA.copy(refreshUrl()); });
-        el.querySelector('[data-action="json"]').addEventListener("click", function () {
-          SILA.copy(JSON.stringify(api, null, 2));
-        });
-      }
-
-      function toggleEndpoint(index) {
-        document.querySelectorAll(".endpoint").forEach(function (el) {
-          var open = el.id === "endpoint-" + index && !el.classList.contains("open");
-          el.classList.toggle("open", open);
-          var head = el.querySelector(".endpoint-head");
-          if (head) head.setAttribute("aria-expanded", open ? "true" : "false");
-        });
-      }
-
-      function applyFilter() {
-        var term = String(document.getElementById("searchInput").value || "").trim().toLowerCase();
-        var shown = 0;
-        document.querySelectorAll(".endpoint").forEach(function (item) {
-          var matchesCategory = activeCategory === "all" || item.dataset.category === activeCategory;
-          var matchesTerm = !term || item.dataset.search.indexOf(term) > -1;
-          var visible = matchesCategory && matchesTerm;
-          item.style.display = visible ? "" : "none";
-          if (visible) shown++;
-        });
-        var empty = document.getElementById("noResult");
-        if (!shown) {
-          if (!empty) {
-            empty = document.createElement("div");
-            empty.id = "noResult";
-            empty.className = "empty";
-            empty.textContent = "No endpoints match your search.";
-            document.getElementById("endpointList").appendChild(empty);
-          }
-        } else if (empty) {
-          empty.remove();
-        }
-      }
-
-      /* ---------- LOAD ---------- */
-      function updateStats(endpoints) {
-        var cats = {};
-        endpoints.forEach(function (e) {
-          var c = e.category || "general";
-          cats[c] = (cats[c] || 0) + 1;
-        });
-        document.getElementById("statEndpoints").textContent = endpoints.length;
-        document.getElementById("statCategories").textContent = Object.keys(cats).length;
-      }
-
-      function loadEndpoints() {
-        var list = document.getElementById("endpointList");
-        SILA.getJSON("/api/endpoints").then(function (data) {
-          allEndpoints = data.endpoints || [];
-          list.innerHTML = "";
-          if (!allEndpoints.length) {
-            list.innerHTML = '<div class="empty">No endpoints are published yet. Drop a .js file on the server and it appears here.</div>';
-            return;
-          }
-          updateStats(allEndpoints);
-
-          // Fetch requests count if available
-          SILA.getJSON("/api/public/stats").then(function (stats) {
-            if (stats && stats.requests) {
-              document.getElementById("statRequests").textContent = (stats.requests.total || 0).toLocaleString();
-            } else {
-              document.getElementById("statRequests").textContent = "0";
-            }
-          }).catch(function () {
-            document.getElementById("statRequests").textContent = "0";
-          });
-
-          allEndpoints.forEach(function (api, index) {
-            var el = createEndpoint(api, index);
-            list.appendChild(el);
-            var head = el.querySelector(".endpoint-head");
-            head.addEventListener("click", function () { toggleEndpoint(index); });
-            head.addEventListener("keydown", function (event) {
-              if (event.key === "Enter" || event.key === " ") { event.preventDefault(); toggleEndpoint(index); }
-            });
-          });
-          renderCategories();
-          applyFilter();
-          applyDeepLink();
-        }).catch(function () {
-          list.innerHTML = '<div class="empty">Failed to load the endpoint list. Refresh the page to try again.</div>';
-          document.getElementById("statEndpoints").textContent = "—";
-          document.getElementById("statCategories").textContent = "—";
-          document.getElementById("statRequests").textContent = "—";
-        });
-      }
-
-      function applyDeepLink() {
-        var params = new URLSearchParams(window.location.search);
-        var open = params.get("open");
-        var cat = params.get("cat");
-        if (cat) {
-          activeCategory = cat;
-          document.querySelectorAll("#categoryChips .chip").forEach(function (c) {
-            c.classList.toggle("active", c.dataset.cat === cat);
-          });
-          applyFilter();
-        }
-        if (!open) return;
-        var index = allEndpoints.findIndex(function (e) { return (e.path || "") === open; });
-        if (index < 0) return;
-        toggleEndpoint(index);
-        var el = document.getElementById("endpoint-" + index);
-        if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-
-      document.getElementById("searchInput").addEventListener("input", applyFilter);
-      document.addEventListener("keydown", function (event) {
-        if (event.key === "/" && document.activeElement !== document.getElementById("searchInput")) {
-          event.preventDefault();
-          document.getElementById("searchInput").focus();
-        }
+    /* ---------- sidebar categories ---------- */
+    function renderSidebar() {
+      const counts = { all: allEndpoints.length };
+      allEndpoints.forEach(e => {
+        const c = e.category || 'general';
+        counts[c] = (counts[c] || 0) + 1;
       });
 
-      // Mobile menu
-      var menuToggle = document.querySelector(".menu-toggle");
-      var mobileMenu = document.querySelector(".mobile-menu");
-      if (menuToggle && mobileMenu) {
-        menuToggle.addEventListener("click", function () {
-          var open = mobileMenu.classList.toggle("show");
-          menuToggle.setAttribute("aria-expanded", open ? "true" : "false");
+      const sorted = Object.keys(counts).sort((a, b) => {
+        if (a === 'all') return -1;
+        if (b === 'all') return 1;
+        return a.localeCompare(b);
+      });
+
+      const nav = $('sidebar-nav');
+      nav.innerHTML = sorted.map(c => {
+        const label = c === 'all' ? 'All Endpoints' : catLabel(c);
+        const icon = c === 'all' ? 'fa-layer-group' : catIcon(c);
+        const active = c === activeCategory ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800/50 border border-transparent';
+        return `<button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${active}" data-cat="${esc(c)}">
+          <i class="fas ${icon} w-4 text-center"></i>
+          <span class="flex-1 text-left">${esc(label)}</span>
+          <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">${counts[c]}</span>
+        </button>`;
+      }).join('');
+
+      nav.querySelectorAll('[data-cat]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeCategory = btn.dataset.cat;
+          renderSidebar();
+          renderMobileChips();
+          applyFilter();
+          closeSidebar();
         });
+      });
+
+      $('sidebar-total').textContent = fmt(allEndpoints.length);
+      $('sidebar-cats').textContent = fmt(Object.keys(counts).length - 1);
+    }
+
+    function renderMobileChips() {
+      const counts = { all: allEndpoints.length };
+      allEndpoints.forEach(e => {
+        const c = e.category || 'general';
+        counts[c] = (counts[c] || 0) + 1;
+      });
+      const sorted = Object.keys(counts).sort((a, b) => {
+        if (a === 'all') return -1;
+        if (b === 'all') return 1;
+        return a.localeCompare(b);
+      });
+      $('mobileChips').innerHTML = sorted.map(c => {
+        const label = c === 'all' ? 'All' : catLabel(c);
+        const active = c === activeCategory ? 'gradient-bg text-white' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700';
+        return `<button class="px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${active}" data-cat="${esc(c)}">${esc(label)} <span class="opacity-60">${counts[c]}</span></button>`;
+      }).join('');
+      $('mobileChips').querySelectorAll('[data-cat]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeCategory = btn.dataset.cat;
+          renderSidebar();
+          renderMobileChips();
+          applyFilter();
+        });
+      });
+    }
+
+    /* ---------- endpoint card ---------- */
+    function createEndpointCard(api, index) {
+      const method = String(api.method || 'GET').toUpperCase();
+      const category = api.category || 'general';
+      const el = document.createElement('article');
+      el.className = 'endpoint-card bento-card bg-white dark:bg-gray-900/70 rounded-2xl overflow-hidden';
+      el.id = 'endpoint-' + index;
+      el.dataset.category = category;
+      el.dataset.search = ((api.name || '') + ' ' + (api.path || '') + ' ' + (api.description || '') + ' ' + category).toLowerCase();
+
+      el.innerHTML = `
+        <div class="endpoint-head p-5 cursor-pointer flex items-center gap-4" role="button" tabindex="0" aria-expanded="false">
+          <span class="method-badge ${method === 'POST' ? 'method-post' : 'method-get'}">${esc(method)}</span>
+          <div class="flex-1 min-w-0">
+            <div class="font-semibold text-sm md:text-base truncate">${esc(api.name || api.path || 'SILA API')}</div>
+            <div class="text-xs font-mono text-gray-500 dark:text-gray-400 truncate mt-0.5">${esc(api.path || '')}</div>
+          </div>
+          <span class="hidden sm:inline-flex text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 whitespace-nowrap">
+            ${esc(catLabel(category))}
+          </span>
+          <svg class="arrow w-5 h-5 text-gray-400 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="endpoint-body hidden px-5 pb-5">
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-5">${esc(api.description || 'SILA API endpoint.')}</p>
+          
+          <div class="mb-4">
+            <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">Parameters</p>
+            <div class="parameters space-y-3" id="parameters-${index}"></div>
+          </div>
+
+          <div class="flex flex-wrap gap-2 mb-4">
+            <button class="send-btn px-4 py-2 gradient-bg text-white text-sm font-semibold rounded-lg hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/25 flex items-center gap-2" data-action="send">
+              <i class="fas fa-paper-plane text-xs"></i> Send Request
+            </button>
+            <button class="px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors flex items-center gap-2" data-action="curl">
+              <i class="fas fa-terminal text-xs"></i> cURL
+            </button>
+            <button class="px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors flex items-center gap-2" data-action="url">
+              <i class="fas fa-link text-xs"></i> Copy URL
+            </button>
+            <button class="px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors flex items-center gap-2" data-action="json">
+              <i class="fas fa-code text-xs"></i> JSON
+            </button>
+          </div>
+
+          <div class="mb-4">
+            <div class="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-900/60 rounded-lg border border-gray-200 dark:border-gray-700">
+              <code class="text-xs font-mono text-blue-600 dark:text-blue-400 truncate flex-1" id="url-${index}">/</code>
+            </div>
+          </div>
+
+          <div class="response-box hidden" id="response-${index}">
+            <div class="flex items-center justify-between px-4 py-2.5 border-b border-white/5">
+              <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Live Response</span>
+              <span class="text-xs font-mono text-gray-400" id="response-status-${index}"></span>
+            </div>
+            <pre class="response-content custom-scrollbar" id="response-content-${index}"></pre>
+            <div id="media-${index}"></div>
+          </div>
+        </div>
+      `;
+
+      setupTester(api, index, el);
+      return el;
+    }
+
+    function setupTester(api, index, el) {
+      const container = el.querySelector('#parameters-' + index);
+      const parameters = api.parameters || [];
+
+      if (!parameters.length) {
+        container.innerHTML = '<div class="text-sm text-gray-500 dark:text-gray-400">This endpoint takes no parameters — just send the request.</div>';
+      } else {
+        container.innerHTML = parameters.map((p, i) => {
+          let input;
+          if (p.type === 'select' && Array.isArray(p.options) && p.options.length) {
+            input = `<select data-name="${esc(p.name)}" data-type="text" class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono">` +
+              p.options.map(o => `<option value="${esc(o)}">${esc(o)}</option>`).join('') + `</select>`;
+          } else {
+            input = `<input data-name="${esc(p.name)}" data-type="${esc(p.type || 'text')}" ` +
+              `type="${p.type === 'number' ? 'number' : 'text'}" ` +
+              `placeholder="${esc(p.placeholder || p.description || 'Enter ' + p.name)}" ` +
+              `value="${esc(sampleValue(p))}" ` +
+              `class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono">`;
+          }
+          return `<div>
+            <div class="flex items-center gap-2 mb-1.5">
+              <span class="text-xs font-semibold font-mono text-gray-700 dark:text-gray-300">${esc(p.name)}</span>
+              ${p.required ? '<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400">required</span>' : '<span class="text-[10px] font-medium px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400">optional</span>'}
+            </div>
+            ${input}
+          </div>`;
+        }).join('');
       }
 
-      loadEndpoints();
-    })();
+      const urlBox = el.querySelector('#url-' + index);
+      const statusEl = el.querySelector('#response-status-' + index);
+      const contentEl = el.querySelector('#response-content-' + index);
+      const mediaEl = el.querySelector('#media-' + index);
+      const responseBox = el.querySelector('#response-' + index);
+
+      function collect() {
+        const values = {};
+        container.querySelectorAll('[data-name]').forEach(input => {
+          const name = input.getAttribute('data-name');
+          const value = String(input.value || '').trim();
+          if (value) values[name] = value;
+        });
+        return values;
+      }
+
+      function buildUrl() {
+        const values = collect();
+        const query = Object.keys(values).map(name =>
+          encodeURIComponent(name) + '=' + encodeURIComponent(values[name])
+        ).join('&');
+        return BASE + (api.path || '') + (query ? '?' + query : '');
+      }
+
+      function refreshUrl() {
+        const url = buildUrl();
+        urlBox.textContent = url;
+        return url;
+      }
+
+      container.addEventListener('input', refreshUrl);
+      container.addEventListener('change', refreshUrl);
+      refreshUrl();
+
+      el.querySelector('[data-action="send"]').addEventListener('click', () => {
+        const url = refreshUrl();
+        const button = el.querySelector('[data-action="send"]');
+        button.disabled = true;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin text-xs"></i> Sending...';
+        statusEl.textContent = '...';
+        contentEl.textContent = 'Waiting for the response...';
+        mediaEl.innerHTML = '';
+        responseBox.classList.remove('hidden');
+
+        const started = performance.now();
+        fetch(url, { headers: { Accept: 'application/json' }, cache: 'no-store' })
+          .then(res => {
+            const ms = Math.round(performance.now() - started);
+            statusEl.textContent = res.status + ' ' + (res.statusText || '') + ' · ' + ms + 'ms';
+            const type = res.headers.get('content-type') || '';
+            if (type.indexOf('application/json') > -1) {
+              return res.text().then(text => {
+                try {
+                  contentEl.innerHTML = highlightJSON(JSON.stringify(JSON.parse(text), null, 2));
+                } catch (e) {
+                  contentEl.textContent = text;
+                }
+              });
+            }
+            if (type.indexOf('image/') === 0) {
+              contentEl.textContent = '// Image response — preview below';
+              mediaEl.innerHTML = `<div class="p-4"><img src="${url}" alt="Endpoint image response" class="rounded-lg max-w-full"></div>`;
+              return null;
+            }
+            return res.text().then(text => { contentEl.textContent = text.slice(0, 4000); });
+          })
+          .catch(error => {
+            statusEl.textContent = 'request failed';
+            contentEl.textContent = String(error && error.message ? error.message : error);
+          })
+          .finally(() => {
+            button.disabled = false;
+            button.innerHTML = '<i class="fas fa-paper-plane text-xs"></i> Send Request';
+          });
+      });
+
+      el.querySelector('[data-action="curl"]').addEventListener('click', () => copy(`curl "${refreshUrl()}"`));
+      el.querySelector('[data-action="url"]').addEventListener('click', () => copy(refreshUrl()));
+      el.querySelector('[data-action="json"]').addEventListener('click', () => copy(JSON.stringify(api, null, 2)));
+    }
+
+    function toggleEndpoint(index) {
+      document.querySelectorAll('.endpoint-card').forEach(el => {
+        const isTarget = el.id === 'endpoint-' + index;
+        const shouldOpen = isTarget && !el.classList.contains('open');
+        el.classList.toggle('open', shouldOpen);
+        const body = el.querySelector('.endpoint-body');
+        const arrow = el.querySelector('.arrow');
+        if (body) body.classList.toggle('hidden', !shouldOpen);
+        if (arrow) arrow.style.transform = shouldOpen ? 'rotate(180deg)' : '';
+        const head = el.querySelector('.endpoint-head');
+        if (head) head.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+      });
+    }
+
+    /* ---------- filter ---------- */
+    function applyFilter() {
+      const term = String($('searchInput').value || '').trim().toLowerCase();
+      const mobileTerm = String($('searchInputMobile').value || '').trim().toLowerCase();
+      const combinedTerm = term || mobileTerm;
+      let shown = 0;
+      document.querySelectorAll('.endpoint-card').forEach(item => {
+        const matchesCategory = activeCategory === 'all' || item.dataset.category === activeCategory;
+        const matchesTerm = !combinedTerm || item.dataset.search.indexOf(combinedTerm) > -1;
+        const visible = matchesCategory && matchesTerm;
+        item.style.display = visible ? '' : 'none';
+        if (visible) shown++;
+      });
+
+      let empty = $('noResult');
+      if (!shown) {
+        if (!empty) {
+          empty = document.createElement('div');
+          empty.id = 'noResult';
+          empty.className = 'text-center py-12 text-gray-500 dark:text-gray-400';
+          empty.innerHTML = '<i class="fas fa-search text-3xl mb-3 block text-gray-300 dark:text-gray-600"></i>No endpoints match your search.';
+          $('endpointList').appendChild(empty);
+        }
+      } else if (empty) {
+        empty.remove();
+      }
+    }
+
+    /* ---------- sidebar toggle (mobile) ---------- */
+    window.closeSidebar = function() {
+      $('sidebar').classList.add('-translate-x-full');
+      $('sidebar-overlay').classList.add('hidden');
+    };
+
+    // Add mobile menu button dynamically if needed (navbar already has space)
+    // For simplicity, we'll allow swipe or just rely on lg breakpoint
+
+    /* ---------- load ---------- */
+    function loadEndpoints() {
+      const list = $('endpointList');
+      fetch('/api/endpoints', { cache: 'no-store' })
+        .then(res => res.json())
+        .then(data => {
+          allEndpoints = data.endpoints || [];
+          list.innerHTML = '';
+          if (!allEndpoints.length) {
+            list.innerHTML = '<div class="text-center py-12 text-gray-500 dark:text-gray-400">No endpoints are published yet.</div>';
+            return;
+          }
+          allEndpoints.forEach((api, index) => {
+            const el = createEndpointCard(api, index);
+            list.appendChild(el);
+            const head = el.querySelector('.endpoint-head');
+            head.addEventListener('click', () => toggleEndpoint(index));
+            head.addEventListener('keydown', e => {
+              if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleEndpoint(index); }
+            });
+          });
+          renderSidebar();
+          renderMobileChips();
+          applyFilter();
+        })
+        .catch(() => {
+          list.innerHTML = '<div class="text-center py-12 text-gray-500 dark:text-gray-400">Failed to load the endpoint list. Refresh the page to try again.</div>';
+        });
+    }
+
+    // Search listeners
+    $('searchInput').addEventListener('input', applyFilter);
+    $('searchInputMobile').addEventListener('input', applyFilter);
+
+    // Keyboard shortcut
+    document.addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        $('searchInput').focus();
+      }
+    });
+
+    loadEndpoints();
+
+  })();
   </script>
 </body>
 </html>
