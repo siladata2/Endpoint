@@ -3,7 +3,7 @@ const router = express.Router();
 
 router.apiInfo = {
   name: "SixtyNine NSFW",
-  description: "Random SixtyNine NSFW (image & video) from Prexzy API",
+  description: "Random SixtyNine NSFW (image & video)",
   method: "GET",
   parameters: []
 };
