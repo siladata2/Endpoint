@@ -49,8 +49,8 @@
     button { font:inherit; color:inherit; background:none; border:0; cursor:pointer; }
     input,select { font:inherit; color:inherit; }
     code,pre,.mono { font-family:'JetBrains Mono',monospace; }
-    .grad-text { background:linear-gradient(135deg,var(--accent),var(--accent2)); -webkit-background-clip:text; background-clip:text; color:transparent; }
     .grad { background:linear-gradient(135deg,var(--accent),var(--accent2)); }
+    .grad-text { background:linear-gradient(135deg,var(--accent),var(--accent2)); -webkit-background-clip:text; background-clip:text; color:transparent; }
     .wrap { max-width:1180px; margin:0 auto; padding:0 20px; }
     .ambient { position:fixed; inset:0; z-index:-1; pointer-events:none;
       background:radial-gradient(700px 400px at 15% -5%,var(--glow),transparent 70%),radial-gradient(600px 400px at 95% 10%,rgba(37,99,235,.15),transparent 70%); }
@@ -64,7 +64,7 @@
     .ld-glow { position:absolute; width:150px; height:150px; border-radius:50%; background:var(--glow); filter:blur(40px); animation:pulse 2s ease-in-out infinite; }
     .ld-logo { position:relative; width:130px; height:140px; animation:float 3s ease-in-out infinite; }
     .ld-logo .draw { stroke-dasharray:900; stroke-dashoffset:900; animation:draw 2s ease forwards; }
-    .ld-logo .node { opacity:0; transform-box:fill-box; transform-origin:center; animation:pop .5s ease forwards; }
+    .ld-logo .node { opacity:0; transform-origin:center; animation:pop .5s ease forwards; }
     .ld-name { font-size:clamp(44px,9vw,76px); font-weight:900; letter-spacing:.04em; line-height:1; }
     .ld-name span { background:linear-gradient(110deg,var(--accent),var(--accent2),var(--accent)); background-size:200% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; animation:shine 2.2s linear infinite; }
     .ld-bar { width:min(260px,70vw); height:4px; border-radius:4px; background:var(--surface2); overflow:hidden; }
@@ -80,7 +80,7 @@
 
     /* ================= TOP BAR ================= */
     .topbar { position:sticky; top:0; z-index:50; background:color-mix(in srgb,var(--bg) 82%,transparent); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); border-bottom:1px solid var(--border); }
-    .topbar .bar { display:flex; align-items:center; gap:14px; height:66px; }
+    .topbar .wrap { display:flex; align-items:center; gap:18px; height:66px; }
     .brand { display:flex; align-items:center; gap:10px; font-weight:800; font-size:19px; }
     .brand svg { width:34px; height:36px; }
     .brand em { font-style:normal; color:var(--accent); }
@@ -94,29 +94,12 @@
     .themes button:hover { color:var(--text); }
     .themes button.on { background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; box-shadow:0 4px 14px var(--glow); }
     .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:9px 16px; border-radius:11px; font-size:13px; font-weight:700; transition:.2s; }
-    .btn-sm { padding:8px 13px; }
     .btn-grad { background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; box-shadow:0 6px 20px var(--glow); }
     .btn-grad:hover { transform:translateY(-1px); filter:brightness(1.08); }
     .btn-ghost { background:var(--surface); border:1px solid var(--border); color:var(--text); }
     .btn-ghost:hover { border-color:var(--accent); color:var(--accent); }
     .btn:disabled { opacity:.6; cursor:wait; transform:none; }
-
-    /* original mobile menu (menu button + dropdown), kept as before */
-    .mbtn { display:none; width:40px; height:40px; border-radius:11px; align-items:center; justify-content:center; background:var(--surface); border:1px solid var(--border); color:var(--text); }
-    .mbtn svg { width:20px; height:20px; }
-    .mmenu { display:none; flex-direction:column; gap:4px; padding:6px 0 14px; }
-    .mmenu a { padding:11px 14px; border-radius:10px; font-size:15px; font-weight:600; color:var(--muted); }
-    .mmenu a:hover { background:var(--surface2); color:var(--text); }
-    .mmenu a.active { color:var(--accent); background:var(--surface2); }
-    @media (max-width:760px) {
-      .links { display:none; }
-      .mbtn { display:flex; }
-      .mmenu.open { display:flex; }
-      .topbar .bar { gap:8px; }
-      .brand span { font-size:17px; }
-      .themes button { width:30px; }
-    }
-    @media (max-width:430px) { .brand span { display:none; } }
+    @media (max-width:760px) { .links { display:none; } .hide-sm { display:none !important; } }
 
     /* ================= HOME ================= */
     .hero { padding:56px 0 26px; text-align:center; }
@@ -141,7 +124,7 @@
     .cat-card::before { content:""; position:absolute; width:160px; height:160px; right:-50px; top:-60px; border-radius:50%; background:var(--tile-a); opacity:.14; filter:blur(10px); transition:.3s; }
     .cat-card:hover { transform:translateY(-5px); border-color:var(--tile-a); box-shadow:0 18px 40px rgba(0,0,0,.25); }
     .cat-card:hover::before { opacity:.28; transform:scale(1.2); }
-    .tile { width:56px; height:56px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:24px; color:#fff; background:linear-gradient(135deg,var(--tile-a),var(--tile-b)); box-shadow:0 10px 24px var(--tile-glow); flex-shrink:0; }
+    .tile { width:56px; height:56px; border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:24px; color:#fff; background:linear-gradient(135deg,var(--tile-a),var(--tile-b)); box-shadow:0 10px 24px var(--tile-glow); }
     .cat-card h3 { font-size:18px; font-weight:800; margin:16px 0 4px; }
     .cat-card p { font-size:13px; color:var(--muted); }
     .cat-card .go { position:absolute; right:20px; bottom:20px; width:34px; height:34px; border-radius:50%; background:var(--surface2); display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:13px; transition:.25s; }
@@ -187,7 +170,8 @@
     .t-left { overflow-y:auto; padding:20px; border-right:1px solid var(--border); background:var(--surface); display:flex; flex-direction:column; gap:18px; }
     .t-right { display:flex; flex-direction:column; min-height:0; padding:20px; gap:14px; }
     .cmd { display:flex; align-items:stretch; border-radius:14px; background:var(--code); border:1px solid var(--border); overflow:hidden; }
-    .cmd code { flex:1; padding:12px; font-size:12px; color:var(--codetext); word-break:break-all; }
+    .cmd .method { border-radius:0; display:flex; align-items:center; min-width:64px; justify-content:center; }
+    .cmd code { flex:1; padding:12px 12px; font-size:12px; color:var(--codetext); word-break:break-all; }
     .cmd button { padding:0 14px; color:#94a3b8; transition:.2s; }
     .cmd button:hover { color:var(--accent); }
     .lab { font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
@@ -212,12 +196,12 @@
     .chip { font-size:12px; font-weight:700; padding:6px 11px; border-radius:99px; background:var(--surface); border:1px solid var(--border); color:var(--muted); font-family:'JetBrains Mono',monospace; }
     .chip.ok { color:var(--ok); border-color:var(--ok); }
     .chip.bad { color:var(--bad); border-color:var(--bad); }
-    .console { flex:1; min-height:240px; position:relative; border-radius:16px; background:var(--code); border:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
-    .console .cbar { display:flex; align-items:center; gap:7px; padding:10px 14px; border-bottom:1px solid rgba(148,163,184,.15); flex-wrap:wrap; }
-    .console .cbar i.d { width:10px; height:10px; border-radius:50%; display:block; }
-    .console .cbar .acts { margin-left:auto; display:flex; gap:6px; }
-    .console .cbar .acts button { font-size:12px; padding:5px 10px; border-radius:8px; background:rgba(148,163,184,.12); color:#cbd5e1; transition:.2s; }
-    .console .cbar .acts button:hover { background:var(--accent); color:#fff; }
+    .console { flex:1; min-height:200px; position:relative; border-radius:16px; background:var(--code); border:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
+    .console .bar { display:flex; align-items:center; gap:7px; padding:10px 14px; border-bottom:1px solid rgba(148,163,184,.15); }
+    .console .bar i.d { width:10px; height:10px; border-radius:50%; display:block; }
+    .console .bar .acts { margin-left:auto; display:flex; gap:6px; }
+    .console .bar .acts button { font-size:12px; padding:5px 10px; border-radius:8px; background:rgba(148,163,184,.12); color:#cbd5e1; transition:.2s; }
+    .console .bar .acts button:hover { background:var(--accent); color:#fff; }
     .console pre { flex:1; overflow:auto; padding:16px; font-size:12.5px; line-height:1.65; color:var(--codetext); white-space:pre-wrap; word-break:break-word; }
     .console .idle { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; color:#64748b; font-size:13px; padding:20px; text-align:center; }
     .console .idle i { font-size:34px; opacity:.5; }
@@ -225,20 +209,20 @@
     .jk { color:var(--k); } .js { color:var(--s); } .jn { color:var(--n); } .jb { color:var(--b); } .jz { color:var(--z); }
     .hdr-row { display:flex; gap:12px; padding:5px 0; border-bottom:1px dashed rgba(148,163,184,.15); }
     .hdr-row b { color:var(--k); min-width:150px; font-weight:600; }
-    .langs { display:flex; gap:6px; margin-left:10px; }
+    .langs { display:flex; gap:6px; }
     .langs button { font-size:12px; font-weight:700; padding:5px 11px; border-radius:8px; border:1px solid rgba(148,163,184,.25); color:#94a3b8; }
     .langs button.on { background:rgba(6,182,212,.2); color:var(--k); border-color:var(--accent); }
     @media (max-width:860px) {
       .t-body { grid-template-columns:1fr; overflow-y:auto; display:block; }
       .t-left { border-right:0; border-bottom:1px solid var(--border); overflow:visible; }
-      .t-right { min-height:560px; }
+      .t-right { min-height:520px; }
     }
 
     /* ================= POPUP ================= */
     #promo { position:fixed; right:22px; bottom:22px; z-index:120; width:min(380px,calc(100vw - 32px)); transform:translateY(40px) scale(.96); opacity:0; visibility:hidden; transition:.5s cubic-bezier(.2,.9,.3,1.2); }
     #promo.show { transform:none; opacity:1; visibility:visible; }
+    .promo-border { padding:2px; border-radius:24px; background:conic-gradient(from var(--ang,0deg),var(--accent),var(--accent2),#a855f7,var(--accent)); animation:rot 5s linear infinite; box-shadow:var(--shadow); }
     @property --ang { syntax:'<angle>'; inherits:false; initial-value:0deg; }
-    .promo-border { padding:2px; border-radius:24px; background:conic-gradient(from var(--ang),var(--accent),var(--accent2),#a855f7,var(--accent)); animation:rot 5s linear infinite; box-shadow:var(--shadow); }
     @keyframes rot { to { --ang:360deg; } }
     .promo-in { position:relative; border-radius:22px; padding:22px; background:var(--surface); overflow:hidden; }
     .promo-in::before { content:""; position:absolute; width:200px; height:200px; right:-70px; top:-90px; border-radius:50%; background:var(--glow); filter:blur(30px); }
@@ -293,35 +277,22 @@
   <!-- ============ TOP BAR ============ -->
   <header class="topbar">
     <div class="wrap">
-      <div class="bar">
-        <a class="brand" href="/" aria-label="SILA API home">
-          <svg viewBox="60 50 180 200" aria-hidden="true"><defs><linearGradient id="lg" x1="76" y1="61" x2="224" y2="239" gradientUnits="userSpaceOnUse"><stop stop-color="#67E8F9"/><stop offset=".5" stop-color="#06B6D4"/><stop offset="1" stop-color="#2563EB"/></linearGradient></defs><path d="M150 61L224 104V196L150 239L76 196V104Z" fill="#0A0A1A" stroke="url(#lg)" stroke-width="12" stroke-linejoin="round"/><path d="M150 91V209M101 120L199 180M101 180L199 120" stroke="url(#lg)" stroke-width="9" stroke-linecap="round"/><circle cx="150" cy="91" r="13" fill="#67E8F9"/><circle cx="101" cy="120" r="13" fill="#38BDF8"/><circle cx="199" cy="120" r="13" fill="#38BDF8"/><circle cx="101" cy="180" r="13" fill="#2563EB"/><circle cx="199" cy="180" r="13" fill="#2563EB"/><circle cx="150" cy="209" r="13" fill="#67E8F9"/><circle cx="150" cy="150" r="27" fill="#0A0A1A" stroke="url(#lg)" stroke-width="7"/><path d="M137 150H163M150 137V163" stroke="#E0F2FE" stroke-width="7" stroke-linecap="round"/></svg>
-          <span>SILA <em>API</em></span>
-        </a>
-
-        <nav class="links" aria-label="Main">
-          <a href="/">Home</a>
-          <a href="/endpoints" class="active">Endpoints</a>
-          <a href="/about">About</a>
-        </nav>
-
-        <div class="spacer"></div>
-
-        <div class="themes" role="group" aria-label="Theme">
-          <button type="button" data-theme-set="light" title="Light theme" aria-label="Light theme"><i class="fas fa-sun"></i></button>
-          <button type="button" data-theme-set="dark" title="Dark theme" aria-label="Dark theme"><i class="fas fa-moon"></i></button>
-          <button type="button" data-theme-set="neon" title="Neon theme" aria-label="Neon theme"><i class="fas fa-wand-magic-sparkles"></i></button>
-        </div>
-
-        <a class="btn btn-ghost btn-sm" href="/api/endpoints">Raw JSON</a>
-        <button class="mbtn" id="menu-btn" type="button" aria-label="Open menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-      </div>
-
-      <nav class="mmenu" id="mmenu" aria-label="Mobile">
+      <a class="brand" href="/" aria-label="SILA API home">
+        <svg viewBox="60 50 180 200" aria-hidden="true"><defs><linearGradient id="lg" x1="76" y1="61" x2="224" y2="239" gradientUnits="userSpaceOnUse"><stop stop-color="#67E8F9"/><stop offset=".5" stop-color="#06B6D4"/><stop offset="1" stop-color="#2563EB"/></linearGradient></defs><path d="M150 61L224 104V196L150 239L76 196V104Z" fill="#0A0A1A" stroke="url(#lg)" stroke-width="12" stroke-linejoin="round"/><path d="M150 91V209M101 120L199 180M101 180L199 120" stroke="url(#lg)" stroke-width="9" stroke-linecap="round"/><circle cx="150" cy="91" r="13" fill="#67E8F9"/><circle cx="101" cy="120" r="13" fill="#38BDF8"/><circle cx="199" cy="120" r="13" fill="#38BDF8"/><circle cx="101" cy="180" r="13" fill="#2563EB"/><circle cx="199" cy="180" r="13" fill="#2563EB"/><circle cx="150" cy="209" r="13" fill="#67E8F9"/><circle cx="150" cy="150" r="27" fill="#0A0A1A" stroke="url(#lg)" stroke-width="7"/><path d="M137 150H163M150 137V163" stroke="#E0F2FE" stroke-width="7" stroke-linecap="round"/></svg>
+        <span>SILA <em>API</em></span>
+      </a>
+      <nav class="links" aria-label="Main">
         <a href="/">Home</a>
         <a href="/endpoints" class="active">Endpoints</a>
         <a href="/about">About</a>
       </nav>
+      <div class="spacer"></div>
+      <div class="themes" role="group" aria-label="Theme">
+        <button type="button" data-theme-set="light" title="Light theme"><i class="fas fa-sun"></i></button>
+        <button type="button" data-theme-set="dark" title="Dark theme"><i class="fas fa-moon"></i></button>
+        <button type="button" data-theme-set="neon" title="Neon theme"><i class="fas fa-wand-magic-sparkles"></i></button>
+      </div>
+      <a class="btn btn-grad hide-sm" href="/api/endpoints"><i class="fas fa-code"></i> Raw JSON</a>
     </div>
   </header>
 
@@ -355,7 +326,7 @@
           <div class="lab" style="margin-bottom:8px">Request</div>
           <div class="cmd">
             <code id="t-url">/</code>
-            <button type="button" id="t-copy-url" title="Copy URL" aria-label="Copy URL"><i class="fas fa-copy"></i></button>
+            <button type="button" id="t-copy-url" title="Copy URL"><i class="fas fa-copy"></i></button>
           </div>
         </div>
         <div>
@@ -382,9 +353,9 @@
           </div>
         </div>
         <div class="console">
-          <div class="cbar">
+          <div class="bar">
             <i class="d" style="background:#ef4444"></i><i class="d" style="background:#f59e0b"></i><i class="d" style="background:#22c55e"></i>
-            <div class="langs hidden" id="langs">
+            <div class="langs hidden" id="langs" style="margin-left:12px">
               <button type="button" class="on" data-lang="javascript">JavaScript</button>
               <button type="button" data-lang="python">Python</button>
               <button type="button" data-lang="curl">cURL</button>
@@ -394,7 +365,7 @@
               <button type="button" id="r-dl"><i class="fas fa-download"></i> Save</button>
             </div>
           </div>
-          <div class="idle" id="r-idle"><i class="fas fa-satellite-dish"></i><span>Press <b>Send request</b> to see the live response here.</span></div>
+          <div class="idle" id="r-idle"><i class="fas fa-satellite-dish"></i>Press <b>Send request</b> to see the live response here.</div>
           <pre id="r-out" class="hidden"></pre>
           <div id="r-media"></div>
         </div>
@@ -431,29 +402,16 @@
       var BASE = SILA.BASE;
       var catLabel = function (c) { return SILA.catLabel ? SILA.catLabel(c) : String(c); };
 
-      var all = [];
-      var groups = {};
-      var current = null;
+      var all = [];            // all endpoints
+      var groups = {};         // category -> [indexes]
+      var current = null;      // { api, index }
       var tab = "body";
       var lang = "javascript";
       var last = { text: "", headers: [], ok: false };
 
       $("year").textContent = new Date().getFullYear();
 
-      /* ---------- mobile menu (menu button + dropdown, same as before) ---------- */
-      var menuBtn = $("menu-btn"), mmenu = $("mmenu");
-      menuBtn.addEventListener("click", function () {
-        var open = mmenu.classList.toggle("open");
-        menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
-      });
-      mmenu.querySelectorAll("a").forEach(function (a) {
-        a.addEventListener("click", function () { mmenu.classList.remove("open"); menuBtn.setAttribute("aria-expanded", "false"); });
-      });
-      window.addEventListener("resize", function () {
-        if (window.innerWidth > 760) { mmenu.classList.remove("open"); menuBtn.setAttribute("aria-expanded", "false"); }
-      });
-
-      /* ---------- toast + copy ---------- */
+      /* ---------- toast + copy (own, no style files needed) ---------- */
       var toastTimer;
       function toast(msg) {
         var t = $("toast");
@@ -464,6 +422,9 @@
       }
       function copy(text) {
         function done() { toast("Copied to clipboard"); }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done, fallback);
+        } else { fallback(); }
         function fallback() {
           var ta = document.createElement("textarea");
           ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
@@ -471,8 +432,6 @@
           try { document.execCommand("copy"); done(); } catch (e) { toast("Copy failed"); }
           ta.remove();
         }
-        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fallback);
-        else fallback();
       }
 
       /* ---------- themes ---------- */
@@ -539,15 +498,12 @@
         return t === "number" ? "1" : t === "boolean" ? "true" : "hello";
       }
       function highlightJSON(json) {
-        return esc(json).replace(/(&quot;(?:\\.|(?!&quot;).)*&quot;)(\s*:)?|\b(true|false)\b|\bnull\b|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/g, function (m, str, colon, bool) {
+        return esc(json).replace(/(&quot;(?:\\.|[^&\\]|&(?!quot;))*?&quot;)(\s*:)?|\b(true|false)\b|\bnull\b|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/g, function (m, str, colon, bool) {
           if (str) return colon ? '<span class="jk">' + str + "</span>" + colon : '<span class="js">' + str + "</span>";
           if (bool) return '<span class="jb">' + m + "</span>";
           if (m === "null") return '<span class="jz">null</span>';
           return '<span class="jn">' + m + "</span>";
         });
-      }
-      function haystack(api) {
-        return ((api.name || "") + " " + (api.path || "") + " " + (api.description || "") + " " + (api.category || "general")).toLowerCase();
       }
 
       /* ---------- routing ---------- */
@@ -582,9 +538,9 @@
         var html =
           '<section class="hero">' +
             '<span class="eyebrow"><i class="fas fa-book-open"></i> Documentation</span>' +
-            '<h1>API <span class="grad-text">endpoints</span></h1>' +
+            "<h1>API <span class=\"grad-text\">endpoints</span></h1>" +
             "<p>Every endpoint published on SILA API, grouped by category. Open a category, pick an endpoint and test it live.</p>" +
-            '<div class="urlbar"><span class="lbl">Base URL</span><code>' + esc(BASE) + '</code><button class="btn btn-ghost btn-sm" id="copy-base" type="button"><i class="fas fa-copy"></i> Copy</button></div>' +
+            '<div class="urlbar"><span class="lbl">Base URL</span><code>' + esc(BASE) + '</code><button class="btn btn-ghost" id="copy-base" type="button"><i class="fas fa-copy"></i> Copy</button></div>' +
             '<div class="searchbox"><i class="fas fa-magnifying-glass"></i><input id="home-search" type="search" autocomplete="off" placeholder="Search all endpoints…" aria-label="Search endpoints"><kbd>/</kbd></div>' +
             '<div class="stats"><div class="stat"><span class="dot"></span>All systems online</div>' +
               '<div class="stat"><b>' + all.length + "</b>endpoints</div>" +
@@ -619,6 +575,10 @@
             : '<div class="empty"><i class="fas fa-ghost"></i>No endpoints match your search.</div>';
           bindEps($("results-list"));
         });
+      }
+
+      function haystack(api) {
+        return ((api.name || "") + " " + (api.path || "") + " " + (api.description || "") + " " + (api.category || "general")).toLowerCase();
       }
 
       function renderCategory(cat) {
@@ -661,11 +621,7 @@
         if (l === "curl") return "curl \"" + u + "\"";
         return "fetch(\"" + u + "\")\n  .then(res => res.json())\n  .then(data => console.log(data));";
       }
-      function refreshUrl() {
-        if (current) $("t-url").textContent = buildUrl();
-        if (tab === "code") renderConsole();
-        return $("t-url").textContent;
-      }
+      function refreshUrl() { if (current) $("t-url").textContent = buildUrl(); if (tab === "code") renderConsole(); return $("t-url").textContent; }
 
       function setTab(t) {
         tab = t;
@@ -780,7 +736,7 @@
       $("q-curl").addEventListener("click", function () { copy('curl "' + refreshUrl() + '"'); });
       $("q-json").addEventListener("click", function () { if (current) copy(JSON.stringify(current.api, null, 2)); });
       $("r-copy").addEventListener("click", function () {
-        copy(tab === "code" ? snippet(lang) : $("r-out").textContent);
+        copy(tab === "code" ? snippet(lang) : (tab === "headers" ? last.headers.map(function (h) { return h[0] + ": " + h[1]; }).join("\n") : $("r-out").textContent));
       });
       $("r-dl").addEventListener("click", function () {
         var text = tab === "code" ? snippet(lang) : $("r-out").textContent;
@@ -838,7 +794,7 @@
           var i = all.findIndex(function (e) { return (e.path || "") === open; });
           if (i > -1) {
             location.hash = "#/c/" + encodeURIComponent(all[i].category || "general");
-            setTimeout(function () { openTester(i); }, 80);
+            setTimeout(function () { openTester(i); }, 60);
             return;
           }
         }
