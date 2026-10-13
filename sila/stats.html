@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="SILA API — live request statistics">
+  <link rel="icon" type="image/svg+xml" href="/silaapi.svg">
+  <title>SILA API — Stats</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter','sans-serif'], mono: ['JetBrains Mono','monospace'] } } } }
+  </script>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Inter',sans-serif; }
+    .gradient-text {
+      background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .gradient-bg { background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%); }
+    .stat-card { transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: 0 18px 40px rgba(37,99,235,0.12); }
+    .dark .stat-card:hover { box-shadow: 0 18px 40px rgba(0,0,0,0.4); }
+    @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.4;transform:scale(1.6);} }
+    .live-dot { width:8px; height:8px; border-radius:50%; background:#10b981; animation:pulse-dot 1.8s ease-in-out infinite; }
+    @keyframes countUp { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
+    .count-anim { animation: countUp 0.4s ease-out; }
+    .skeleton { background: linear-gradient(90deg, rgba(148,163,184,0.12) 25%, rgba(148,163,184,0.22) 37%, rgba(148,163,184,0.12) 63%); background-size:400% 100%; animation: shimmer 1.4s ease infinite; border-radius:0.5rem; }
+    @keyframes shimmer { 0%{background-position:100% 0;} 100%{background-position:-100% 0;} }
+  </style>
+</head>
+<body class="bg-gray-50 dark:bg-[#0a0a1a] text-gray-900 dark:text-gray-100 transition-colors duration-300 min-h-screen">
+
+  <!-- Nav -->
+  <nav class="sticky top-0 z-40 bg-white/80 dark:bg-[#0a0a1a]/80 backdrop-blur-xl border-b border-gray-200 dark:border-gray-800">
+    <div class="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">
+          <i class="fas fa-chart-line text-white text-sm"></i>
+        </div>
+        <span class="text-lg font-bold">SILA API</span>
+        <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">Stats</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="hidden sm:flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+          <span class="live-dot"></span> Live · updates every <span id="refresh-secs">10</span>s
+        </span>
+        <button id="theme-toggle" class="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+          <i class="fas fa-moon text-gray-600 dark:hidden"></i>
+          <i class="fas fa-sun text-yellow-400 hidden dark:block"></i>
+        </button>
+        <a href="https://api.silatech.site" class="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-medium text-white gradient-bg rounded-lg hover:opacity-90 transition-opacity">
+          <i class="fas fa-house text-xs"></i> Main Site
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-6xl mx-auto px-5 py-8">
+
+    <!-- Hero / Live counter -->
+    <section class="mb-8 text-center">
+      <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Total API Requests Served</p>
+      <h1 id="live-total" class="text-5xl sm:text-7xl font-black gradient-text count-anim">—</h1>
+      <p id="offline-banner" class="hidden mt-3 text-sm text-amber-600 dark:text-amber-400">
+        <i class="fas fa-triangle-exclamation"></i> Stats database not connected — showing nothing yet.
+      </p>
+    </section>
+
+    <!-- Stat cards -->
+    <section class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+      <div class="stat-card bg-white dark:bg-gray-800/50 rounded-2xl p-5 border border-gray-200 dark:border-gray-700/50">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Today</span>
+          <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background:rgba(37,99,235,0.12)">
+            <i class="fas fa-calendar-day text-blue-600 dark:text-blue-400"></i>
+          </div>
+        </div>
+        <p id="stat-today" class="text-3xl font-bold count-anim">—</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">requests since 00:00 UTC</p>
+      </div>
+      <div class="stat-card bg-white dark:bg-gray-800/50 rounded-2xl p-5 border border-gray-200 dark:border-gray-700/50">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">This Month</span>
+          <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background:rgba(6,182,212,0.12)">
+            <i class="fas fa-calendar text-cyan-600 dark:text-cyan-400"></i>
+          </div>
+        </div>
+        <p id="stat-month" class="text-3xl font-bold count-anim">—</p>
+        <p id="stat-month-label" class="text-xs text-gray-500 dark:text-gray-400 mt-1">this calendar month</p>
+      </div>
+      <div class="stat-card bg-white dark:bg-gray-800/50 rounded-2xl p-5 border border-gray-200 dark:border-gray-700/50">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">All Time</span>
+          <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background:rgba(16,185,129,0.12)">
+            <i class="fas fa-infinity text-emerald-600 dark:text-emerald-400"></i>
+          </div>
+        </div>
+        <p id="stat-alltime" class="text-3xl font-bold count-anim">—</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">since launch</p>
+      </div>
+    </section>
+
+    <!-- Secondary metrics -->
+    <section class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+      <div class="stat-card bg-white dark:bg-gray-800/50 rounded-2xl p-5 border border-gray-200 dark:border-gray-700/50">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Last 7 Days</span>
+          <i class="fas fa-calendar-week text-blue-500"></i>
+        </div>
+        <p id="stat-7d" class="text-2xl font-bold">—</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">recent request volume</p>
+      </div>
+      <div class="stat-card bg-white dark:bg-gray-800/50 rounded-2xl p-5 border border-gray-200 dark:border-gray-700/50">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Avg / Day</span>
+          <i class="fas fa-wave-square text-cyan-500"></i>
+        </div>
+        <p id="stat-avg" class="text-2xl font-bold">—</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">daily average (real traffic)</p>
+      </div>
+      <div class="stat-card bg-white dark:bg-gray-800/50 rounded-2xl p-5 border border-gray-200 dark:border-gray-700/50">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Busiest Day</span>
+          <i class="fas fa-trophy text-amber-500"></i>
+        </div>
+        <p id="stat-busiest" class="text-2xl font-bold">—</p>
+        <p id="stat-busiest-date" class="text-xs text-gray-500 dark:text-gray-400 mt-1">peak traffic day</p>
+      </div>
+    </section>
+
+    <!-- Top endpoint today + Chart -->
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
+      <!-- Top endpoint highlight -->
+      <div class="bg-white dark:bg-gray-800/50 rounded-2xl p-5 border border-gray-200 dark:border-gray-700/50">
+        <div class="flex items-center gap-2 mb-4">
+          <i class="fas fa-fire text-orange-500"></i>
+          <h2 class="text-sm font-bold">Top Endpoint Today</h2>
+        </div>
+        <div id="top-endpoint">
+          <div class="skeleton h-6 w-3/4 mb-2"></div>
+          <div class="skeleton h-4 w-1/3"></div>
+        </div>
+      </div>
+      <!-- Chart -->
+      <div class="lg:col-span-2 bg-white dark:bg-gray-800/50 rounded-2xl p-5 border border-gray-200 dark:border-gray-700/50">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-sm font-bold flex items-center gap-2"><i class="fas fa-chart-area text-blue-500"></i> Requests · Last 30 Days</h2>
+        </div>
+        <div class="h-64"><canvas id="trend-chart"></canvas></div>
+      </div>
+    </section>
+
+    <!-- Top endpoints table -->
+    <section class="bg-white dark:bg-gray-800/50 rounded-2xl p-5 border border-gray-200 dark:border-gray-700/50">
+      <h2 class="text-sm font-bold mb-4 flex items-center gap-2"><i class="fas fa-ranking-star text-cyan-500"></i> Most Requested Today</h2>
+      <div id="top-list" class="space-y-2">
+        <div class="skeleton h-10 w-full"></div>
+        <div class="skeleton h-10 w-full"></div>
+        <div class="skeleton h-10 w-full"></div>
+      </div>
+    </section>
+
+    <footer class="mt-10 text-center text-xs text-gray-400 dark:text-gray-500">
+      <p>&copy; <span data-year>2025</span> SILA API · Stats refresh automatically · Last updated <span id="last-updated">—</span></p>
+    </footer>
+  </main>
+
+  <script>
+    // ===== Theme =====
+    const html = document.documentElement;
+    if (localStorage.getItem('sila-theme') === 'dark' || (!localStorage.getItem('sila-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) html.classList.add('dark');
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('sila-theme', html.classList.contains('dark') ? 'dark' : 'light');
+      if (chart) renderChart(lastTrend);
+    });
+    document.querySelectorAll('[data-year]').forEach(el => el.textContent = new Date().getFullYear());
+
+    const REFRESH_MS = 10000;
+    document.getElementById('refresh-secs').textContent = REFRESH_MS / 1000;
+
+    // ===== Helpers =====
+    const fmt = n => (n ?? 0).toLocaleString('en-US');
+    function animateValue(el, to) {
+      const from = Number(String(el.dataset.val || 0));
+      if (from === to) { el.textContent = fmt(to); return; }
+      el.dataset.val = to;
+      const dur = 600, start = performance.now();
+      const step = now => {
+        const p = Math.min((now - start) / dur, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = fmt(Math.round(from + (to - from) * eased));
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+
+    // ===== Chart =====
+    let chart = null, lastTrend = [];
+    function renderChart(trend) {
+      lastTrend = trend || [];
+      const ctx = document.getElementById('trend-chart').getContext('2d');
+      const dark = html.classList.contains('dark');
+      const labels = lastTrend.map(d => d.date.slice(5));
+      const data = lastTrend.map(d => d.count);
+      const grad = ctx.createLinearGradient(0, 0, 0, 256);
+      grad.addColorStop(0, 'rgba(37,99,235,0.35)');
+      grad.addColorStop(1, 'rgba(6,182,212,0.02)');
+      if (chart) chart.destroy();
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: { labels, datasets: [{
+          label: 'Requests', data, fill: true, backgroundColor: grad,
+          borderColor: '#2563eb', borderWidth: 2, tension: 0.35,
+          pointRadius: 2, pointHoverRadius: 5, pointBackgroundColor: '#06b6d4'
+        }]},
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
+          scales: {
+            x: { grid: { display: false }, ticks: { color: dark ? '#94a3b8' : '#6b7280', maxTicksLimit: 10, font: { size: 10 } } },
+            y: { beginAtZero: true, grid: { color: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }, ticks: { color: dark ? '#94a3b8' : '#6b7280', font: { size: 10 }, callback: v => fmt(v) } }
+          }
+        }
+      });
+    }
+
+    // ===== Data load =====
+    async function load() {
+      try {
+        const res = await fetch('/api/summary', { cache: 'no-store' });
+        const d = await res.json();
+
+        if (!d.connected) {
+          document.getElementById('offline-banner').classList.remove('hidden');
+          document.getElementById('live-total').textContent = '0';
+          return;
+        }
+        document.getElementById('offline-banner').classList.add('hidden');
+
+        animateValue(document.getElementById('live-total'), d.allTime);
+        animateValue(document.getElementById('stat-today'), d.today);
+        animateValue(document.getElementById('stat-month'), d.month);
+        animateValue(document.getElementById('stat-alltime'), d.allTime);
+        animateValue(document.getElementById('stat-7d'), d.last7Days || 0);
+        animateValue(document.getElementById('stat-avg'), d.avgPerDay || 0);
+        if (d.busiestDay) {
+          animateValue(document.getElementById('stat-busiest'), d.busiestDay.count);
+          document.getElementById('stat-busiest-date').textContent = d.busiestDay.date;
+        } else {
+          document.getElementById('stat-busiest').textContent = '0';
+        }
+
+        const te = document.getElementById('top-endpoint');
+        if (d.topEndpointToday) {
+          te.innerHTML = `
+            <p class="font-mono text-sm text-blue-600 dark:text-blue-400 break-all mb-1">${d.topEndpointToday.path}</p>
+            <p class="text-2xl font-bold">${fmt(d.topEndpointToday.count)} <span class="text-sm font-normal text-gray-400">hits today</span></p>`;
+        } else {
+          te.innerHTML = `<p class="text-sm text-gray-400">No requests yet today.</p>`;
+        }
+
+        const list = document.getElementById('top-list');
+        if (d.topEndpoints && d.topEndpoints.length) {
+          const max = d.topEndpoints[0].count || 1;
+          list.innerHTML = d.topEndpoints.map((e, i) => `
+            <div class="flex items-center gap-3">
+              <span class="w-6 text-xs font-bold text-gray-400 text-right">${i + 1}</span>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-2 mb-1">
+                  <code class="text-xs font-mono text-gray-700 dark:text-gray-300 truncate">${e.path}</code>
+                  <span class="text-xs font-semibold text-gray-900 dark:text-white flex-shrink-0">${fmt(e.count)}</span>
+                </div>
+                <div class="h-1.5 rounded-full bg-gray-100 dark:bg-gray-700 overflow-hidden">
+                  <div class="h-full gradient-bg rounded-full" style="width:${Math.max(3, (e.count / max) * 100)}%"></div>
+                </div>
+              </div>
+            </div>`).join('');
+        } else {
+          list.innerHTML = `<p class="text-sm text-gray-400">No requests yet today.</p>`;
+        }
+
+        renderChart(d.dailyTrend);
+        document.getElementById('last-updated').textContent = new Date(d.updatedAt).toLocaleTimeString();
+      } catch (err) {
+        console.error('Failed to load stats:', err);
+      }
+    }
+
+    load();
+    setInterval(load, REFRESH_MS);
+  </script>
+
+  <!-- ===== Community Welcome Modal ===== -->
+  <div id="welcome-modal" class="fixed inset-0 z-[200] hidden items-center justify-center p-4">
+    <div id="welcome-backdrop" class="absolute inset-0 bg-black/60 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
+    <div id="welcome-card" class="relative w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-2xl p-6 sm:p-7 text-center transform scale-95 opacity-0 transition-all duration-300">
+      <button id="welcome-close" aria-label="Close" class="absolute top-3 right-3 w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"><i class="fas fa-times"></i></button>
+      <div class="w-14 h-14 mx-auto mb-4 rounded-2xl gradient-bg flex items-center justify-center shadow-lg">
+        <i class="fab fa-whatsapp text-white text-2xl"></i>
+      </div>
+      <h3 class="text-xl font-bold mb-2">Join the SILA API community</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Get announcements about new endpoints &amp; updates, and chat with other developers. Free &amp; unlimited, always.</p>
+      <div class="space-y-3">
+        <a href="https://whatsapp.com/channel/0029VbBG4gfISTkCpKxyMH02" target="_blank" rel="noopener" class="flex items-center justify-center gap-2 w-full py-3 rounded-xl gradient-bg text-white font-semibold hover:opacity-90 transition-opacity">
+          <i class="fab fa-whatsapp"></i> Follow the Channel <span class="opacity-70 text-xs font-normal">updates</span>
+        </a>
+        <a href="https://chat.whatsapp.com/Db9YMXctmLG2BZs4aNuwRi" target="_blank" rel="noopener" class="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-gray-200 dark:border-gray-700 font-semibold hover:border-blue-400 dark:hover:border-blue-500 transition-colors">
+          <i class="fas fa-users text-blue-500"></i> Join the Group <span class="opacity-60 text-xs font-normal">discussion</span>
+        </a>
+      </div>
+      <button id="welcome-later" class="mt-4 text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">Maybe later</button>
+    </div>
+  </div>
+  <script>
+  (function(){
+    var KEY='sila_welcome_dismissed', DAYS=3;
+    try { var t=localStorage.getItem(KEY); if (t && (Date.now()-parseInt(t,10) < DAYS*864e5)) return; } catch(e){}
+    var modal=document.getElementById('welcome-modal'),
+        card=document.getElementById('welcome-card'),
+        bd=document.getElementById('welcome-backdrop');
+    if(!modal) return;
+    function open(){ modal.classList.remove('hidden'); modal.classList.add('flex');
+      requestAnimationFrame(function(){ bd.classList.add('opacity-100'); card.classList.remove('scale-95','opacity-0'); card.classList.add('scale-100','opacity-100'); }); }
+    function close(){ bd.classList.remove('opacity-100'); card.classList.add('scale-95','opacity-0');
+      try{ localStorage.setItem(KEY, String(Date.now())); }catch(e){}
+      setTimeout(function(){ modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300); }
+    document.getElementById('welcome-close').onclick=close;
+    document.getElementById('welcome-later').onclick=close;
+    bd.onclick=close;
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+    setTimeout(open, 1200);
+  })();
+  </script>
+  <!-- ===== End Community Welcome Modal ===== -->
+
+</body>
+</html>
