@@ -140,6 +140,16 @@
       min-width: 0;
     }
 
+    /* Popup Ad Styles */
+    #promo-popup {
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    #promo-popup.hidden-popup {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
     @media(prefers-reduced-motion:reduce) {
       *,
       *::before,
@@ -154,12 +164,59 @@
 
 <body class="bg-gray-50 dark:bg-[#0a0a1a] text-gray-900 dark:text-gray-100 transition-colors duration-300">
 
+  <!-- PROMO POPUP AD -->
+  <div id="promo-popup" class="hidden-popup fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-sm w-full p-6 border border-gray-200 dark:border-gray-700 relative animate-fade-up">
+      <button id="close-popup" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+        <i class="fas fa-times text-xl"></i>
+      </button>
+
+      <div class="text-center">
+        <div class="w-16 h-16 gradient-bg rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-500/30">
+          <i class="fas fa-bullhorn text-2xl text-white"></i>
+        </div>
+        <h3 class="text-xl font-extrabold mb-2">Join Our Community!</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-5">
+          Get the latest updates, API tips, and support directly from Sila Tech.
+        </p>
+
+        <div class="space-y-3">
+          <a href="https://whatsapp.com/channel/your-channel-link" target="_blank" rel="noopener" class="w-full flex items-center justify-center gap-3 px-4 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-green-500/25">
+            <i class="fab fa-whatsapp text-xl"></i>
+            Follow WhatsApp Channel
+          </a>
+          <a href="https://chat.whatsapp.com/your-group-link" target="_blank" rel="noopener" class="w-full flex items-center justify-center gap-3 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-blue-500/25">
+            <i class="fas fa-users text-xl"></i>
+            Join WhatsApp Group
+          </a>
+        </div>
+
+        <p class="text-xs text-gray-400 dark:text-gray-500 mt-4">
+          Don't miss out on new API releases.
+        </p>
+      </div>
+    </div>
+  </div>
+
   <!-- NAVIGATION -->
   <nav class="fixed top-0 w-full z-50 glass">
     <div class="max-w-7xl mx-auto px-5 sm:px-6 py-4 flex justify-between items-center gap-4">
 
       <a href="/" class="flex items-center gap-3 min-w-0" aria-label="SILA API home">
-        <img src="/silaapi.svg" alt="" class="w-9 h-9 object-contain">
+        <!-- New Hexagon Logo SVG -->
+        <svg width="36" height="36" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0">
+          <path d="M50 5L90 27.5V72.5L50 95L10 72.5V27.5L50 5Z" stroke="#22d3ee" stroke-width="6" stroke-linejoin="round" fill="none"/>
+          <circle cx="50" cy="50" r="12" fill="none" stroke="#22d3ee" stroke-width="4"/>
+          <path d="M50 38V20" stroke="#22d3ee" stroke-width="5" stroke-linecap="round"/>
+          <path d="M50 62V80" stroke="#22d3ee" stroke-width="5" stroke-linecap="round"/>
+          <path d="M38 50H20" stroke="#22d3ee" stroke-width="5" stroke-linecap="round"/>
+          <path d="M62 50H80" stroke="#22d3ee" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="50" cy="20" r="5" fill="#3b82f6"/>
+          <circle cx="50" cy="80" r="5" fill="#3b82f6"/>
+          <circle cx="20" cy="50" r="5" fill="#3b82f6"/>
+          <circle cx="80" cy="50" r="5" fill="#3b82f6"/>
+          <circle cx="50" cy="50" r="4" fill="#22d3ee"/>
+        </svg>
 
         <span class="text-lg font-extrabold text-gray-900 dark:text-white whitespace-nowrap">
           SILA <span class="gradient-text">API</span>
@@ -241,21 +298,27 @@
 
         </div>
 
+        <!-- NEW STATS SECTION (Matches the image provided) -->
         <div class="flex flex-wrap justify-center gap-8 sm:gap-12 mt-12 animate-fade-up delay-400">
 
           <div class="text-center">
-            <p id="stat-endpoints" class="text-2xl font-extrabold text-gray-900 dark:text-white">—</p>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Active endpoints</p>
+            <p id="stat-endpoints" class="text-2xl font-extrabold text-gray-900 dark:text-white">9+</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Endpoints</p>
           </div>
 
           <div class="text-center">
-            <p id="stat-requests" class="text-2xl font-extrabold text-gray-900 dark:text-white">—</p>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Requests served</p>
+            <p id="stat-requests" class="text-2xl font-extrabold text-gray-900 dark:text-white">0+</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Requests Served</p>
           </div>
 
           <div class="text-center">
-            <p id="stat-visitors" class="text-2xl font-extrabold text-gray-900 dark:text-white">—</p>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Developers reached</p>
+            <p id="stat-visitors" class="text-2xl font-extrabold text-gray-900 dark:text-white">1m</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Uptime</p>
+          </div>
+
+          <div class="text-center">
+            <p id="stat-free" class="text-2xl font-extrabold text-gray-900 dark:text-white">Free</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">No API Key</p>
           </div>
 
         </div>
@@ -369,7 +432,9 @@
 
         </div>
       </div>
-    </section>    <!-- API CATEGORIES -->
+    </section>
+
+    <!-- API CATEGORIES -->
     <section class="py-20 px-5 sm:px-6 bg-white dark:bg-gray-900/50">
       <div class="max-w-6xl mx-auto">
 
@@ -518,7 +583,8 @@
       data: 'fa-database',
       general: 'fa-code',
       tts: 'fa-volume-high',
-      texttospeech: 'fa-volume-high'
+      texttospeech: 'fa-volume-high',
+      nsfw: 'fa-eye-slash'
     };
 
     function label(s) {
@@ -554,6 +620,36 @@
     });
 
     setTheme();
+
+    // Popup Ad Logic
+    const popup = $('promo-popup');
+    const closePopup = $('close-popup');
+
+    if (popup && closePopup) {
+      // Check if user has already seen the popup
+      const hasSeenPopup = localStorage.getItem('sila-popup-seen');
+      
+      if (!hasSeenPopup) {
+        // Show popup after a short delay
+        setTimeout(() => {
+          popup.classList.remove('hidden-popup');
+        }, 1500);
+      }
+
+      // Close popup when clicking the X button
+      closePopup.addEventListener('click', () => {
+        popup.classList.add('hidden-popup');
+        localStorage.setItem('sila-popup-seen', 'true');
+      });
+
+      // Close popup when clicking outside the modal
+      popup.addEventListener('click', (e) => {
+        if (e.target === popup) {
+          popup.classList.add('hidden-popup');
+          localStorage.setItem('sila-popup-seen', 'true');
+        }
+      });
+    }
 
     async function load() {
 
@@ -596,6 +692,7 @@
       const visitors = stats.visitors || {};
       const status = stats.status || {};
 
+      // Update Stats
       [
         'stat-endpoints',
         'card-endpoints',
