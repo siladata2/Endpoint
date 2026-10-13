@@ -3,7 +3,7 @@ const router = express.Router();
 
 router.apiInfo = {
   name: "XVIDEOS Downloader",
-  description: "XVIDEOS Video Downloader via Prexzy API - 18+",
+  description: "XVIDEOS Video Downloader - 18+",
   method: "GET",
   parameters: [
     { name: "url", required: true, description: "XVIDEOS video URL" }
