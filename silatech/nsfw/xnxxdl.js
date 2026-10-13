@@ -3,7 +3,7 @@ const router = express.Router();
 
 router.apiInfo = {
   name: "XNXX Downloader",
-  description: "XNXX Video Downloader via Prexzy API - 18+",
+  description: "XNXX Video Downloader - 18+",
   method: "GET",
   parameters: [
     { name: "url", required: true, description: "XNXX video URL" }
