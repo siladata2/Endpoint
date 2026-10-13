@@ -44,12 +44,9 @@ router.get("/", async (req, res) => {
   }
 });
 
-module.exports = router;
 
 //sila
 
-const express = require("express");
-const router = express.Router();
 
 router.apiInfo = {
   name: "Sila Boy Pic",
