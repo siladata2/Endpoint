@@ -3,7 +3,7 @@ const router = express.Router();
 
 router.apiInfo = {
   name: "XNXX Search NSFW",
-  description: "Search XNXX videos via Prexzy API - 18+",
+  description: "Search XNXX videos- 18+",
   method: "GET",
   parameters: [
     { name: "query", required: true, description: "Search keyword" }
