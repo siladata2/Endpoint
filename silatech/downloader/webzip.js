@@ -3,7 +3,7 @@ const router = express.Router();
 
 router.apiInfo = {
   name: "Website ZIP Downloader",
-  description: "Retrieve website export information as a ZIP archive.",
+  description: "Create a ZIP archive of a website you are authorized to save.",
   method: "GET",
   parameters: [
     {
@@ -23,12 +23,10 @@ router.get("/", async (req, res) => {
       return res.status(400).json({
         success: false,
         creator: "Sila Tech",
-        error: "Missing required parameter: url",
-        usage: "/download/saveweb2zip?url=silatech.site"
+        error: "Missing required parameter: url"
       });
     }
 
-    // Ruhusu domain yenyewe au URL kamili ya HTTP/HTTPS.
     if (!/^https?:\/\//i.test(website)) {
       website = `https://${website}`;
     }
@@ -49,7 +47,7 @@ router.get("/", async (req, res) => {
       return res.status(400).json({
         success: false,
         creator: "Sila Tech",
-        error: "Only HTTP and HTTPS website URLs are supported."
+        error: "Only HTTP and HTTPS URLs are supported."
       });
     }
 
@@ -61,11 +59,11 @@ router.get("/", async (req, res) => {
       return res.status(400).json({
         success: false,
         creator: "Sila Tech",
-        error: "Please provide a valid public website domain."
+        error: "Please provide a valid public website URL."
       });
     }
 
-    // Provider inabaki backend pekee.
+    // Backend provider: haionekani kwenye public response.
     const providerUrl = new URL(
       "https://prexzyapis.com/download/saveweb2zip"
     );
@@ -82,34 +80,50 @@ router.get("/", async (req, res) => {
 
     if (!response.ok) {
       console.error(
-        "[SILA API] Website ZIP provider status:",
+        "[SILA API] Website ZIP request failed:",
         response.status
       );
 
       return res.status(502).json({
         success: false,
         creator: "Sila Tech",
-        error: "Website export service is temporarily unavailable."
+        error: "Website ZIP service is temporarily unavailable."
       });
     }
 
-    const contentType =
-      response.headers.get("content-type") || "";
+    const rawData = await response.json();
 
-    if (!contentType.includes("application/json")) {
+    if (!rawData || rawData.status !== true || !rawData.data) {
       return res.status(502).json({
         success: false,
         creator: "Sila Tech",
-        error: "The export service returned an unsupported response."
+        error: "Unable to create the website archive."
       });
     }
 
-    const data = await response.json();
+    // Rudisha fields zinazohitajika tu.
+    // Usirudishe rawData nzima kwa sababu ina taarifa za provider.
+    const cleanResult = {
+      downloadUrl:
+        typeof rawData.data.downloadUrl === "string"
+          ? rawData.data.downloadUrl
+          : null,
+
+      copiedFilesAmount:
+        Number.isFinite(Number(rawData.data.copiedFilesAmount))
+          ? Number(rawData.data.copiedFilesAmount)
+          : 0,
+
+      originalUrl:
+        typeof rawData.data.originalUrl === "string"
+          ? rawData.data.originalUrl
+          : parsedUrl.href
+    };
 
     return res.status(200).json({
       success: true,
       creator: "Sila Tech",
-      result: data
+      result: cleanResult
     });
 
   } catch (error) {
@@ -126,8 +140,8 @@ router.get("/", async (req, res) => {
       success: false,
       creator: "Sila Tech",
       error: timeout
-        ? "The website export request timed out."
-        : "Unable to export the website right now."
+        ? "The request timed out. Please try again."
+        : "Unable to process the website archive."
     });
   }
 });
