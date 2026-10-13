@@ -4,69 +4,73 @@ const router = express.Router();
 
 const API_BASE = "https://prexzyapis.com/random";
 
-const endpoints = [
-  {
-    path: "/bluearchive",
-    name: "Sila Blue Archive",
-    description: "Get a random Blue Archive image.",
-    endpoint: "/random/bluearchive"
-  },
-  {
-    path: "/boypic",
-    name: "Sila Boy Pic",
-    description: "Get a random boy picture.",
-    endpoint: "/random/boypic"
-  },
-  {
-    path: "/car",
-    name: "Sila Random Car",
-    description: "Get a random car image.",
-    endpoint: "/random/car"
-  }
-];
-
-// Metadata ya kila API kwa ajili ya mfumo wa UI.
-router.apiInfo = endpoints.map((item) => ({
-  name: item.name,
-  description: item.description,
+// API 1: Blue Archive
+const blueArchiveInfo = {
+  name: "Sila Blue Archive",
+  description: "Get random Blue Archive images.",
   category: "Random",
   method: "GET",
-  endpoint: item.endpoint,
+  endpoint: "/random/bluearchive",
   parameters: [],
-  example: item.endpoint
-}));
+  example: "/random/bluearchive"
+};
 
-// Kutengeneza route kwa kila API.
-for (const item of endpoints) {
-  router.get(item.path, async (req, res) => {
+// API 2: Boy Pic
+const boyPicInfo = {
+  name: "Sila Boy Pic",
+  description: "Get random boy pictures.",
+  category: "Random",
+  method: "GET",
+  endpoint: "/random/boypic",
+  parameters: [],
+  example: "/random/boypic"
+};
+
+// API 3: Random Car
+const carInfo = {
+  name: "Sila Random Car",
+  description: "Get random car images.",
+  category: "Random",
+  method: "GET",
+  endpoint: "/random/car",
+  parameters: [],
+  example: "/random/car"
+};
+
+// Hifadhi metadata zote kwa ajili ya UI loader.
+router.apiInfo = [
+  blueArchiveInfo,
+  boyPicInfo,
+  carInfo
+];
+
+// Function ya kuunda route kwa kila API.
+function createRandomEndpoint(path, info) {
+  router.get(path, async (req, res) => {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 30000);
+
     try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 30000);
+      const upstreamUrl = `${API_BASE}${path}`;
 
-      let response;
-
-      try {
-        response = await fetch(`${API_BASE}${item.path}`, {
-          method: "GET",
-          headers: {
-            Accept: "application/json"
-          },
-          signal: controller.signal
-        });
-      } finally {
-        clearTimeout(timeout);
-      }
+      const response = await fetch(upstreamUrl, {
+        method: "GET",
+        headers: {
+          Accept: "application/json"
+        },
+        signal: controller.signal
+      });
 
       if (!response.ok) {
         console.error(
-          `[${item.name}] Upstream status:`,
+          `[${info.name}] Service status:`,
           response.status
         );
 
         return res.status(502).json({
           success: false,
           creator: "Sila Tech",
-          message: "The random image service is temporarily unavailable."
+          message: "The service is temporarily unavailable."
         });
       }
 
@@ -76,23 +80,13 @@ for (const item of endpoints) {
         return res.status(502).json({
           success: false,
           creator: "Sila Tech",
-          message: "The service returned an unsupported response."
+          message: "Unsupported response format."
         });
       }
 
-      let data;
+      const data = await response.json();
 
-      try {
-        data = await response.json();
-      } catch {
-        return res.status(502).json({
-          success: false,
-          creator: "Sila Tech",
-          message: "The service returned invalid JSON."
-        });
-      }
-
-      if (data && (data.success === false || data.error)) {
+      if (data?.success === false || data?.error) {
         return res.status(502).json({
           success: false,
           creator: "Sila Tech",
@@ -103,14 +97,14 @@ for (const item of endpoints) {
       return res.status(200).json({
         success: true,
         creator: "Sila Tech",
-        name: item.name,
+        name: info.name,
         result: data
       });
     } catch (error) {
-      const timedOut = error?.name === "AbortError";
+      const timedOut = error.name === "AbortError";
 
       console.error(
-        `[${item.name}]`,
+        `[${info.name}]`,
         timedOut ? "Request timed out" : "Request failed"
       );
 
@@ -118,11 +112,18 @@ for (const item of endpoints) {
         success: false,
         creator: "Sila Tech",
         message: timedOut
-          ? "The request timed out. Please try again."
+          ? "Request timed out. Please try again."
           : "An unexpected error occurred."
       });
+    } finally {
+      clearTimeout(timeout);
     }
   });
 }
+
+// Sajili kila API kwa metadata yake.
+createRandomEndpoint("/bluearchive", blueArchiveInfo);
+createRandomEndpoint("/boypic", boyPicInfo);
+createRandomEndpoint("/car", carInfo);
 
 module.exports = router;
