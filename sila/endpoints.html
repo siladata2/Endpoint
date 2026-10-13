@@ -2,7 +2,7 @@
 <html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>API endpoints — SILA API</title>
   <meta name="description" content="Browse and test every SILA API endpoint in your browser. Search by name, fill the parameters and read the live JSON response.">
   <meta name="theme-color" content="#0a0a1a">
@@ -13,9 +13,9 @@
   <link rel="apple-touch-icon" href="/silaapi.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -24,37 +24,10 @@
           fontFamily: {
             sans: ['Inter', 'sans-serif'],
             mono: ['JetBrains Mono', 'monospace']
-          },
-          animation: {
-            'grid-move': 'grid-move 20s linear infinite',
-            'float': 'float 6s ease-in-out infinite',
-            'fade-up': 'fadeUp .75s ease-out both',
-            'blob': 'blob 7s infinite',
-          },
-          keyframes: {
-            'grid-move': {
-              '0%': { transform: 'translateY(0)' },
-              '100%': { transform: 'translateY(40px)' },
-            },
-            'float': {
-              '0%,100%': { transform: 'translateY(0)' },
-              '50%': { transform: 'translateY(-20px)' },
-            },
-            'fadeUp': {
-              from: { opacity: 0, transform: 'translateY(24px)' },
-              to: { opacity: 1, transform: 'translateY(0)' },
-            },
-            'blob': {
-              '0%': { transform: 'translate(0px, 0px) scale(1)' },
-              '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-              '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-              '100%': { transform: 'translate(0px, 0px) scale(1)' },
-            }
           }
         }
       }
     };
-
     try {
       if (localStorage.getItem('sila-theme') === 'light') {
         document.documentElement.classList.remove('dark');
@@ -69,31 +42,12 @@
     * { box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
-    /* Premium Grid Background */
-    .grid-bg {
-      background-image: 
-        linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
-    .dark .grid-bg {
-      background-image: 
-        linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
-    }
-
     .gradient-text {
-      background: linear-gradient(135deg, #2563eb 0%, #06b6d4 50%, #3b82f6 100%);
-      background-size: 200% auto;
+      background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      animation: shine 4s linear infinite;
     }
-    @keyframes shine {
-      to { background-position: 200% center; }
-    }
-
     .gradient-bg {
       background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
     }
@@ -108,363 +62,367 @@
       border: 1px solid rgba(255,255,255,.1);
     }
 
-    .hero-glow {
-      position: absolute;
-      width: 600px;
-      height: 600px;
-      border-radius: 50%;
-      filter: blur(120px);
-      opacity: .25;
-      pointer-events: none;
+    /* Endpoint list styles */
+    .endpoint {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
-    .bento-card {
-      transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
+    .endpoint .endpoint-body {
+      max-height: 0;
       overflow: hidden;
+      transition: max-height 0.4s ease;
     }
-    .bento-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0,0,0,.12);
+    .endpoint.open .endpoint-body {
+      max-height: 2000px;
     }
-    .dark .bento-card:hover {
-      box-shadow: 0 20px 40px rgba(0,0,0,.4);
+    .endpoint.open .endpoint-arrow {
+      transform: rotate(180deg);
     }
-
-    .feature-icon {
-      width: 48px; height: 48px;
-      display: flex; align-items: center; justify-content: center;
-      border-radius: 14px;
+    .endpoint-arrow {
       transition: transform 0.3s ease;
     }
-    .bento-card:hover .feature-icon {
-      transform: scale(1.1) rotate(-5deg);
-    }
 
-    /* Endpoint card styles */
-    .endpoint-card {
-      transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
-      border: 1px solid rgba(255,255,255,0.05);
-    }
-    .dark .endpoint-card {
-      border: 1px solid rgba(255,255,255,0.05);
-    }
-    .endpoint-card:hover {
-      border-color: rgba(6,182,212,0.4);
-      box-shadow: 0 15px 30px rgba(0,0,0,.1);
-    }
-    .dark .endpoint-card:hover {
-      box-shadow: 0 15px 30px rgba(0,0,0,.4);
-    }
-    .endpoint-card.open {
-      border-color: rgba(6,182,212,0.6);
-      box-shadow: 0 20px 40px rgba(6,182,212,.08);
-    }
-
-    .method-badge {
-      font-size: 10px;
+    .method {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 12px;
+      font-size: 11px;
       font-weight: 700;
-      padding: 4px 8px;
-      border-radius: 6px;
-      letter-spacing: 0.05em;
+      border-radius: 8px;
       text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
-    .method-get {
-      background: rgba(34,197,94,.15);
-      color: #22c55e;
+    .method.get { background: #dbeafe; color: #1d4ed8; }
+    .dark .method.get { background: rgba(59,130,246,0.2); color: #60a5fa; }
+    .method.post { background: #dcfce7; color: #15803d; }
+    .dark .method.post { background: rgba(34,197,94,0.2); color: #4ade80; }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      border-radius: 9999px;
+      border: 1px solid #e5e7eb;
+      background: white;
+      color: #374151;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
-    .method-post {
-      background: rgba(59,130,246,.15);
-      color: #3b82f6;
+    .dark .chip {
+      border-color: #374151;
+      background: #1f2937;
+      color: #d1d5db;
     }
+    .chip:hover { border-color: #3b82f6; }
+    .chip.active {
+      background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+      color: white;
+      border-color: transparent;
+    }
+    .chip em {
+      font-style: normal;
+      font-size: 11px;
+      padding: 1px 6px;
+      border-radius: 9999px;
+      background: rgba(0,0,0,0.08);
+    }
+    .chip.active em { background: rgba(255,255,255,0.25); }
 
     .response-box {
       background: #0d1117;
       border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.05);
+      padding: 16px;
       overflow: hidden;
     }
-    .response-content {
+    .response-box pre {
+      margin: 0;
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
       line-height: 1.6;
-      color: #c9d1d9;
-      padding: 16px;
-      overflow-x: auto;
-      max-height: 400px;
+      color: #e6edf3;
       white-space: pre-wrap;
       word-break: break-word;
+      max-height: 400px;
+      overflow-y: auto;
     }
-    .json-key { color: #79c0ff; }
-    .json-string { color: #a5d6ff; }
-    .json-number { color: #f0883e; }
-    .json-boolean { color: #ff7b72; }
-    .json-null { color: #8b949e; }
-
-    /* Scrollbar */
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+    .response-box .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(34,197,94,0.15);
+      color: #4ade80;
     }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: rgba(255,255,255,0.1);
-      border-radius: 3px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: rgba(255,255,255,0.2);
+    .response-box .status-badge.bad {
+      background: rgba(239,68,68,0.15);
+      color: #f87171;
     }
 
-    /* Status pulse */
-    .status-dot {
-      position: relative;
-      display: inline-block;
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: #10b981;
+    .url-preview {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #3b82f6;
+      background: #f3f4f6;
+      padding: 10px 14px;
+      border-radius: 10px;
+      word-break: break-all;
     }
-    .status-dot::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      background: #10b981;
-      animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
-    @keyframes pulse-ring {
-      0% { transform: scale(1); opacity: 0.7; }
-      100% { transform: scale(3); opacity: 0; }
+    .dark .url-preview {
+      background: #1f2937;
+      color: #60a5fa;
     }
 
-    @media(prefers-reduced-motion:reduce) {
-      *, *::before, *::after {
-        animation-duration: .01ms !important;
-        transition-duration: .01ms !important;
-        scroll-behavior: auto !important;
+    /* Sidebar */
+    .sidebar {
+      transition: transform 0.3s ease;
+    }
+    @media (max-width: 1023px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.open {
+        transform: translateX(0);
       }
     }
+
+    /* Skeleton */
+    .skeleton {
+      background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 12px;
+    }
+    .dark .skeleton {
+      background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
+      background-size: 200% 100%;
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* JSON syntax */
+    .json-key { color: #7dd3fc; }
+    .json-string { color: #86efac; }
+    .json-number { color: #fbbf24; }
+    .json-boolean { color: #f472b6; }
+    .json-null { color: #94a3b8; }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    .dark ::-webkit-scrollbar-thumb { background: #475569; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
   </style>
 </head>
-<body class="bg-gray-50 dark:bg-[#0a0a1a] text-gray-900 dark:text-gray-100 transition-colors duration-300 grid-bg">
+<body class="bg-gray-50 dark:bg-[#0a0a1a] text-gray-900 dark:text-gray-100 transition-colors duration-300">
 
   <!-- NAVIGATION -->
   <nav class="fixed top-0 w-full z-50 glass">
     <div class="max-w-7xl mx-auto px-5 sm:px-6 py-3 flex justify-between items-center gap-4">
-      <a href="/" class="flex items-center gap-3 min-w-0" aria-label="SILA API home">
-        <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0">
-          <path d="M50 5L90 27.5V72.5L50 95L10 72.5V27.5L50 5Z" stroke="#22d3ee" stroke-width="6" stroke-linejoin="round" fill="none"/>
-          <circle cx="50" cy="50" r="12" fill="none" stroke="#22d3ee" stroke-width="4"/>
-          <path d="M50 38V20" stroke="#22d3ee" stroke-width="5" stroke-linecap="round"/>
-          <path d="M50 62V80" stroke="#22d3ee" stroke-width="5" stroke-linecap="round"/>
-          <path d="M38 50H20" stroke="#22d3ee" stroke-width="5" stroke-linecap="round"/>
-          <path d="M62 50H80" stroke="#22d3ee" stroke-width="5" stroke-linecap="round"/>
-          <circle cx="50" cy="20" r="5" fill="#3b82f6"/>
-          <circle cx="50" cy="80" r="5" fill="#3b82f6"/>
-          <circle cx="20" cy="50" r="5" fill="#3b82f6"/>
-          <circle cx="80" cy="50" r="5" fill="#3b82f6"/>
-          <circle cx="50" cy="50" r="4" fill="#22d3ee"/>
-        </svg>
-        <span class="text-lg font-extrabold text-gray-900 dark:text-white whitespace-nowrap">
-          SILA <span class="gradient-text">API</span>
-        </span>
-      </a>
+      <div class="flex items-center gap-3">
+        <button id="sidebar-toggle" class="lg:hidden w-9 h-9 rounded-lg flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+          <i class="fas fa-bars text-gray-600 dark:text-gray-400"></i>
+        </button>
+        <a href="/" class="flex items-center gap-3 min-w-0" aria-label="SILA API home">
+          <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0">
+            <path d="M50 5L90 27.5V72.5L50 95L10 72.5V27.5L50 5Z" stroke="#22d3ee" stroke-width="6" stroke-linejoin="round" fill="none"/>
+            <circle cx="50" cy="50" r="12" fill="none" stroke="#22d3ee" stroke-width="4"/>
+            <path d="M50 38V20" stroke="#22d3ee" stroke-width="5" stroke-linecap="round"/>
+            <path d="M50 62V80" stroke="#22d3ee" stroke-width="5" stroke-linecap="round"/>
+            <path d="M38 50H20" stroke="#22d3ee" stroke-width="5" stroke-linecap="round"/>
+            <path d="M62 50H80" stroke="#22d3ee" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="50" cy="20" r="5" fill="#3b82f6"/>
+            <circle cx="50" cy="80" r="5" fill="#3b82f6"/>
+            <circle cx="20" cy="50" r="5" fill="#3b82f6"/>
+            <circle cx="80" cy="50" r="5" fill="#3b82f6"/>
+            <circle cx="50" cy="50" r="4" fill="#22d3ee"/>
+          </svg>
+          <span class="text-lg font-extrabold text-gray-900 dark:text-white whitespace-nowrap">
+            SILA <span class="gradient-text">API</span>
+          </span>
+        </a>
+      </div>
 
-      <div class="hidden md:flex items-center flex-1 max-w-md mx-6">
+      <div class="hidden md:flex items-center flex-1 max-w-md mx-8">
         <div class="relative w-full">
           <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-          <input type="text" id="searchInput" 
-            class="w-full pl-10 pr-12 py-2 text-sm bg-gray-100 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500 transition-all"
+          <input type="text" id="api-search" 
+            class="w-full pl-10 pr-12 py-2 text-sm bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500 transition-all"
             placeholder="Search APIs... (Ctrl+K)">
           <kbd class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 bg-gray-200 dark:bg-gray-700 px-1.5 py-0.5 rounded">⌘K</kbd>
         </div>
       </div>
 
-      <div class="flex items-center gap-2">
-        <button id="theme-toggle" aria-label="Toggle light and dark mode" class="w-9 h-9 rounded-xl flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+      <div class="flex items-center gap-3">
+        <a href="/" class="hidden sm:flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors">
+          <i class="fas fa-home text-blue-500"></i> Home
+        </a>
+        <a href="/about" class="hidden sm:flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors">
+          <i class="fas fa-circle-info text-cyan-500"></i> About
+        </a>
+        <button id="theme-toggle" aria-label="Toggle theme" class="w-9 h-9 rounded-lg flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
           <i id="theme-icon" class="fas fa-sun text-amber-400"></i>
         </button>
-        <a href="/" class="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white gradient-bg rounded-lg hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/25">
-          <i class="fas fa-home text-xs"></i> Home
+        <a href="/api/endpoints" class="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white gradient-bg rounded-lg hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/25">
+          <i class="fas fa-code text-xs"></i> Raw JSON
         </a>
       </div>
     </div>
   </nav>
 
-  <div class="flex pt-16 min-h-screen">
-    <!-- SIDEBAR -->
-    <aside id="sidebar" class="fixed left-0 top-16 bottom-0 w-64 bg-white/80 dark:bg-[#0f0f23]/80 backdrop-blur-xl border-r border-gray-200 dark:border-gray-800 overflow-y-auto z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 custom-scrollbar">
-      <div class="p-4">
-        <!-- API Stats -->
-        <div class="mb-6 p-3 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl border border-blue-100 dark:border-blue-800/30">
-          <div class="flex items-center gap-2 mb-1">
-            <span class="status-dot"></span>
-            <span class="text-xs font-medium text-green-700 dark:text-green-400">All Systems Operational</span>
-          </div>
-          <p class="text-xs text-gray-600 dark:text-gray-400"><span id="sidebar-total" class="font-bold text-gray-900 dark:text-white">0</span> endpoints available</p>
-          <p class="text-xs text-gray-600 dark:text-gray-400"><span id="sidebar-cats" class="font-bold text-gray-900 dark:text-white">0</span> categories</p>
-        </div>
-
-        <!-- Categories -->
-        <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3 px-2">Categories</p>
-        <nav id="sidebar-nav" class="space-y-1">
-          <!-- Populated by JS -->
-        </nav>
-      </div>
-    </aside>
-
-    <!-- Sidebar Overlay (Mobile) -->
-    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden" onclick="closeSidebar()"></div>
-
-    <!-- MAIN CONTENT -->
-    <main class="lg:ml-64 flex-1 min-w-0">
-      <div class="p-5 md:p-8 max-w-6xl mx-auto">
-        
-        <!-- Header Card -->
-        <div class="mb-8 p-6 md:p-8 bg-white dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-gray-700/50 shadow-sm animate-fade-up">
-          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <h1 class="text-2xl md:text-3xl font-bold mb-2">API endpoints</h1>
-              <p class="text-gray-600 dark:text-gray-400 text-sm">Browse, test, and integrate powerful APIs into your projects. Every endpoint supports <code class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded text-xs">GET</code> &amp; <code class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 rounded text-xs">POST</code> · no key required.</p>
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="px-3 py-1.5 text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 rounded-lg flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Online
-              </span>
-              <span class="px-3 py-1.5 text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300 rounded-lg">REST API</span>
-            </div>
-          </div>
-          <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700/50 flex flex-wrap items-center gap-3">
-            <p class="text-xs text-gray-500 dark:text-gray-400 font-mono flex items-center gap-2">
-              Base URL:
-              <code id="baseUrlText" class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-blue-600 dark:text-blue-400">https://api.silatech.site</code>
-              <button id="copyBase" class="w-6 h-6 rounded-md flex items-center justify-center text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors" title="Copy base URL" aria-label="Copy base URL">
-                <i class="fas fa-copy text-[11px] pointer-events-none"></i>
-              </button>
-            </p>
-          </div>
-        </div>
-
-        <!-- Mobile Search -->
-        <div class="md:hidden mb-4 animate-fade-up">
-          <div class="relative">
-            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-            <input type="text" id="searchInputMobile" 
-              class="w-full pl-10 pr-4 py-2.5 text-sm bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
-              placeholder="Search APIs...">
-          </div>
-        </div>
-
-        <!-- Mobile category chips -->
-        <div class="lg:hidden mb-4 overflow-x-auto pb-2 -mx-1 px-1 animate-fade-up">
-          <div id="mobileChips" class="flex gap-2 min-w-max"></div>
-        </div>
-
-        <!-- Endpoint List -->
-        <div id="endpointList" class="space-y-3">
-          <div class="skeleton h-24 rounded-2xl bg-gray-200 dark:bg-gray-800 animate-pulse"></div>
-          <div class="skeleton h-24 rounded-2xl bg-gray-200 dark:bg-gray-800 animate-pulse"></div>
-          <div class="skeleton h-24 rounded-2xl bg-gray-200 dark:bg-gray-800 animate-pulse"></div>
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="sidebar fixed left-0 top-16 bottom-0 w-64 bg-white dark:bg-[#0f0f23] border-r border-gray-200 dark:border-gray-800 overflow-y-auto z-30">
+    <div class="p-4">
+      <!-- Mobile Search -->
+      <div class="lg:hidden mb-4">
+        <div class="relative">
+          <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+          <input type="text" id="api-search-mobile" 
+            class="w-full pl-9 pr-4 py-2 text-sm bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+            placeholder="Search APIs...">
         </div>
       </div>
 
-      <!-- Footer -->
-      <footer class="border-t border-gray-200 dark:border-gray-800 px-5 sm:px-6 py-8 mt-12">
-        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-          <a href="/" class="font-bold text-gray-800 dark:text-white">
-            SILA <span class="gradient-text">API</span>
-            <span class="font-normal text-gray-500">by Sila Tech</span>
-          </a>
-          <div class="flex flex-wrap justify-center gap-5">
-            <a href="/endpoints" class="hover:text-blue-500 transition-colors">Endpoints</a>
-            <a href="/about" class="hover:text-blue-500 transition-colors">About</a>
-            <a href="/privacy" class="hover:text-blue-500 transition-colors">Privacy</a>
-            <a href="/terms" class="hover:text-blue-500 transition-colors">Terms</a>
-          </div>
-          <span>© <span id="year"></span> Sila Tech. All rights reserved.</span>
+      <!-- API Stats -->
+      <div class="mb-6 p-3 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl border border-blue-100 dark:border-blue-800/30">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+          <span class="text-xs font-medium text-green-700 dark:text-green-400">All Systems Operational</span>
         </div>
-      </footer>
-    </main>
-  </div>
+        <p class="text-xs text-gray-600 dark:text-gray-400"><span id="sidebar-total" class="font-bold text-gray-900 dark:text-white">0</span> endpoints available</p>
+      </div>
 
-  <!-- Toast Container -->
-  <div id="toast-container" class="fixed bottom-6 right-6 z-[60] space-y-3"></div>
+      <!-- Categories -->
+      <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3 px-2">Categories</p>
+      <nav id="sidebar-nav" class="space-y-1">
+        <button class="cat-btn active w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors" data-cat="all">
+          <span class="flex items-center gap-2"><i class="fas fa-th-large text-blue-500"></i> All Endpoints</span>
+          <em class="not-italic text-xs px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400" id="count-all">0</em>
+        </button>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- Sidebar Overlay Mobile -->
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-20 hidden lg:hidden"></div>
+
+  <!-- MAIN CONTENT -->
+  <main class="lg:ml-64 pt-16 min-h-screen">
+    <div class="p-5 md:p-8 max-w-6xl mx-auto">
+      
+      <!-- Header -->
+      <div class="mb-6">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 mb-3">
+          <i class="fas fa-book"></i> Documentation
+        </span>
+        <h1 class="text-3xl md:text-4xl font-extrabold mb-2">API endpoints</h1>
+        <p class="text-gray-600 dark:text-gray-400 max-w-2xl">Every endpoint published on SILA API with a live tester. Open one, fill the parameters and press send.</p>
+      </div>
+
+      <!-- Base URL bar -->
+      <div class="mb-5 flex flex-wrap items-center gap-3 p-3 bg-white dark:bg-gray-900/70 rounded-xl border border-gray-200 dark:border-gray-800">
+        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Base URL</span>
+        <code id="baseUrlText" class="text-sm font-mono text-blue-600 dark:text-blue-400 px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded">https://api.silatech.site</code>
+        <button id="copyBase" class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded transition-colors">
+          <i class="fas fa-copy"></i> Copy
+        </button>
+      </div>
+
+      <!-- Toolbar: Chips -->
+      <div class="mb-5 flex flex-wrap gap-2" id="categoryChips"></div>
+
+      <!-- Endpoint List -->
+      <div id="endpointList" class="space-y-3">
+        <div class="skeleton h-24"></div>
+        <div class="skeleton h-24"></div>
+        <div class="skeleton h-24"></div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-200 dark:border-gray-800 mt-12 p-6">
+      <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
+        <span>SILA API — Powered by Sila Tech</span>
+        <span>© <span id="year"></span> Sila Tech</span>
+      </div>
+    </footer>
+  </main>
 
   <script>
-  (function() {
+  (function () {
     const $ = id => document.getElementById(id);
-    const BASE = 'https://api.silatech.site';
-    const fmt = n => Number(n || 0).toLocaleString('en-US');
-    const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({
-      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-    }[c]));
-
+    const BASE = "https://api.silatech.site";
+    
     let allEndpoints = [];
-    let activeCategory = 'all';
+    let activeCategory = "all";
 
-    $('baseUrlText').textContent = BASE;
-    $('year').textContent = new Date().getFullYear();
+    $("year").textContent = new Date().getFullYear();
+    $("baseUrlText").textContent = BASE;
+
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[c]));
+    }
+
+    function catLabel(s) {
+      return String(s || 'general').replace(/[-_]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    function catIcon(s) {
+      const icons = {
+        ai: 'fa-brain', image: 'fa-image', media: 'fa-photo-film',
+        download: 'fa-download', downloader: 'fa-download',
+        tools: 'fa-screwdriver-wrench', search: 'fa-magnifying-glass',
+        data: 'fa-database', general: 'fa-code', tts: 'fa-volume-high',
+        nsfw: 'fa-eye-slash'
+      };
+      const key = String(s || 'general').toLowerCase().replace(/[\s_-]/g, '');
+      return icons[key] || icons[String(s || 'general').toLowerCase()] || 'fa-cubes';
+    }
+
+    function highlight(json) {
+      if (typeof json !== 'string') json = JSON.stringify(json, null, 2);
+      json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+        let cls = 'json-number';
+        if (/^"/.test(match)) {
+          if (/:$/.test(match)) cls = 'json-key';
+          else cls = 'json-string';
+        } else if (/true|false/.test(match)) cls = 'json-boolean';
+        else if (/null/.test(match)) cls = 'json-null';
+        return '<span class="' + cls + '">' + match + '</span>';
+      });
+    }
 
     function copy(text) {
-      navigator.clipboard.writeText(text).then(() => {
-        toast('Copied to clipboard');
-      }).catch(() => {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => showToast('Copied!'));
+      } else {
         const ta = document.createElement('textarea');
         ta.value = text;
         document.body.appendChild(ta);
         ta.select();
         document.execCommand('copy');
         ta.remove();
-        toast('Copied to clipboard');
-      });
+        showToast('Copied!');
+      }
     }
 
-    $('copyBase').addEventListener('click', () => copy(BASE));
-
-    function toast(message) {
-      const container = $('toast-container');
-      const el = document.createElement('div');
-      el.className = 'px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm font-medium rounded-xl shadow-2xl animate-fade-up';
-      el.textContent = message;
-      container.appendChild(el);
-      setTimeout(() => {
-        el.style.opacity = '0';
-        el.style.transition = 'opacity 0.3s';
-        setTimeout(() => el.remove(), 300);
-      }, 2000);
-    }
-
-    function setTheme() {
-      const dark = document.documentElement.classList.contains('dark');
-      $('theme-icon').className = dark ? 'fas fa-sun text-amber-400' : 'fas fa-moon text-gray-600';
-    }
-
-    $('theme-toggle').addEventListener('click', () => {
-      const dark = document.documentElement.classList.toggle('dark');
-      try { localStorage.setItem('sila-theme', dark ? 'dark' : 'light'); } catch(e) {}
-      setTheme();
-    });
-    setTheme();
-
-    /* ---------- helpers ---------- */
-    function catLabel(c) {
-      return String(c || 'general').replace(/[-_]+/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-    }
-
-    function catIcon(c) {
-      const icons = {
-        ai: 'fa-brain', image: 'fa-image', media: 'fa-photo-film',
-        download: 'fa-download', downloader: 'fa-download',
-        tools: 'fa-screwdriver-wrench', search: 'fa-magnifying-glass',
-        data: 'fa-database', general: 'fa-code', tts: 'fa-volume-high',
-        texttospeech: 'fa-volume-high', nsfw: 'fa-eye-slash',
-        anime: 'fa-dragon', random: 'fa-shuffle', sports: 'fa-futbol',
-        movies: 'fa-film', audio: 'fa-music', stalk: 'fa-user-secret',
-        screenshot: 'fa-camera', urlshortener: 'fa-link'
-      };
-      const key = String(c || 'general').toLowerCase().replace(/[\s_-]/g, '');
-      return icons[key] || icons[String(c || 'general').toLowerCase()] || 'fa-cubes';
+    function showToast(msg) {
+      const toast = document.createElement('div');
+      toast.className = 'fixed bottom-6 right-6 z-[100] px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm rounded-lg shadow-lg';
+      toast.textContent = msg;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 2000);
     }
 
     function sampleValue(p) {
@@ -475,142 +433,59 @@
       return 'hello';
     }
 
-    function highlightJSON(json) {
-      return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, match => {
-        let cls = 'json-number';
-        if (/^"/.test(match)) {
-          if (/:$/.test(match)) cls = 'json-key';
-          else cls = 'json-string';
-        } else if (/true|false/.test(match)) cls = 'json-boolean';
-        else if (/null/.test(match)) cls = 'json-null';
-        return `<span class="${cls}">${match}</span>`;
-      });
-    }
-
-    /* ---------- sidebar categories ---------- */
-    function renderSidebar() {
-      const counts = { all: allEndpoints.length };
-      allEndpoints.forEach(e => {
-        const c = e.category || 'general';
-        counts[c] = (counts[c] || 0) + 1;
-      });
-
-      const sorted = Object.keys(counts).sort((a, b) => {
-        if (a === 'all') return -1;
-        if (b === 'all') return 1;
-        return a.localeCompare(b);
-      });
-
-      const nav = $('sidebar-nav');
-      nav.innerHTML = sorted.map(c => {
-        const label = c === 'all' ? 'All Endpoints' : catLabel(c);
-        const icon = c === 'all' ? 'fa-layer-group' : catIcon(c);
-        const active = c === activeCategory ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800/50 border border-transparent';
-        return `<button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${active}" data-cat="${esc(c)}">
-          <i class="fas ${icon} w-4 text-center"></i>
-          <span class="flex-1 text-left">${esc(label)}</span>
-          <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">${counts[c]}</span>
-        </button>`;
-      }).join('');
-
-      nav.querySelectorAll('[data-cat]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          activeCategory = btn.dataset.cat;
-          renderSidebar();
-          renderMobileChips();
-          applyFilter();
-          closeSidebar();
-        });
-      });
-
-      $('sidebar-total').textContent = fmt(allEndpoints.length);
-      $('sidebar-cats').textContent = fmt(Object.keys(counts).length - 1);
-    }
-
-    function renderMobileChips() {
-      const counts = { all: allEndpoints.length };
-      allEndpoints.forEach(e => {
-        const c = e.category || 'general';
-        counts[c] = (counts[c] || 0) + 1;
-      });
-      const sorted = Object.keys(counts).sort((a, b) => {
-        if (a === 'all') return -1;
-        if (b === 'all') return 1;
-        return a.localeCompare(b);
-      });
-      $('mobileChips').innerHTML = sorted.map(c => {
-        const label = c === 'all' ? 'All' : catLabel(c);
-        const active = c === activeCategory ? 'gradient-bg text-white' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700';
-        return `<button class="px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${active}" data-cat="${esc(c)}">${esc(label)} <span class="opacity-60">${counts[c]}</span></button>`;
-      }).join('');
-      $('mobileChips').querySelectorAll('[data-cat]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          activeCategory = btn.dataset.cat;
-          renderSidebar();
-          renderMobileChips();
-          applyFilter();
-        });
-      });
-    }
-
-    /* ---------- endpoint card ---------- */
-    function createEndpointCard(api, index) {
+    /* ========== RENDER ENDPOINT ========== */
+    function createEndpoint(api, index) {
       const method = String(api.method || 'GET').toUpperCase();
       const category = api.category || 'general';
       const el = document.createElement('article');
-      el.className = 'endpoint-card bento-card bg-white dark:bg-gray-900/70 rounded-2xl overflow-hidden';
+      el.className = 'endpoint bg-white dark:bg-gray-900/70 rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden';
       el.id = 'endpoint-' + index;
       el.dataset.category = category;
       el.dataset.search = ((api.name || '') + ' ' + (api.path || '') + ' ' + (api.description || '') + ' ' + category).toLowerCase();
+      el.dataset.path = api.path || '';
+      el.dataset.api = JSON.stringify(api);
 
       el.innerHTML = `
-        <div class="endpoint-head p-5 cursor-pointer flex items-center gap-4" role="button" tabindex="0" aria-expanded="false">
-          <span class="method-badge ${method === 'POST' ? 'method-post' : 'method-get'}">${esc(method)}</span>
+        <div class="endpoint-head flex items-center gap-3 p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors" role="button" tabindex="0" aria-expanded="false">
+          <span class="method ${method.toLowerCase()}">${esc(method)}</span>
           <div class="flex-1 min-w-0">
-            <div class="font-semibold text-sm md:text-base truncate">${esc(api.name || api.path || 'SILA API')}</div>
-            <div class="text-xs font-mono text-gray-500 dark:text-gray-400 truncate mt-0.5">${esc(api.path || '')}</div>
+            <div class="font-bold text-sm sm:text-base truncate">${esc(api.name || api.path || 'SILA API')}</div>
+            <div class="text-xs font-mono text-gray-500 dark:text-gray-400 truncate">${esc(api.path || '')}</div>
           </div>
-          <span class="hidden sm:inline-flex text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 whitespace-nowrap">
-            ${esc(catLabel(category))}
-          </span>
-          <svg class="arrow w-5 h-5 text-gray-400 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+          <span class="hidden sm:inline-block text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">${esc(catLabel(category))}</span>
+          <i class="fas fa-chevron-down endpoint-arrow text-gray-400 text-sm"></i>
         </div>
-        <div class="endpoint-body hidden px-5 pb-5">
-          <p class="text-sm text-gray-600 dark:text-gray-400 mb-5">${esc(api.description || 'SILA API endpoint.')}</p>
-          
-          <div class="mb-4">
-            <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2">Parameters</p>
-            <div class="parameters space-y-3" id="parameters-${index}"></div>
-          </div>
-
-          <div class="flex flex-wrap gap-2 mb-4">
-            <button class="send-btn px-4 py-2 gradient-bg text-white text-sm font-semibold rounded-lg hover:opacity-90 transition-opacity shadow-lg shadow-blue-500/25 flex items-center gap-2" data-action="send">
-              <i class="fas fa-paper-plane text-xs"></i> Send Request
-            </button>
-            <button class="px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors flex items-center gap-2" data-action="curl">
-              <i class="fas fa-terminal text-xs"></i> cURL
-            </button>
-            <button class="px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors flex items-center gap-2" data-action="url">
-              <i class="fas fa-link text-xs"></i> Copy URL
-            </button>
-            <button class="px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors flex items-center gap-2" data-action="json">
-              <i class="fas fa-code text-xs"></i> JSON
-            </button>
-          </div>
-
-          <div class="mb-4">
-            <div class="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-900/60 rounded-lg border border-gray-200 dark:border-gray-700">
-              <code class="text-xs font-mono text-blue-600 dark:text-blue-400 truncate flex-1" id="url-${index}">/</code>
+        <div class="endpoint-body">
+          <div class="p-4 pt-0 border-t border-gray-100 dark:border-gray-800">
+            <p class="text-sm text-gray-600 dark:text-gray-400 my-4">${esc(api.description || 'SILA API endpoint.')}</p>
+            
+            <div class="mb-4">
+              <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Parameters</p>
+              <div class="parameters space-y-3" id="parameters-${index}"></div>
             </div>
-          </div>
 
-          <div class="response-box hidden" id="response-${index}">
-            <div class="flex items-center justify-between px-4 py-2.5 border-b border-white/5">
-              <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Live Response</span>
-              <span class="text-xs font-mono text-gray-400" id="response-status-${index}"></span>
+            <div class="flex flex-wrap gap-2 mb-4">
+              <button class="send-btn px-4 py-2 text-sm font-semibold text-white gradient-bg rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2" data-action="send">
+                <i class="fas fa-paper-plane text-xs"></i> Send request
+              </button>
+              <button class="px-3 py-2 text-sm font-medium bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors" data-action="curl">
+                <i class="fas fa-terminal text-xs"></i> cURL
+              </button>
+              <button class="px-3 py-2 text-sm font-medium bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors" data-action="url">
+                <i class="fas fa-link text-xs"></i> URL
+              </button>
             </div>
-            <pre class="response-content custom-scrollbar" id="response-content-${index}"></pre>
-            <div id="media-${index}"></div>
+
+            <div class="url-preview mb-4" id="url-${index}"></div>
+
+            <div class="response-box" id="response-${index}">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Live response</span>
+                <span class="status-badge" id="response-status-${index}"><i class="fas fa-circle text-[6px]"></i> Ready</span>
+              </div>
+              <pre id="response-content-${index}">Click "Send request" to see the response.</pre>
+              <div class="media-preview mt-3" id="media-${index}"></div>
+            </div>
           </div>
         </div>
       `;
@@ -626,25 +501,22 @@
       if (!parameters.length) {
         container.innerHTML = '<div class="text-sm text-gray-500 dark:text-gray-400">This endpoint takes no parameters — just send the request.</div>';
       } else {
-        container.innerHTML = parameters.map((p, i) => {
+        container.innerHTML = parameters.map(function (p) {
           let input;
           if (p.type === 'select' && Array.isArray(p.options) && p.options.length) {
-            input = `<select data-name="${esc(p.name)}" data-type="text" class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono">` +
-              p.options.map(o => `<option value="${esc(o)}">${esc(o)}</option>`).join('') + `</select>`;
+            input = '<select data-index="' + index + '" data-name="' + esc(p.name) + '" class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">' +
+              p.options.map(function (o) { return '<option value="' + esc(o) + '">' + esc(o) + '</option>'; }).join('') + '</select>';
           } else {
-            input = `<input data-name="${esc(p.name)}" data-type="${esc(p.type || 'text')}" ` +
-              `type="${p.type === 'number' ? 'number' : 'text'}" ` +
-              `placeholder="${esc(p.placeholder || p.description || 'Enter ' + p.name)}" ` +
-              `value="${esc(sampleValue(p))}" ` +
-              `class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono">`;
+            input = '<input data-index="' + index + '" data-name="' + esc(p.name) + '" type="' + (p.type === 'number' ? 'number' : 'text') + '" ' +
+              'placeholder="' + esc(p.placeholder || p.description || 'Enter ' + p.name) + '" ' +
+              'value="' + esc(sampleValue(p)) + '" ' +
+              'class="w-full px-3 py-2 text-sm bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">';
           }
-          return `<div>
-            <div class="flex items-center gap-2 mb-1.5">
-              <span class="text-xs font-semibold font-mono text-gray-700 dark:text-gray-300">${esc(p.name)}</span>
-              ${p.required ? '<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400">required</span>' : '<span class="text-[10px] font-medium px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400">optional</span>'}
-            </div>
-            ${input}
-          </div>`;
+          return '<div>' +
+            '<div class="flex items-center gap-2 mb-1.5">' +
+              '<span class="text-sm font-medium">' + esc(p.name) + '</span>' +
+              (p.required ? '<span class="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400">required</span>' : '<span class="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-500">optional</span>') +
+            '</div>' + input + '</div>';
         }).join('');
       }
 
@@ -652,11 +524,10 @@
       const statusEl = el.querySelector('#response-status-' + index);
       const contentEl = el.querySelector('#response-content-' + index);
       const mediaEl = el.querySelector('#media-' + index);
-      const responseBox = el.querySelector('#response-' + index);
 
       function collect() {
         const values = {};
-        container.querySelectorAll('[data-name]').forEach(input => {
+        container.querySelectorAll('[data-name]').forEach(function (input) {
           const name = input.getAttribute('data-name');
           const value = String(input.value || '').trim();
           if (value) values[name] = value;
@@ -666,9 +537,9 @@
 
       function buildUrl() {
         const values = collect();
-        const query = Object.keys(values).map(name =>
-          encodeURIComponent(name) + '=' + encodeURIComponent(values[name])
-        ).join('&');
+        const query = Object.keys(values).map(function (name) {
+          return encodeURIComponent(name) + '=' + encodeURIComponent(values[name]);
+        }).join('&');
         return BASE + (api.path || '') + (query ? '?' + query : '');
       }
 
@@ -682,81 +553,75 @@
       container.addEventListener('change', refreshUrl);
       refreshUrl();
 
-      el.querySelector('[data-action="send"]').addEventListener('click', () => {
+      el.querySelector('[data-action="send"]').addEventListener('click', function () {
         const url = refreshUrl();
         const button = el.querySelector('[data-action="send"]');
         button.disabled = true;
-        button.innerHTML = '<i class="fas fa-spinner fa-spin text-xs"></i> Sending...';
-        statusEl.textContent = '...';
-        contentEl.textContent = 'Waiting for the response...';
+        button.innerHTML = '<i class="fas fa-spinner fa-spin text-xs"></i> Sending…';
+        statusEl.innerHTML = '<i class="fas fa-circle text-[6px]"></i> Loading…';
+        statusEl.classList.remove('bad');
+        contentEl.textContent = 'Waiting for the response…';
         mediaEl.innerHTML = '';
-        responseBox.classList.remove('hidden');
 
         const started = performance.now();
         fetch(url, { headers: { Accept: 'application/json' }, cache: 'no-store' })
-          .then(res => {
+          .then(function (res) {
             const ms = Math.round(performance.now() - started);
-            statusEl.textContent = res.status + ' ' + (res.statusText || '') + ' · ' + ms + 'ms';
+            statusEl.innerHTML = '<i class="fas fa-circle text-[6px]"></i> ' + res.status + ' · ' + ms + 'ms';
+            if (!res.ok) statusEl.classList.add('bad');
             const type = res.headers.get('content-type') || '';
             if (type.indexOf('application/json') > -1) {
-              return res.text().then(text => {
-                try {
-                  contentEl.innerHTML = highlightJSON(JSON.stringify(JSON.parse(text), null, 2));
-                } catch (e) {
-                  contentEl.textContent = text;
-                }
+              return res.text().then(function (text) {
+                try { contentEl.innerHTML = highlight(JSON.stringify(JSON.parse(text), null, 2)); }
+                catch (e) { contentEl.textContent = text; }
               });
             }
             if (type.indexOf('image/') === 0) {
-              contentEl.textContent = '// Image response — preview below';
-              mediaEl.innerHTML = `<div class="p-4"><img src="${url}" alt="Endpoint image response" class="rounded-lg max-w-full"></div>`;
+              contentEl.textContent = 'Image response — preview below.';
+              mediaEl.innerHTML = '<img src="' + url + '" alt="Endpoint image response" class="max-w-full rounded-lg border border-gray-200 dark:border-gray-700">';
               return null;
             }
-            return res.text().then(text => { contentEl.textContent = text.slice(0, 4000); });
+            return res.text().then(function (text) { contentEl.textContent = text.slice(0, 4000); });
           })
-          .catch(error => {
-            statusEl.textContent = 'request failed';
+          .catch(function (error) {
+            statusEl.innerHTML = '<i class="fas fa-circle text-[6px]"></i> Failed';
+            statusEl.classList.add('bad');
             contentEl.textContent = String(error && error.message ? error.message : error);
           })
-          .finally(() => {
+          .then(function () {
             button.disabled = false;
-            button.innerHTML = '<i class="fas fa-paper-plane text-xs"></i> Send Request';
+            button.innerHTML = '<i class="fas fa-paper-plane text-xs"></i> Send request';
           });
       });
 
-      el.querySelector('[data-action="curl"]').addEventListener('click', () => copy(`curl "${refreshUrl()}"`));
-      el.querySelector('[data-action="url"]').addEventListener('click', () => copy(refreshUrl()));
-      el.querySelector('[data-action="json"]').addEventListener('click', () => copy(JSON.stringify(api, null, 2)));
+      el.querySelector('[data-action="curl"]').addEventListener('click', function () {
+        copy('curl "' + refreshUrl() + '"');
+      });
+      el.querySelector('[data-action="url"]').addEventListener('click', function () { copy(refreshUrl()); });
     }
 
+    /* ========== TOGGLE ========== */
     function toggleEndpoint(index) {
-      document.querySelectorAll('.endpoint-card').forEach(el => {
-        const isTarget = el.id === 'endpoint-' + index;
-        const shouldOpen = isTarget && !el.classList.contains('open');
-        el.classList.toggle('open', shouldOpen);
-        const body = el.querySelector('.endpoint-body');
-        const arrow = el.querySelector('.arrow');
-        if (body) body.classList.toggle('hidden', !shouldOpen);
-        if (arrow) arrow.style.transform = shouldOpen ? 'rotate(180deg)' : '';
+      document.querySelectorAll('.endpoint').forEach(function (el) {
+        const open = el.id === 'endpoint-' + index && !el.classList.contains('open');
+        el.classList.toggle('open', open);
         const head = el.querySelector('.endpoint-head');
-        if (head) head.setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+        if (head) head.setAttribute('aria-expanded', open ? 'true' : 'false');
       });
     }
 
-    /* ---------- filter ---------- */
+    /* ========== FILTER ========== */
     function applyFilter() {
-      const term = String($('searchInput').value || '').trim().toLowerCase();
-      const mobileTerm = String($('searchInputMobile').value || '').trim().toLowerCase();
-      const combinedTerm = term || mobileTerm;
+      const term = String(($('api-search').value || $('api-search-mobile').value || '')).trim().toLowerCase();
       let shown = 0;
-      document.querySelectorAll('.endpoint-card').forEach(item => {
+      document.querySelectorAll('.endpoint').forEach(function (item) {
         const matchesCategory = activeCategory === 'all' || item.dataset.category === activeCategory;
-        const matchesTerm = !combinedTerm || item.dataset.search.indexOf(combinedTerm) > -1;
+        const matchesTerm = !term || item.dataset.search.indexOf(term) > -1;
         const visible = matchesCategory && matchesTerm;
         item.style.display = visible ? '' : 'none';
         if (visible) shown++;
       });
-
+      const list = $('endpointList');
       let empty = $('noResult');
       if (!shown) {
         if (!empty) {
@@ -764,66 +629,164 @@
           empty.id = 'noResult';
           empty.className = 'text-center py-12 text-gray-500 dark:text-gray-400';
           empty.innerHTML = '<i class="fas fa-search text-3xl mb-3 block text-gray-300 dark:text-gray-600"></i>No endpoints match your search.';
-          $('endpointList').appendChild(empty);
+          list.appendChild(empty);
         }
       } else if (empty) {
         empty.remove();
       }
     }
 
-    /* ---------- sidebar toggle (mobile) ---------- */
-    window.closeSidebar = function() {
-      $('sidebar').classList.add('-translate-x-full');
-      $('sidebar-overlay').classList.add('hidden');
-    };
+    /* ========== CATEGORIES ========== */
+    function renderCategories() {
+      const counts = { all: allEndpoints.length };
+      allEndpoints.forEach(function (e) {
+        const c = e.category || 'general';
+        counts[c] = (counts[c] || 0) + 1;
+      });
 
-    // Add mobile menu button dynamically if needed (navbar already has space)
-    // For simplicity, we'll allow swipe or just rely on lg breakpoint
+      $('count-all').textContent = counts.all;
 
-    /* ---------- load ---------- */
+      const nav = $('sidebar-nav');
+      nav.querySelectorAll('.cat-btn:not([data-cat="all"])').forEach(b => b.remove());
+
+      const sorted = Object.keys(counts).filter(c => c !== 'all').sort((a, b) => a.localeCompare(b));
+      sorted.forEach(function (c) {
+        const btn = document.createElement('button');
+        btn.className = 'cat-btn w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-gray-100 dark:hover:bg-gray-800';
+        btn.dataset.cat = c;
+        btn.innerHTML = '<span class="flex items-center gap-2"><i class="fas ' + catIcon(c) + ' text-blue-500"></i> ' + esc(catLabel(c)) + '</span>' +
+          '<em class="not-italic text-xs px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">' + counts[c] + '</em>';
+        btn.addEventListener('click', function () {
+          activeCategory = c;
+          updateActiveCat();
+          applyFilter();
+        });
+        nav.appendChild(btn);
+      });
+
+      // Chips
+      const chips = $('categoryChips');
+      chips.innerHTML = '<button class="chip' + (activeCategory === 'all' ? ' active' : '') + '" data-cat="all">All <em>' + counts.all + '</em></button>';
+      sorted.forEach(function (c) {
+        const chip = document.createElement('button');
+        chip.className = 'chip' + (activeCategory === c ? ' active' : '');
+        chip.dataset.cat = c;
+        chip.innerHTML = esc(catLabel(c)) + ' <em>' + counts[c] + '</em>';
+        chip.addEventListener('click', function () {
+          activeCategory = c;
+          updateActiveCat();
+          applyFilter();
+        });
+        chips.appendChild(chip);
+      });
+
+      nav.querySelector('[data-cat="all"]').addEventListener('click', function () {
+        activeCategory = 'all';
+        updateActiveCat();
+        applyFilter();
+      });
+    }
+
+    function updateActiveCat() {
+      document.querySelectorAll('.cat-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.cat === activeCategory);
+        b.classList.toggle('bg-blue-50', b.dataset.cat === activeCategory);
+        b.classList.toggle('dark:bg-blue-900/20', b.dataset.cat === activeCategory);
+        b.classList.toggle('text-blue-600', b.dataset.cat === activeCategory);
+        b.classList.toggle('dark:text-blue-400', b.dataset.cat === activeCategory);
+      });
+      document.querySelectorAll('.chip').forEach(c => {
+        c.classList.toggle('active', c.dataset.cat === activeCategory);
+      });
+    }
+
+    /* ========== LOAD ========== */
     function loadEndpoints() {
       const list = $('endpointList');
       fetch('/api/endpoints', { cache: 'no-store' })
         .then(res => res.json())
-        .then(data => {
+        .then(function (data) {
           allEndpoints = data.endpoints || [];
           list.innerHTML = '';
           if (!allEndpoints.length) {
-            list.innerHTML = '<div class="text-center py-12 text-gray-500 dark:text-gray-400">No endpoints are published yet.</div>';
+            list.innerHTML = '<div class="text-center py-12 text-gray-500">No endpoints published yet.</div>';
             return;
           }
-          allEndpoints.forEach((api, index) => {
-            const el = createEndpointCard(api, index);
+          $('sidebar-total').textContent = allEndpoints.length;
+          allEndpoints.forEach(function (api, index) {
+            const el = createEndpoint(api, index);
             list.appendChild(el);
             const head = el.querySelector('.endpoint-head');
-            head.addEventListener('click', () => toggleEndpoint(index));
-            head.addEventListener('keydown', e => {
-              if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleEndpoint(index); }
+            head.addEventListener('click', function () { toggleEndpoint(index); });
+            head.addEventListener('keydown', function (event) {
+              if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); toggleEndpoint(index); }
             });
           });
-          renderSidebar();
-          renderMobileChips();
+          renderCategories();
           applyFilter();
+          applyDeepLink();
         })
-        .catch(() => {
-          list.innerHTML = '<div class="text-center py-12 text-gray-500 dark:text-gray-400">Failed to load the endpoint list. Refresh the page to try again.</div>';
+        .catch(function () {
+          list.innerHTML = '<div class="text-center py-12 text-red-500">Failed to load endpoints. Refresh the page.</div>';
         });
     }
 
-    // Search listeners
-    $('searchInput').addEventListener('input', applyFilter);
-    $('searchInputMobile').addEventListener('input', applyFilter);
+    function applyDeepLink() {
+      const params = new URLSearchParams(window.location.search);
+      const open = params.get('open');
+      const cat = params.get('cat');
+      if (cat) {
+        activeCategory = cat;
+        updateActiveCat();
+        applyFilter();
+      }
+      if (!open) return;
+      const index = allEndpoints.findIndex(e => (e.path || '') === open);
+      if (index < 0) return;
+      toggleEndpoint(index);
+      const el = $('endpoint-' + index);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
 
-    // Keyboard shortcut
-    document.addEventListener('keydown', e => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-        e.preventDefault();
-        $('searchInput').focus();
+    /* ========== EVENTS ========== */
+    $('copyBase').addEventListener('click', () => copy(BASE));
+    $('api-search').addEventListener('input', applyFilter);
+    $('api-search-mobile').addEventListener('input', applyFilter);
+
+    document.addEventListener('keydown', function (event) {
+      if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+        event.preventDefault();
+        $('api-search').focus();
+      }
+      if (event.key === '/' && document.activeElement !== $('api-search') && document.activeElement !== $('api-search-mobile')) {
+        event.preventDefault();
+        $('api-search').focus();
       }
     });
 
-    loadEndpoints();
+    // Theme toggle
+    function setTheme() {
+      const dark = document.documentElement.classList.contains('dark');
+      $('theme-icon').className = dark ? 'fas fa-sun text-amber-400' : 'fas fa-moon text-gray-600';
+    }
+    $('theme-toggle').addEventListener('click', () => {
+      const dark = document.documentElement.classList.toggle('dark');
+      try { localStorage.setItem('sila-theme', dark ? 'dark' : 'light'); } catch(e) {}
+      setTheme();
+    });
+    setTheme();
 
+    // Sidebar toggle
+    $('sidebar-toggle').addEventListener('click', () => {
+      $('sidebar').classList.toggle('open');
+      $('sidebar-overlay').classList.toggle('hidden');
+    });
+    $('sidebar-overlay').addEventListener('click', () => {
+      $('sidebar').classList.remove('open');
+      $('sidebar-overlay').classList.add('hidden');
+    });
+
+    loadEndpoints();
   })();
   </script>
 </body>
