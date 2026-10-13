@@ -1,963 +1,1569 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>MUFASER-X | WhatsApp Bot Pairing</title>
+<title>SILA TECH — Explore the World of Technology</title>
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<meta name="description" content="Explore the world of technology with SILA TECH. Learn AI, APIs, programming, web development, cybersecurity, networking, databases and more.">
+<meta name="keywords" content="Sila Tech, technology, AI, API, programming, cybersecurity, web development, Android, iOS, networking">
+<meta name="author" content="Sila Tech">
+<meta name="theme-color" content="#080b18">
+
+<link rel="icon" href="/silaapi.svg" type="image/svg+xml">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif']
+      }
+    }
+  }
+};
+
+try {
+  if (localStorage.getItem('sila-tech-theme') === 'light') {
+    document.documentElement.classList.remove('dark');
+  }
+} catch(e) {}
+</script>
 
 <style>
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
 }
 
 body {
-    min-height: 100vh;
-    background: #000;
-    color: #fff;
-    font-family: 'Segoe UI', sans-serif;
-    overflow-x: hidden;
+  font-family: Inter, sans-serif;
+  overflow-x: hidden;
 }
 
-canvas {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    opacity: .8;
+:root {
+  --blue: #3b82f6;
+  --cyan: #22d3ee;
 }
 
-/* MUSIC */
-
-#musicBtn {
-    position: fixed;
-    top: 15px;
-    right: 15px;
-    z-index: 999;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    background: rgba(10,10,10,.85);
-    border: 2px solid #00ff99;
-    color: #00ff99;
-    font-size: 20px;
-    cursor: pointer;
-    box-shadow: 0 0 15px #00ff99;
+.gradient-text {
+  background: linear-gradient(120deg, #60a5fa, #22d3ee, #818cf8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* MAIN */
-
-.container {
-    width: 95%;
-    max-width: 460px;
-    margin: 50px auto;
-    padding: 35px 30px;
-    background: rgba(10,10,10,.88);
-    border: 2px solid #00ff99;
-    border-radius: 25px;
-    text-align: center;
-    box-shadow:
-        0 0 50px #00ff99,
-        inset 0 0 20px rgba(0,255,153,.3);
-    animation: show 1.2s ease;
+.gradient-bg {
+  background: linear-gradient(135deg, #2563eb, #0891b2);
 }
 
-@keyframes show {
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
+body {
+  background-color: #f8fafc;
+  color: #0f172a;
 }
 
-.logo-img {
-    width: 130px;
-    height: 130px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 4px solid #33ccff;
-    box-shadow: 0 0 25px #33ccff;
-    margin-bottom: 15px;
+.dark body {
+  background-color: #080b18;
+  color: #f8fafc;
 }
 
-h1 {
-    font-size: 42px;
-    letter-spacing: 3px;
-    color: #33ccff;
-    text-shadow:
-        0 0 10px #33ccff,
-        0 0 30px #33ccff;
+.glass {
+  background: rgba(255,255,255,.83);
+  backdrop-filter: blur(22px);
+  border-bottom: 1px solid rgba(148,163,184,.2);
 }
 
-.subtitle {
-    margin-top: 8px;
-    font-size: 18px;
-    color: #00ff99;
-    text-transform: uppercase;
+.dark .glass {
+  background: rgba(8,11,24,.78);
+  border-bottom: 1px solid rgba(255,255,255,.07);
 }
 
-/* STATUS */
-
-.status-card {
-    margin-top: 25px;
-    padding: 15px;
-    border-radius: 15px;
-    background: #111;
-    border: 1px solid #333;
-    font-size: 16px;
+.hero-grid {
+  background-image:
+    linear-gradient(rgba(59,130,246,.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59,130,246,.06) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, black, transparent 90%);
 }
 
-.status-dot {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #777;
-    margin-right: 8px;
+.glow {
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: .18;
+  pointer-events: none;
 }
 
-.status-dot.waiting {
-    background: #ffc857;
-    box-shadow: 0 0 10px #ffc857;
+.dark .glow {
+  opacity: .22;
 }
 
-.status-dot.pairing,
-.status-dot.generating_code,
-.status-dot.waiting_approval,
-.status-dot.qr_ready {
-    background: #33ccff;
-    box-shadow: 0 0 10px #33ccff;
+.card {
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
 }
 
-.status-dot.connected {
-    background: #00ff99;
-    box-shadow: 0 0 15px #00ff99;
+.dark .card {
+  background: rgba(15,23,42,.72);
+  border-color: rgba(148,163,184,.15);
 }
 
-.status-dot.disconnected,
-.status-dot.failed {
-    background: #ff4444;
-    box-shadow: 0 0 10px #ff4444;
+.card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(59,130,246,.45);
+  box-shadow: 0 18px 45px rgba(15,23,42,.08);
 }
 
-/* INPUT */
-
-input {
-    width: 100%;
-    padding: 15px;
-    margin-top: 20px;
-    background: #050505;
-    border: 2px solid #33ccff;
-    border-radius: 12px;
-    color: #fff;
-    font-size: 16px;
-    outline: none;
+.dark .card:hover {
+  box-shadow: 0 18px 45px rgba(0,0,0,.25);
 }
 
-input:focus {
-    box-shadow: 0 0 20px #33ccff;
+.icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 15px;
+  flex-shrink: 0;
 }
 
-/* BUTTON */
-
-.btn {
-    width: 100%;
-    margin-top: 15px;
-    padding: 16px;
-    border: 2px solid #00ff99;
-    border-radius: 12px;
-    background: transparent;
-    color: #ffd700;
-    font-size: 17px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: .4s;
+.category-btn {
+  border: 1px solid #e2e8f0;
+  transition: all .2s ease;
 }
 
-.btn:hover {
-    background: #00ff99;
-    color: #000;
-    box-shadow: 0 0 30px #00ff99;
-    transform: scale(1.03);
+.dark .category-btn {
+  border-color: rgba(148,163,184,.18);
 }
 
-.btn:disabled {
-    opacity: .6;
-    cursor: not-allowed;
-    transform: none;
+.category-btn.active,
+.category-btn:hover {
+  background: linear-gradient(135deg, #2563eb, #0891b2);
+  color: white;
+  border-color: transparent;
 }
 
-/* CODE + QR */
-
-.code-box,
-.qr-box {
-    display: none;
-    margin-top: 25px;
-    padding: 20px;
-    border-radius: 15px;
-    background: #050505;
-    border: 2px solid #33ccff;
+.article-content {
+  line-height: 1.85;
 }
 
-.code-box.show,
-.qr-box.show {
-    display: block;
+.article-content h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin: 25px 0 10px;
 }
 
-.code {
-    font-size: 22px;
-    letter-spacing: 4px;
-    color: #00ff99;
-    font-weight: bold;
-    text-shadow: 0 0 15px #00ff99;
-    margin-bottom: 10px;
-    word-break: break-word;
+.article-content p {
+  margin: 12px 0;
 }
 
-.copy-btn {
-    padding: 8px 16px;
-    margin-top: 8px;
-    border-radius: 8px;
-    border: 1px solid #00ff99;
-    background: transparent;
-    color: #00ff99;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
+.article-content code,
+.inline-code {
+  font-family: monospace;
+  background: rgba(59,130,246,.1);
+  color: #2563eb;
+  padding: 2px 6px;
+  border-radius: 5px;
 }
 
-.copy-btn:hover {
-    background: #00ff99;
-    color: #000;
+.dark .article-content code,
+.dark .inline-code {
+  color: #67e8f9;
 }
 
-.qr-box img {
-    width: 250px;
-    height: 250px;
-    border-radius: 15px;
-    border: 2px solid #00ff99;
-    background: #fff;
-    padding: 5px;
+pre {
+  overflow-x: auto;
+  max-width: 100%;
 }
 
-/* OTHER */
-
-.go-back {
-    display: block;
-    margin-top: 15px;
-    color: #33ccff;
-    font-size: 13px;
-    text-decoration: underline;
-    cursor: pointer;
+pre code {
+  background: transparent !important;
+  padding: 0 !important;
+  color: inherit !important;
 }
 
-.go-back:hover {
-    color: #00ff99;
+.animate-up {
+  animation: up .65s ease both;
 }
 
-.connected {
-    display: none;
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 15px;
-    background: #002b16;
-    border: 2px solid #00ff99;
+@keyframes up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.connected.show {
-    display: block;
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
 }
 
-.footer {
-    margin-top: 30px;
-    padding-top: 15px;
-    border-top: 1px solid #333;
-    color: #aaa;
-    font-size: 14px;
+.float {
+  animation: float 5s ease-in-out infinite;
 }
 
-.footer span {
-    color: #00ff99;
-    font-weight: bold;
+.mobile-menu {
+  transition: opacity .2s ease, transform .2s ease;
 }
 
-.divider {
-    margin: 20px 0;
-    color: #555;
-    font-size: 14px;
+.mobile-menu.closed {
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  visibility: hidden;
 }
 
-#errorMsg {
-    display: none;
-    margin-top: 10px;
-    color: #ff4444;
+#toast {
+  transition: all .25s ease;
+}
+
+#toast.hide {
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+}
+
+::selection {
+  background: rgba(59,130,246,.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 </style>
 </head>
 
-<body>
+<body class="text-slate-900 dark:text-slate-100 transition-colors duration-300">
 
-<canvas id="bg"></canvas>
+<!-- NAVIGATION -->
+<nav class="glass fixed top-0 inset-x-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
 
-<audio
-    id="bgMusic"
-    src="https://files.catbox.moe/0v8587.mp3"
-    loop
-    preload="auto">
-</audio>
+    <a href="#home" class="flex items-center gap-3 min-w-0">
+      <div class="w-11 h-11 gradient-bg rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+        <i class="fas fa-microchip text-white text-xl"></i>
+      </div>
 
-<button id="musicBtn" title="Mute / Unmute">🔊</button>
-
-<div class="container">
-
-    <img
-        src="https://res.cloudinary.com/dqxlb29uz/image/upload/v1791285903/bwm_uploads/media-1791285903776.jpg"
-        class="logo-img"
-        alt="MUFASER-X Logo">
-
-    <h1>MUFASER-X</h1>
-
-    <div class="subtitle">
-        <i class="fa-brands fa-whatsapp"></i>
-        WhatsApp Multi-Device Bot
-    </div>
-
-    <div class="status-card">
-        <span class="status-dot" id="statusDot"></span>
-        <span id="statusText">Waiting to start...</span>
-    </div>
-
-    <div id="pairSection">
-
-        <h3 style="margin-top:25px;">
-            <i class="fa-solid fa-link"></i>
-            Pair Your WhatsApp
-        </h3>
-
-        <p style="color:#aaa;margin-top:10px;font-size:14px;">
-            Choose pairing method below
-        </p>
-
-        <button class="btn" id="qrBtn" onclick="startQR()">
-            <i class="fa-solid fa-qrcode"></i>
-            PAIR WITH QR CODE
-        </button>
-
-        <div class="divider">--- OR ---</div>
-
-        <input
-            type="tel"
-            id="phoneInput"
-            placeholder="Enter phone number 2567XXXXXXXXX"
-            autocomplete="tel">
-
-        <button class="btn" id="pairBtn" onclick="requestPairing()">
-            <i class="fa-solid fa-key"></i>
-            GET PAIRING CODE
-        </button>
-
-        <p id="errorMsg"></p>
-
-        <div class="qr-box" id="qrBox">
-
-            <h3>Scan QR Code</h3>
-
-            <img id="qrImage" src="" alt="QR Code">
-
-            <p style="color:#aaa;margin-top:15px;font-size:13px;">
-                WhatsApp → Settings → Linked Devices →
-                Link a device
-            </p>
-
-            <a class="go-back" onclick="hideBoxes()">
-                <i class="fa-solid fa-arrow-left"></i>
-                GO BACK
-            </a>
-
+      <div>
+        <div class="font-black text-lg leading-tight">
+          SILA <span class="gradient-text">TECH</span>
         </div>
-
-        <div class="code-box" id="codeBox">
-
-            <h3>Your Pairing Code</h3>
-
-            <div class="code" id="codeValue">
-                --------
-            </div>
-
-            <button class="copy-btn" onclick="copyCode()">
-                <i class="fa-solid fa-copy"></i>
-                COPY CODE
-            </button>
-
-            <p style="color:#aaa;margin-top:15px;font-size:13px;">
-                WhatsApp → Settings → Linked Devices →
-                Link with phone number
-            </p>
-
-            <a class="go-back" onclick="hideBoxes()">
-                <i class="fa-solid fa-arrow-left"></i>
-                GO BACK
-            </a>
-
+        <div class="text-[10px] tracking-[.2em] text-slate-500 dark:text-slate-400 uppercase">
+          Technology Universe
         </div>
+      </div>
+    </a>
 
+    <div class="hidden lg:flex items-center gap-7 text-sm font-semibold">
+      <a href="#home" class="hover:text-blue-500 transition">Home</a>
+      <a href="#explore" class="hover:text-blue-500 transition">Explore</a>
+      <a href="#learn" class="hover:text-blue-500 transition">Learn</a>
+      <a href="#tools" class="hover:text-blue-500 transition">Tools</a>
+      <a href="#about" class="hover:text-blue-500 transition">About</a>
     </div>
 
-    <div class="connected" id="connectedBox">
+    <div class="flex items-center gap-2">
+      <button id="theme-toggle" aria-label="Toggle theme"
+        class="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800">
+        <i id="theme-icon" class="fas fa-sun text-amber-400"></i>
+      </button>
 
-        <h2 style="color:#00ff99;">
-            ✅ BOT CONNECTED
-        </h2>
+      <button id="mobile-toggle" aria-label="Open navigation" class="lg:hidden w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700">
+        <i class="fas fa-bars"></i>
+      </button>
 
-        <p style="margin-top:10px;color:#aaa;">
-            MUFASER-X is online and ready.
-        </p>
+      <a href="#explore" class="hidden sm:flex gradient-bg text-white rounded-xl px-4 py-2.5 text-sm font-bold items-center gap-2">
+        <i class="fas fa-compass"></i>
+        Explore Tech
+      </a>
+    </div>
+  </div>
 
-        <p style="margin-top:10px;">
-            Type <b style="color:#00ff99">.menu</b> on WhatsApp
-        </p>
+  <div id="mobile-menu" class="mobile-menu closed lg:hidden absolute top-full inset-x-0 glass p-4 border-t border-slate-200 dark:border-slate-800">
+    <div class="grid grid-cols-2 gap-2">
+      <a href="#home" class="p-3 rounded-xl hover:bg-blue-500/10">Home</a>
+      <a href="#explore" class="p-3 rounded-xl hover:bg-blue-500/10">Explore</a>
+      <a href="#learn" class="p-3 rounded-xl hover:bg-blue-500/10">Learn</a>
+      <a href="#tools" class="p-3 rounded-xl hover:bg-blue-500/10">Tools</a>
+      <a href="#about" class="p-3 rounded-xl hover:bg-blue-500/10">About</a>
+    </div>
+  </div>
+</nav>
 
-        <a class="go-back" onclick="goBackToPair()">
-            <i class="fa-solid fa-arrow-left"></i>
-            GO BACK
+<main>
+
+<!-- HERO -->
+<section id="home" class="relative min-h-[88vh] flex items-center pt-32 pb-20 px-5 overflow-hidden">
+
+  <div class="absolute inset-0 hero-grid"></div>
+  <div class="glow bg-blue-500 top-24 -left-36"></div>
+  <div class="glow bg-cyan-400 bottom-0 right-0"></div>
+
+  <div class="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-14 items-center relative z-10">
+
+    <div class="animate-up">
+
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-blue-500/20 bg-blue-500/5 text-blue-600 dark:text-cyan-300 text-xs sm:text-sm font-bold mb-7">
+        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+        YOUR GATEWAY TO THE DIGITAL WORLD
+      </div>
+
+      <h1 class="text-4xl sm:text-5xl lg:text-7xl font-black leading-[1.12] tracking-tight mb-7">
+        Discover the<br>
+        <span class="gradient-text">Future of Tech.</span>
+      </h1>
+
+      <p class="text-base sm:text-lg leading-8 text-slate-600 dark:text-slate-400 max-w-xl mb-8">
+        One place to explore technology, understand how it works, learn new skills, discover developer tools and stay informed about the digital world.
+      </p>
+
+      <div class="flex flex-wrap gap-3 mb-9">
+        <a href="#explore" class="gradient-bg text-white font-bold px-6 py-3.5 rounded-xl flex items-center gap-3 shadow-lg shadow-blue-500/20 hover:opacity-90">
+          Start Exploring
+          <i class="fas fa-arrow-right"></i>
         </a>
 
+        <a href="#learn" class="border border-slate-300 dark:border-slate-700 px-6 py-3.5 rounded-xl font-bold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-3">
+          <i class="fas fa-book-open text-blue-500"></i>
+          Learn Technology
+        </a>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-x-6 gap-y-3 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+        <span><i class="fas fa-check-circle text-green-500 mr-2"></i>Beginner friendly</span>
+        <span><i class="fas fa-code text-blue-500 mr-2"></i>Developer focused</span>
+        <span><i class="fas fa-globe text-cyan-500 mr-2"></i>All things tech</span>
+      </div>
     </div>
 
-    <div class="footer">
-        Powered by <span>MUFASER-X</span>
+    <!-- HERO VISUAL -->
+    <div class="relative hidden sm:block">
+
+      <div class="absolute inset-5 bg-blue-500/10 blur-3xl rounded-full"></div>
+
+      <div class="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200 dark:border-slate-700/70 rounded-3xl p-5 sm:p-7 shadow-2xl float">
+
+        <div class="flex items-center justify-between mb-7">
+          <div>
+            <p class="text-xs text-slate-500 uppercase tracking-widest">Technology overview</p>
+            <h2 class="font-extrabold text-xl mt-1">The Digital Universe</h2>
+          </div>
+          <div class="w-11 h-11 gradient-bg rounded-2xl flex items-center justify-center">
+            <i class="fas fa-atom text-white text-xl"></i>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+
+          <div class="rounded-2xl p-4 bg-blue-500/10 border border-blue-500/10">
+            <i class="fas fa-brain text-blue-500 text-2xl mb-3"></i>
+            <h3 class="font-bold">Artificial Intelligence</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">Machines that learn and assist.</p>
+          </div>
+
+          <div class="rounded-2xl p-4 bg-cyan-500/10 border border-cyan-500/10">
+            <i class="fas fa-code text-cyan-500 text-2xl mb-3"></i>
+            <h3 class="font-bold">Programming</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">Turn ideas into software.</p>
+          </div>
+
+          <div class="rounded-2xl p-4 bg-violet-500/10 border border-violet-500/10">
+            <i class="fas fa-shield-halved text-violet-500 text-2xl mb-3"></i>
+            <h3 class="font-bold">Cybersecurity</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">Protect systems and data.</p>
+          </div>
+
+          <div class="rounded-2xl p-4 bg-emerald-500/10 border border-emerald-500/10">
+            <i class="fas fa-cloud text-emerald-500 text-2xl mb-3"></i>
+            <h3 class="font-bold">Cloud Computing</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">Build and scale online.</p>
+          </div>
+        </div>
+
+        <div class="mt-5 rounded-2xl bg-slate-950 text-slate-300 p-4 font-mono text-xs sm:text-sm overflow-hidden">
+          <div class="flex gap-2 mb-4">
+            <span class="w-2.5 h-2.5 rounded-full bg-red-400"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-green-400"></span>
+          </div>
+          <p><span class="text-cyan-300">const</span> future = {</p>
+          <p class="pl-4">learning: <span class="text-green-300">"always_on"</span>,</p>
+          <p class="pl-4">innovation: <span class="text-green-300">true</span>,</p>
+          <p class="pl-4">createdBy: <span class="text-amber-300">"Sila Tech"</span></p>
+          <p>};</p>
+        </div>
+
+      </div>
+
+      <div class="absolute -top-5 -right-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl px-4 py-3 shadow-xl">
+        <i class="fas fa-bolt text-amber-400 mr-2"></i>
+        <span class="text-sm font-bold">Learn. Build. Innovate.</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SEARCH -->
+<section class="px-5 relative z-20">
+  <div class="max-w-4xl mx-auto">
+    <div class="card rounded-2xl p-3 sm:p-4 shadow-xl shadow-blue-500/5">
+      <form id="search-form" class="flex items-center gap-3">
+        <i class="fas fa-magnifying-glass text-blue-500 text-lg ml-2"></i>
+        <input id="search-input" type="search" autocomplete="off"
+          placeholder="Search AI, APIs, programming, cybersecurity..."
+          class="flex-1 min-w-0 bg-transparent outline-none py-3 text-sm sm:text-base">
+        <button type="submit" class="gradient-bg text-white font-bold rounded-xl px-5 py-3 text-sm">
+          Search
+        </button>
+      </form>
+      <div class="px-3 pt-2 flex flex-wrap gap-2 text-xs text-slate-500 dark:text-slate-400">
+        <span>Popular:</span>
+        <button class="quick-search hover:text-blue-500" data-query="API">API</button>
+        <button class="quick-search hover:text-blue-500" data-query="Artificial Intelligence">AI</button>
+        <button class="quick-search hover:text-blue-500" data-query="Cybersecurity">Cybersecurity</button>
+        <button class="quick-search hover:text-blue-500" data-query="Web Development">Web Development</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section id="explore" class="py-24 px-5 sm:px-6">
+  <div class="max-w-7xl mx-auto">
+
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-10">
+      <div>
+        <p class="text-xs sm:text-sm uppercase tracking-[.2em] text-blue-600 dark:text-cyan-400 font-extrabold mb-3">Explore the ecosystem</p>
+        <h2 class="text-3xl sm:text-4xl font-black">Explore Technology</h2>
+        <p class="text-slate-500 dark:text-slate-400 mt-3 max-w-2xl">
+          From the basics to advanced concepts, discover the technologies shaping our digital world.
+        </p>
+      </div>
+
+      <div class="text-sm text-slate-500 dark:text-slate-400">
+        <i class="fas fa-layer-group text-blue-500 mr-2"></i>
+        <span id="result-count">12 topics</span>
+      </div>
     </div>
 
-</div>
+    <div id="category-filters" class="flex flex-wrap gap-2 mb-8">
+      <button class="category-btn active rounded-xl px-4 py-2 text-sm font-bold" data-filter="all">All Topics</button>
+      <button class="category-btn rounded-xl px-4 py-2 text-sm font-bold" data-filter="development">Development</button>
+      <button class="category-btn rounded-xl px-4 py-2 text-sm font-bold" data-filter="infrastructure">Infrastructure</button>
+      <button class="category-btn rounded-xl px-4 py-2 text-sm font-bold" data-filter="security">Security</button>
+      <button class="category-btn rounded-xl px-4 py-2 text-sm font-bold" data-filter="innovation">Innovation</button>
+    </div>
+
+    <div id="category-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+
+      <button class="card topic-card text-left rounded-2xl p-6" data-category="innovation" data-title="Artificial Intelligence AI Machine Learning" data-topic="ai">
+        <div class="icon-box bg-blue-500/10 text-blue-500 mb-5"><i class="fas fa-brain text-xl"></i></div>
+        <div class="flex justify-between items-center gap-2 mb-2">
+          <h3 class="font-extrabold text-lg">Artificial Intelligence</h3>
+          <i class="fas fa-arrow-up-right-from-square text-xs text-slate-400"></i>
+        </div>
+        <p class="text-sm text-slate-500 dark:text-slate-400 leading-6">Understand AI, machine learning, generative AI, chatbots and intelligent systems.</p>
+        <span class="inline-block mt-5 text-xs font-bold text-blue-600 dark:text-cyan-400">EXPLORE AI →</span>
+      </button>
+
+      <button class="card topic-card text-left rounded-2xl p-6" data-category="development" data-title="API Application Programming Interface REST JSON HTTP" data-topic="api">
+        <div class="icon-box bg-cyan-500/10 text-cyan-500 mb-5"><i class="fas fa-plug text-xl"></i></div>
+        <h3 class="font-extrabold text-lg mb-2">APIs & Integration</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 leading-6">Learn how APIs connect apps, websites, databases and external services.</p>
+        <span class="inline-block mt-5 text-xs font-bold text-blue-600 dark:text-cyan-400">EXPLORE APIs →</span>
+      </button>
+
+      <button class="card topic-card text-left rounded-2xl p-6" data-category="development" data-title="Web Development HTML CSS JavaScript Frontend Backend" data-topic="web">
+        <div class="icon-box bg-orange-500/10 text-orange-500 mb-5"><i class="fas fa-globe text-xl"></i></div>
+        <h3 class="font-extrabold text-lg mb-2">Web Development</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 leading-6">Explore HTML, CSS, JavaScript, frontend, backend and full-stack development.</p>
+        <span class="inline-block mt-5 text-xs font-bold text-blue-600 dark:text-cyan-400">EXPLORE WEB →</span>
+      </button>
+
+      <button class="card topic-card text-left rounded-2xl p-6" data-category="development" data-title="Mobile App Development Android iOS Flutter React Native" data-topic="mobile">
+        <div class="icon-box bg-violet-500/10 text-violet-500 mb-5"><i class="fas fa-mobile-screen-button text-xl"></i></div>
+        <h3 class="font-extrabold text-lg mb-2">Mobile Development</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 leading-6">Discover Android, iOS, cross-platform frameworks and app architecture.</p>
+        <span class="inline-block mt-5 text-xs font-bold text-blue-600 dark:text-cyan-400">EXPLORE MOBILE →</span>
+      </button>
+
+      <button class="card topic-card text-left rounded-2xl p-6" data-category="security" data-title="Cybersecurity Ethical Hacking Privacy Encryption Defense" data-topic="security">
+        <div class="icon-box bg-red-500/10 text-red-500 mb-5"><i class="fas fa-shield-halved text-xl"></i></div>
+        <h3 class="font-extrabold text-lg mb-2">Cybersecurity</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 leading-6">Understand digital safety, ethical security testing, encryption and defense.</p>
+        <span class="inline-block mt-5 text-xs font-bold text-blue-600 dark:text-cyan-400">EXPLORE SECURITY →</span>
+      </button>
+
+      <button class="card topic-card text-left rounded-2xl p-6" data-category="development" data-title="Programming Python JavaScript Java C C++ Algorithms" data-topic="programming">
+        <div class="icon-box bg-yellow-500/10 text-yellow-500 mb-5"><i class="fas fa-code text-xl"></i></div>
+        <h3 class="font-extrabold text-lg mb-2">Programming</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 leading-6">Explore programming languages, algorithms, logic and software engineering.</p>
+        <span class="inline-block mt-5 text-xs font-bold text-blue-600 dark:text-cyan-400">EXPLORE CODE →</span>
+      </button>
+
+      <button class="card topic-card text-left rounded-2xl p-6" data-category="infrastructure" data-title="Database SQL MongoDB PostgreSQL MySQL Supabase" data-topic="database">
+        <div class="icon-box bg-emerald-500/10 text-emerald-500 mb-5"><i class="fas fa-database text-xl"></i></div>
+        <h3 class="font-extrabold text-lg mb-2">Databases</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 leading-6">Learn SQL, NoSQL, data modeling, queries, indexing and data storage.</p>
+        <span class="inline-block mt-5 text-xs font-bold text-blue-600 dark:text-cyan-400">EXPLORE DATA →</span>
+      </button>
+
+      <button class="card topic-card text-left rounded-2xl p-6" data-category="infrastructure" data-title="Networking TCP IP DNS HTTP HTTPS Router Server Internet" data-topic="network">
+        <div class="icon-box bg-indigo-500/10 text-indigo-500 mb-5"><i class="fas fa-network-wired text-xl"></i></div>
+        <h3 class="font-extrabold text-lg mb-2">Networking</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 leading-6">Understand IP addresses, DNS, protocols, routers and how the internet works.</p>
+        <span class="inline-block mt-5 text-xs font-bold text-blue-600 dark:text-cyan-400">EXPLORE NETWORKS →</span>
+      </button>
+
+      <button class="card topic-card text-left rounded-2xl p-6" data-category="infrastructure" data-title="Cloud Computing VPS Hosting Deployment DevOps Docker" data-topic="cloud">
+        <div class="icon-box bg-sky-500/10 text-sky-500 mb-5"><i class="fas fa-cloud text-xl"></i></div>
+        <h3 class="font-extrabold text-lg mb-2">Cloud & DevOps</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 leading-6">Explore hosting, VPS, deployment, containers, automation and scalability.</p>
+        <span class="inline-block mt-5 text-xs font-bold text-blue-600 dark:text-cyan-400">EXPLORE CLOUD →</span>
+      </button>
+
+      <button class="card topic-card text-left rounded-2xl p-6" data-category="innovation" data-title="Internet of Things IoT Smart Devices Sensors Automation" data-topic="iot">
+        <div class="icon-box bg-teal-500/10 text-teal-500 mb-5"><i class="fas fa-house-signal text-xl"></i></div>
+        <h3 class="font-extrabold text-lg mb-2">Internet of Things</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 leading-6">Discover connected devices, sensors, smart homes and industrial automation.</p>
+        <span class="inline-block mt-5 text-xs font-bold text-blue-600 dark:text-cyan-400">EXPLORE IoT →</span>
+      </button>
+
+      <button class="card topic-card text-left rounded-2xl p-6" data-category="innovation" data-title="Blockchain Cryptocurrency Distributed Ledger Smart Contracts" data-topic="blockchain">
+        <div class="icon-box bg-purple-500/10 text-purple-500 mb-5"><i class="fas fa-cubes-stacked text-xl"></i></div>
+        <h3 class="font-extrabold text-lg mb-2">Blockchain</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 leading-6">Learn distributed ledgers, smart contracts and decentralized applications.</p>
+        <span class="inline-block mt-5 text-xs font-bold text-blue-600 dark:text-cyan-400">EXPLORE BLOCKCHAIN →</span>
+      </button>
+
+      <button class="card topic-card text-left rounded-2xl p-6" data-category="innovation" data-title="Robotics Automation Computer Vision Emerging Technology" data-topic="robotics">
+        <div class="icon-box bg-pink-500/10 text-pink-500 mb-5"><i class="fas fa-robot text-xl"></i></div>
+        <h3 class="font-extrabold text-lg mb-2">Robotics & Automation</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 leading-6">Explore robots, sensors, computer vision and automated systems.</p>
+        <span class="inline-block mt-5 text-xs font-bold text-blue-600 dark:text-cyan-400">EXPLORE ROBOTICS →</span>
+      </button>
+
+    </div>
+
+    <div id="no-results" class="hidden text-center py-16">
+      <i class="fas fa-magnifying-glass text-4xl text-slate-400 mb-4"></i>
+      <h3 class="text-xl font-bold">No matching topics found</h3>
+      <p class="text-slate-500 mt-2">Try another keyword or select All Topics.</p>
+      <button id="clear-search" class="mt-5 gradient-bg text-white px-5 py-3 rounded-xl font-bold">Clear search</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- LEARNING -->
+<section id="learn" class="py-24 px-5 sm:px-6 bg-slate-100/70 dark:bg-slate-900/35">
+  <div class="max-w-7xl mx-auto">
+
+    <div class="text-center max-w-2xl mx-auto mb-12">
+      <p class="text-xs uppercase tracking-[.2em] text-blue-600 dark:text-cyan-400 font-extrabold mb-3">Knowledge base</p>
+      <h2 class="text-3xl sm:text-4xl font-black">Understand How Technology Works</h2>
+      <p class="text-slate-500 dark:text-slate-400 mt-4 leading-7">
+        Clear explanations, practical examples and beginner-friendly guides to help you understand the technologies behind modern digital products.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+
+      <article class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="icon-box bg-cyan-500/10 text-cyan-500"><i class="fas fa-plug text-xl"></i></div>
+          <span class="text-xs font-bold text-cyan-600 dark:text-cyan-400 uppercase">API Fundamentals</span>
+        </div>
+        <h3 class="text-xl font-extrabold mb-3">What Is an API?</h3>
+        <p class="text-sm leading-7 text-slate-500 dark:text-slate-400">
+          An API, or Application Programming Interface, allows software applications to communicate using defined rules.
+        </p>
+        <button class="read-article mt-5 font-bold text-sm text-blue-600 dark:text-cyan-400" data-topic="api">
+          Read explanation <i class="fas fa-arrow-right ml-2"></i>
+        </button>
+      </article>
+
+      <article class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="icon-box bg-blue-500/10 text-blue-500"><i class="fas fa-brain text-xl"></i></div>
+          <span class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase">Artificial Intelligence</span>
+        </div>
+        <h3 class="text-xl font-extrabold mb-3">How Does AI Work?</h3>
+        <p class="text-sm leading-7 text-slate-500 dark:text-slate-400">
+          Explore how models process data, identify patterns and generate useful outputs for different tasks.
+        </p>
+        <button class="read-article mt-5 font-bold text-sm text-blue-600 dark:text-cyan-400" data-topic="ai">
+          Read explanation <i class="fas fa-arrow-right ml-2"></i>
+        </button>
+      </article>
+
+      <article class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="icon-box bg-orange-500/10 text-orange-500"><i class="fas fa-globe text-xl"></i></div>
+          <span class="text-xs font-bold text-orange-600 dark:text-orange-400 uppercase">Web Development</span>
+        </div>
+        <h3 class="text-xl font-extrabold mb-3">How Websites Work</h3>
+        <p class="text-sm leading-7 text-slate-500 dark:text-slate-400">
+          Learn how browsers, frontend code, servers, databases and internet protocols work together.
+        </p>
+        <button class="read-article mt-5 font-bold text-sm text-blue-600 dark:text-cyan-400" data-topic="web">
+          Read explanation <i class="fas fa-arrow-right ml-2"></i>
+        </button>
+      </article>
+
+      <article class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="icon-box bg-emerald-500/10 text-emerald-500"><i class="fas fa-database text-xl"></i></div>
+          <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase">Data Systems</span>
+        </div>
+        <h3 class="text-xl font-extrabold mb-3">What Is a Database?</h3>
+        <p class="text-sm leading-7 text-slate-500 dark:text-slate-400">
+          Understand how applications store, organize, query and retrieve information.
+        </p>
+        <button class="read-article mt-5 font-bold text-sm text-blue-600 dark:text-cyan-400" data-topic="database">
+          Read explanation <i class="fas fa-arrow-right ml-2"></i>
+        </button>
+      </article>
+
+      <article class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="icon-box bg-red-500/10 text-red-500"><i class="fas fa-shield-halved text-xl"></i></div>
+          <span class="text-xs font-bold text-red-600 dark:text-red-400 uppercase">Digital Safety</span>
+        </div>
+        <h3 class="text-xl font-extrabold mb-3">Cybersecurity Basics</h3>
+        <p class="text-sm leading-7 text-slate-500 dark:text-slate-400">
+          Learn about protecting accounts, securing systems and recognizing common online threats.
+        </p>
+        <button class="read-article mt-5 font-bold text-sm text-blue-600 dark:text-cyan-400" data-topic="security">
+          Read explanation <i class="fas fa-arrow-right ml-2"></i>
+        </button>
+      </article>
+
+      <article class="card rounded-2xl p-6">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="icon-box bg-violet-500/10 text-violet-500"><i class="fas fa-cloud text-xl"></i></div>
+          <span class="text-xs font-bold text-violet-600 dark:text-violet-400 uppercase">Cloud Technology</span>
+        </div>
+        <h3 class="text-xl font-extrabold mb-3">What Is Cloud Hosting?</h3>
+        <p class="text-sm leading-7 text-slate-500 dark:text-slate-400">
+          Discover how remote servers host websites, store files and run applications over the internet.
+        </p>
+        <button class="read-article mt-5 font-bold text-sm text-blue-600 dark:text-cyan-400" data-topic="cloud">
+          Read explanation <i class="fas fa-arrow-right ml-2"></i>
+        </button>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ARTICLE READER -->
+<section id="article-section" class="hidden py-16 px-5 sm:px-6">
+  <div class="max-w-4xl mx-auto">
+    <button id="back-articles" class="mb-7 text-sm font-bold text-blue-600 dark:text-cyan-400">
+      <i class="fas fa-arrow-left mr-2"></i> Back to learning
+    </button>
+
+    <article class="card rounded-3xl p-6 sm:p-10">
+      <div id="article-label" class="text-xs uppercase tracking-widest font-extrabold text-blue-600 dark:text-cyan-400 mb-4"></div>
+      <h2 id="article-title" class="text-3xl sm:text-4xl font-black mb-6"></h2>
+      <div id="article-body" class="article-content text-slate-600 dark:text-slate-300"></div>
+    </article>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section id="tools" class="py-24 px-5 sm:px-6">
+  <div class="max-w-7xl mx-auto">
+
+    <div class="mb-10">
+      <p class="text-xs uppercase tracking-[.2em] text-blue-600 dark:text-cyan-400 font-extrabold mb-3">Developer corner</p>
+      <h2 class="text-3xl sm:text-4xl font-black">Interactive Tech Tools</h2>
+      <p class="text-slate-500 dark:text-slate-400 mt-3 max-w-2xl">
+        Experiment with a few simple utilities directly in your browser.
+      </p>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-6">
+
+      <!-- JSON FORMATTER -->
+      <div class="card rounded-3xl p-6 sm:p-8">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="icon-box bg-blue-500/10 text-blue-500"><i class="fas fa-brackets-curly text-xl"></i></div>
+          <div>
+            <h3 class="text-xl font-extrabold">JSON Formatter</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Format and validate JSON data.</p>
+          </div>
+        </div>
+
+        <label for="json-input" class="block text-sm font-bold mb-2">JSON input</label>
+        <textarea id="json-input" rows="5" spellcheck="false"
+          class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-4 font-mono text-sm outline-none focus:border-blue-500"
+          placeholder='{"name":"Sila Tech","type":"technology"}'></textarea>
+
+        <div class="flex flex-wrap gap-3 mt-4">
+          <button id="format-json" class="gradient-bg text-white rounded-xl px-5 py-3 font-bold text-sm">
+            <i class="fas fa-wand-magic-sparkles mr-2"></i>Format JSON
+          </button>
+          <button id="clear-json" class="border border-slate-300 dark:border-slate-700 rounded-xl px-5 py-3 font-bold text-sm">
+            Clear
+          </button>
+          <button id="copy-json" class="border border-slate-300 dark:border-slate-700 rounded-xl px-5 py-3 font-bold text-sm">
+            Copy
+          </button>
+        </div>
+
+        <p id="json-status" aria-live="polite" class="text-sm mt-4 text-slate-500 dark:text-slate-400">Ready to format.</p>
+      </div>
+
+      <!-- BASE64 -->
+      <div class="card rounded-3xl p-6 sm:p-8">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="icon-box bg-cyan-500/10 text-cyan-500"><i class="fas fa-file-code text-xl"></i></div>
+          <div>
+            <h3 class="text-xl font-extrabold">Base64 Encoder / Decoder</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Convert text to and from Base64.</p>
+          </div>
+        </div>
+
+        <label for="base64-input" class="block text-sm font-bold mb-2">Text or Base64</label>
+        <textarea id="base64-input" rows="5" spellcheck="false"
+          class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-4 font-mono text-sm outline-none focus:border-cyan-500"
+          placeholder="Enter text here..."></textarea>
+
+        <div class="flex flex-wrap gap-3 mt-4">
+          <button id="encode-base64" class="gradient-bg text-white rounded-xl px-5 py-3 font-bold text-sm">Encode</button>
+          <button id="decode-base64" class="border border-slate-300 dark:border-slate-700 rounded-xl px-5 py-3 font-bold text-sm">Decode</button>
+          <button id="clear-base64" class="border border-slate-300 dark:border-slate-700 rounded-xl px-5 py-3 font-bold text-sm">Clear</button>
+        </div>
+
+        <p id="base64-status" aria-live="polite" class="text-sm mt-4 text-slate-500 dark:text-slate-400">Ready to convert.</p>
+        <p class="text-xs text-slate-500 mt-2">Base64 is an encoding format, not encryption.</p>
+      </div>
+
+      <!-- TIMESTAMP -->
+      <div class="card rounded-3xl p-6 sm:p-8">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="icon-box bg-violet-500/10 text-violet-500"><i class="fas fa-clock text-xl"></i></div>
+          <div>
+            <h3 class="text-xl font-extrabold">Unix Timestamp</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Convert a date to a Unix timestamp.</p>
+          </div>
+        </div>
+
+        <div class="rounded-2xl bg-slate-100 dark:bg-slate-950 p-5 mb-5">
+          <p class="text-xs uppercase tracking-widest text-slate-500 mb-2">Current timestamp</p>
+          <p id="current-timestamp" class="text-3xl font-black gradient-text font-mono break-all">—</p>
+          <p id="current-date" class="text-sm text-slate-500 mt-2">—</p>
+        </div>
+
+        <label for="date-input" class="block text-sm font-bold mb-2">Choose a date and time</label>
+        <input id="date-input" type="datetime-local"
+          class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-transparent p-3 outline-none focus:border-blue-500">
+
+        <button id="convert-date" class="gradient-bg text-white rounded-xl px-5 py-3 font-bold text-sm mt-4">Convert date</button>
+        <p id="timestamp-result" aria-live="polite" class="text-sm mt-4 break-all text-slate-500 dark:text-slate-400"></p>
+      </div>
+
+      <!-- PASSWORD GENERATOR -->
+      <div class="card rounded-3xl p-6 sm:p-8">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="icon-box bg-emerald-500/10 text-emerald-500"><i class="fas fa-key text-xl"></i></div>
+          <div>
+            <h3 class="text-xl font-extrabold">Password Generator</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400">Generate a random password locally.</p>
+          </div>
+        </div>
+
+        <label for="password-length" class="block text-sm font-bold mb-2">Password length</label>
+        <select id="password-length" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-transparent p-3 outline-none">
+          <option value="12">12 characters</option>
+          <option value="16" selected>16 characters</option>
+          <option value="20">20 characters</option>
+          <option value="24">24 characters</option>
+          <option value="32">32 characters</option>
+        </select>
+
+        <label class="flex items-center gap-3 mt-4 text-sm">
+          <input id="include-symbols" type="checkbox" checked class="accent-blue-500 w-4 h-4">
+          Include symbols
+        </label>
+
+        <div class="flex gap-2 mt-5">
+          <input id="password-output" readonly aria-label="Generated password"
+            class="flex-1 min-w-0 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-3 font-mono text-sm"
+            placeholder="Generate a password">
+          <button id="generate-password" aria-label="Generate password" class="gradient-bg text-white rounded-xl px-4">
+            <i class="fas fa-rotate"></i>
+          </button>
+          <button id="copy-password" aria-label="Copy password" class="border border-slate-300 dark:border-slate-700 rounded-xl px-4">
+            <i class="fas fa-copy"></i>
+          </button>
+        </div>
+
+        <p id="password-status" aria-live="polite" class="text-sm mt-4 text-slate-500 dark:text-slate-400">Your password is generated in this browser.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="py-24 px-5 sm:px-6 bg-slate-100/70 dark:bg-slate-900/35">
+  <div class="max-w-5xl mx-auto">
+    <div class="relative overflow-hidden rounded-3xl bg-slate-950 text-white p-8 sm:p-12">
+      <div class="absolute w-64 h-64 bg-blue-600/30 rounded-full blur-3xl -top-24 -right-20"></div>
+      <div class="absolute w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl -bottom-36 -left-20"></div>
+
+      <div class="relative z-10">
+        <div class="w-14 h-14 gradient-bg rounded-2xl flex items-center justify-center mb-6">
+          <i class="fas fa-microchip text-2xl"></i>
+        </div>
+
+        <p class="text-xs uppercase tracking-[.25em] text-cyan-300 font-extrabold mb-3">About the platform</p>
+        <h2 class="text-3xl sm:text-5xl font-black mb-6">Technology for <span class="gradient-text">Everyone.</span></h2>
+
+        <p class="text-slate-300 leading-8 max-w-3xl">
+          SILA TECH is a technology-focused knowledge platform designed to make digital concepts easier to understand. Explore software development, AI, APIs, cybersecurity, infrastructure and emerging technologies in one place.
+        </p>
+
+        <p class="text-slate-400 leading-7 max-w-3xl mt-4">
+          Our goal is to encourage learning, practical experimentation and responsible innovation — whether you are starting your technology journey or building your next project.
+        </p>
+
+        <div class="flex flex-wrap gap-3 mt-8">
+          <a href="#explore" class="gradient-bg px-6 py-3 rounded-xl font-bold">Explore Topics</a>
+          <a href="#tools" class="border border-slate-700 px-6 py-3 rounded-xl font-bold hover:bg-white/5">Try Developer Tools</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="border-t border-slate-200 dark:border-slate-800 px-5 sm:px-6 py-10">
+  <div class="max-w-7xl mx-auto">
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+
+      <div>
+        <a href="#home" class="font-black text-xl">SILA <span class="gradient-text">TECH</span></a>
+        <p class="text-sm text-slate-500 dark:text-slate-400 leading-7 mt-4 max-w-xs">
+          Explore technology. Understand innovation. Build the future.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="font-extrabold mb-4">Explore</h3>
+        <div class="space-y-3 text-sm text-slate-500 dark:text-slate-400">
+          <p><a href="#explore" class="hover:text-blue-500">Technology categories</a></p>
+          <p><a href="#learn" class="hover:text-blue-500">Learning centre</a></p>
+          <p><a href="#tools" class="hover:text-blue-500">Developer tools</a></p>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="font-extrabold mb-4">Popular topics</h3>
+        <div class="space-y-3 text-sm text-slate-500 dark:text-slate-400">
+          <p><button class="footer-topic hover:text-blue-500" data-topic="ai">Artificial Intelligence</button></p>
+          <p><button class="footer-topic hover:text-blue-500" data-topic="api">APIs</button></p>
+          <p><button class="footer-topic hover:text-blue-500" data-topic="security">Cybersecurity</button></p>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="font-extrabold mb-4">Platform</h3>
+        <div class="space-y-3 text-sm text-slate-500 dark:text-slate-400">
+          <p><a href="#about" class="hover:text-blue-500">About SILA TECH</a></p>
+          <p><a href="#home" class="hover:text-blue-500">Back to top ↑</a></p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="pt-6 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row justify-between gap-3 text-xs text-slate-500">
+      <p>© <span id="year"></span> SILA TECH. All rights reserved.</p>
+      <p>Designed for curious minds and builders.</p>
+    </div>
+
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div id="toast" class="hide fixed bottom-5 left-1/2 -translate-x-1/2 z-[100] rounded-xl bg-slate-950 text-white px-5 py-3 text-sm shadow-2xl" role="status" aria-live="polite"></div>
 
 <script>
-const canvas = document.getElementById("bg");
-const ctx = canvas.getContext("2d");
+(function() {
+  'use strict';
 
-let w = canvas.width = window.innerWidth;
-let h = canvas.height = window.innerHeight;
+  const $ = id => document.getElementById(id);
 
-const particles = [];
+  let activeFilter = 'all';
+  let searchTerm = '';
+  let toastTimer;
 
-for (let i = 0; i < 80; i++) {
-    particles.push({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        r: Math.random() * 2 + 1,
-        dx: (Math.random() - .5),
-        dy: (Math.random() - .5)
+  function showToast(message) {
+    const toast = $('toast');
+    toast.textContent = message;
+    toast.classList.remove('hide');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.add('hide'), 2400);
+  }
+
+  async function copyText(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      showToast('Copied to clipboard');
+    } catch (e) {
+      const area = document.createElement('textarea');
+      area.value = text;
+      area.style.position = 'fixed';
+      area.style.opacity = '0';
+      document.body.appendChild(area);
+      area.select();
+
+      try {
+        document.execCommand('copy');
+        showToast('Copied to clipboard');
+      } catch (err) {
+        showToast('Copy failed. Please select and copy manually.');
+      }
+
+      area.remove();
+    }
+  }
+
+  // Theme
+  function updateThemeIcon() {
+    const dark = document.documentElement.classList.contains('dark');
+    $('theme-icon').className = dark
+      ? 'fas fa-sun text-amber-400'
+      : 'fas fa-moon text-slate-600';
+  }
+
+  $('theme-toggle').addEventListener('click', () => {
+    const dark = document.documentElement.classList.toggle('dark');
+
+    try {
+      localStorage.setItem('sila-tech-theme', dark ? 'dark' : 'light');
+    } catch(e) {}
+
+    updateThemeIcon();
+  });
+
+  updateThemeIcon();
+
+  // Mobile navigation
+  const mobileMenu = $('mobile-menu');
+
+  $('mobile-toggle').addEventListener('click', () => {
+    mobileMenu.classList.toggle('closed');
+
+    $('mobile-toggle').innerHTML = mobileMenu.classList.contains('closed')
+      ? '<i class="fas fa-bars"></i>'
+      : '<i class="fas fa-xmark"></i>';
+  });
+
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.add('closed');
+      $('mobile-toggle').innerHTML = '<i class="fas fa-bars"></i>';
     });
-}
+  });
 
-function draw() {
-    ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = "#00ff99";
+  // Search and category filters
+  function filterCards() {
+    const cards = Array.from(document.querySelectorAll('.topic-card'));
+    let visible = 0;
 
-    particles.forEach(p => {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fill();
+    cards.forEach(card => {
+      const category = card.dataset.category;
+      const text = (
+        card.dataset.title + ' ' + card.innerText
+      ).toLowerCase();
 
-        p.x += p.dx;
-        p.y += p.dy;
+      const categoryMatch =
+        activeFilter === 'all' || category === activeFilter;
 
-        if (p.x < 0 || p.x > w) p.dx *= -1;
-        if (p.y < 0 || p.y > h) p.dy *= -1;
+      const searchMatch = !searchTerm || text.includes(searchTerm);
+
+      const show = categoryMatch && searchMatch;
+
+      card.classList.toggle('hidden', !show);
+
+      if (show) visible++;
     });
 
-    requestAnimationFrame(draw);
+    $('result-count').textContent =
+      visible + (visible === 1 ? ' topic' : ' topics');
+
+    $('no-results').classList.toggle('hidden', visible !== 0);
+  }
+
+  document.querySelectorAll('[data-filter]').forEach(button => {
+    button.addEventListener('click', () => {
+      activeFilter = button.dataset.filter;
+
+      document.querySelectorAll('[data-filter]').forEach(btn => {
+        btn.classList.toggle('active', btn === button);
+      });
+
+      filterCards();
+    });
+  });
+
+  $('search-form').addEventListener('submit', e => {
+    e.preventDefault();
+    searchTerm = $('search-input').value.trim().toLowerCase();
+    activeFilter = 'all';
+
+    document.querySelectorAll('[data-filter]').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.filter === 'all');
+    });
+
+    filterCards();
+    $('explore').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  $('search-input').addEventListener('input', () => {
+    searchTerm = $('search-input').value.trim().toLowerCase();
+    filterCards();
+  });
+
+  document.querySelectorAll('.quick-search').forEach(button => {
+    button.addEventListener('click', () => {
+      $('search-input').value = button.dataset.query;
+      searchTerm = button.dataset.query.toLowerCase();
+      activeFilter = 'all';
+
+      document.querySelectorAll('[data-filter]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.filter === 'all');
+      });
+
+      filterCards();
+      $('explore').scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  $('clear-search').addEventListener('click', () => {
+    $('search-input').value = '';
+    searchTerm = '';
+    activeFilter = 'all';
+
+    document.querySelectorAll('[data-filter]').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.filter === 'all');
+    });
+
+    filterCards();
+  });
+
+  // Article content
+  const articles = {
+    api: {
+      label: 'API FUNDAMENTALS',
+      title: 'What Is an API?',
+      body: `
+        <p>An <strong>API (Application Programming Interface)</strong> is a set of rules that lets one software system request services or data from another system.</p>
+
+        <h3>Think of it like a restaurant</h3>
+        <p>You choose a meal from a menu. The waiter takes your order to the kitchen, and the kitchen prepares your food. The waiter brings the result back to you.</p>
+        <p>In this analogy, your application is the customer, the API is the waiter, and the server is the kitchen.</p>
+
+        <h3>How does a web API work?</h3>
+        <p>1. A client sends an HTTP request to a server.</p>
+        <p>2. The server receives and validates the request.</p>
+        <p>3. The server performs the requested operation.</p>
+        <p>4. The server returns a response, often in JSON format.</p>
+
+        <h3>Example API request</h3>
+        <pre class="bg-slate-950 text-green-300 rounded-xl p-5 text-sm"><code>GET /api/users/42
+Accept: application/json</code></pre>
+
+        <h3>Example JSON response</h3>
+        <pre class="bg-slate-950 text-cyan-300 rounded-xl p-5 text-sm"><code>{
+  "success": true,
+  "user": {
+    "id": 42,
+    "name": "Example User"
+  }
+}</code></pre>
+
+        <h3>Common HTTP methods</h3>
+        <p><code>GET</code> retrieves information.</p>
+        <p><code>POST</code> submits data or creates a resource.</p>
+        <p><code>PUT</code> or <code>PATCH</code> updates a resource.</p>
+        <p><code>DELETE</code> requests deletion of a resource.</p>
+
+        <h3>Where are APIs used?</h3>
+        <p>Payment systems, weather applications, maps, AI chatbots, mobile apps, social platforms and business software all use APIs.</p>
+
+        <h3>Important security note</h3>
+        <p>Real APIs may require authentication, rate limits and permission checks. Never expose private API keys in public frontend JavaScript.</p>
+      `
+    },
+
+    ai: {
+      label: 'ARTIFICIAL INTELLIGENCE',
+      title: 'How Does Artificial Intelligence Work?',
+      body: `
+        <p><strong>Artificial Intelligence (AI)</strong> describes computer systems designed to perform tasks that normally require human-like abilities, such as understanding language, recognizing patterns or generating content.</p>
+
+        <h3>What is machine learning?</h3>
+        <p>Machine learning is a branch of AI in which systems learn patterns from examples or data rather than relying only on manually written rules.</p>
+
+        <h3>How is generative AI different?</h3>
+        <p>Generative AI models can create new outputs, such as text, images, audio or computer code, based on their training and input instructions.</p>
+
+        <h3>How does an AI chatbot respond?</h3>
+        <p>1. You submit a prompt or question.</p>
+        <p>2. The application sends it to an AI model.</p>
+        <p>3. The model processes the context and predicts an appropriate output.</p>
+        <p>4. The application returns the generated response.</p>
+
+        <h3>Example uses</h3>
+        <p>AI can help summarize documents, answer questions, translate languages, analyze information and assist with programming.</p>
+
+        <h3>What are the limitations?</h3>
+        <p>AI may produce incorrect information, reflect biases or misunderstand a request. Important information should be verified, and private data should be handled carefully.</p>
+      `
+    },
+
+    web: {
+      label: 'WEB DEVELOPMENT',
+      title: 'How Do Websites Work?',
+      body: `
+        <p>A website is a collection of pages and resources that a browser can retrieve and display over a network.</p>
+
+        <h3>Frontend</h3>
+        <p>The frontend is the part visitors see and interact with. HTML structures content, CSS styles it, and JavaScript adds interactivity.</p>
+
+        <h3>Backend</h3>
+        <p>The backend runs server-side logic. It may handle authentication, business rules, payments and requests from the frontend.</p>
+
+        <h3>Database</h3>
+        <p>A database stores information such as user accounts, product details, posts and settings.</p>
+
+        <h3>What happens when you open a website?</h3>
+        <p>1. Your browser looks up the website's IP address using DNS.</p>
+        <p>2. It establishes a connection to the server, typically using HTTPS.</p>
+        <p>3. The server returns the requested files or application response.</p>
+        <p>4. The browser processes HTML, CSS and JavaScript to display the page.</p>
+
+        <h3>Common technologies</h3>
+        <p>Frontend: HTML, CSS, JavaScript and frameworks such as React.</p>
+        <p>Backend: Node.js, Python, Java, PHP and other server technologies.</p>
+        <p>Databases: PostgreSQL, MySQL and MongoDB.</p>
+
+        <h3>Deployment</h3>
+        <p>When a website is ready, developers deploy it to a hosting service and connect a domain name so other people can access it.</p>
+      `
+    },
+
+    database: {
+      label: 'DATABASE TECHNOLOGY',
+      title: 'What Is a Database?',
+      body: `
+        <p>A <strong>database</strong> is an organized system for storing, managing and retrieving information.</p>
+
+        <h3>Why do applications need databases?</h3>
+        <p>Imagine a movie application. It needs to remember movie titles, descriptions, users, watchlists and viewing history. A database stores this information beyond a single page load.</p>
+
+        <h3>Relational databases</h3>
+        <p>Relational databases organize information into tables with rows and columns. PostgreSQL and MySQL are popular examples. They use SQL to query and manage data.</p>
+
+        <h3>NoSQL databases</h3>
+        <p>NoSQL databases use different data models, including documents and key-value records. MongoDB is an example of a document database.</p>
+
+        <h3>Simple SQL example</h3>
+        <pre class="bg-slate-950 text-cyan-300 rounded-xl p-5 text-sm"><code>SELECT title, release_year
+FROM movies
+WHERE release_year >= 2024
+ORDER BY release_year DESC;</code></pre>
+
+        <h3>What makes a database reliable?</h3>
+        <p>Good database design considers data integrity, access controls, backups, indexing, performance and recovery procedures.</p>
+
+        <h3>Choosing a database</h3>
+        <p>The right choice depends on your data structure, query patterns, scale, consistency requirements, budget and the experience of your team.</p>
+      `
+    },
+
+    security: {
+      label: 'CYBERSECURITY',
+      title: 'Cybersecurity Basics',
+      body: `
+        <p><strong>Cybersecurity</strong> is the practice of protecting computers, networks, applications and information from unauthorized access, disruption or misuse.</p>
+
+        <h3>Confidentiality, integrity and availability</h3>
+        <p>Confidentiality means information is available only to authorized people. Integrity means information remains accurate and trustworthy. Availability means systems and information are accessible when needed.</p>
+
+        <h3>Common threats</h3>
+        <p>Phishing attempts to trick people into revealing information. Malware is malicious software. Weak passwords and unpatched software can also put systems at risk.</p>
+
+        <h3>How to protect yourself</h3>
+        <p>Use unique passwords and a password manager, enable multifactor authentication, update your devices, verify suspicious links and keep backups of important files.</p>
+
+        <h3>What is ethical security testing?</h3>
+        <p>Ethical testing evaluates systems with explicit authorization and a clearly defined scope. It helps identify weaknesses so they can be fixed before attackers exploit them.</p>
+
+        <h3>Responsible practice</h3>
+        <p>Only test systems you own or have permission to assess. Respect privacy, avoid disrupting services and report discovered vulnerabilities responsibly.</p>
+      `
+    },
+
+    cloud: {
+      label: 'CLOUD COMPUTING',
+      title: 'What Is Cloud Hosting?',
+      body: `
+        <p><strong>Cloud computing</strong> provides computing resources such as servers, storage, databases and software over a network, usually the internet.</p>
+
+        <h3>What is hosting?</h3>
+        <p>Hosting makes a website or application available by running it on a computer configured to receive network requests.</p>
+
+        <h3>What is a VPS?</h3>
+        <p>A Virtual Private Server is a virtual machine that provides an isolated environment on a physical host. It offers more control than many shared hosting plans but requires appropriate administration.</p>
+
+        <h3>What is serverless computing?</h3>
+        <p>Serverless services allow developers to run code without managing the underlying server infrastructure directly. The provider still operates the servers.</p>
+
+        <h3>Deployment workflow</h3>
+        <p>Developers write code, test it, configure environment variables, deploy it to a hosting provider and monitor its performance.</p>
+
+        <h3>Important considerations</h3>
+        <p>Compare pricing, regional availability, backups, security controls, scaling options and provider limits before choosing a service.</p>
+      `
+    },
+
+    mobile: {
+      label: 'MOBILE DEVELOPMENT',
+      title: 'How Are Android and iOS Apps Built?',
+      body: `
+        <p>Mobile applications are software designed to run on smartphones and tablets.</p>
+
+        <h3>Native development</h3>
+        <p>Android apps commonly use Kotlin or Java. iOS applications commonly use Swift. Native development provides access to platform-specific APIs and tools.</p>
+
+        <h3>Cross-platform development</h3>
+        <p>Frameworks such as Flutter and React Native allow developers to share much of their code across multiple platforms.</p>
+
+        <h3>Typical app architecture</h3>
+        <p>A mobile app displays the interface, manages local state and communicates with backend services when needed. The backend may connect to databases and third-party APIs.</p>
+
+        <h3>Testing and publishing</h3>
+        <p>Developers test functionality, accessibility, security and performance before distributing an application through a store or another permitted distribution method.</p>
+      `
+    },
+
+    programming: {
+      label: 'PROGRAMMING',
+      title: 'What Is Programming?',
+      body: `
+        <p>Programming is the process of writing instructions that computers can execute to perform tasks.</p>
+
+        <h3>Popular languages</h3>
+        <p>JavaScript is widely used for web development. Python is popular for automation, data work and AI. Java and Kotlin are used in many Android projects. Swift is commonly used for Apple platforms.</p>
+
+        <h3>Core concepts</h3>
+        <p>Variables store values. Conditions control which instructions run. Loops repeat operations. Functions package reusable behavior. Data structures organize information.</p>
+
+        <h3>Example in JavaScript</h3>
+        <pre class="bg-slate-950 text-green-300 rounded-xl p-5 text-sm"><code>function greet(name) {
+  return `Hello, ${name}!`;
 }
 
-draw();
+console.log(greet("Sila Tech"));</code></pre>
 
-window.addEventListener("resize", () => {
-    w = canvas.width = window.innerWidth;
-    h = canvas.height = window.innerHeight;
-});
+        <h3>How to improve</h3>
+        <p>Build small projects, read error messages carefully, practice debugging, use version control and gradually work on more complex applications.</p>
+      `
+    },
 
+    network: {
+      label: 'NETWORKING',
+      title: 'How Does the Internet Work?',
+      body: `
+        <p>The internet is a global network of interconnected networks that exchange data using shared protocols.</p>
 
-const statusDot = document.getElementById("statusDot");
-const statusText = document.getElementById("statusText");
+        <h3>IP addresses</h3>
+        <p>An IP address identifies a network interface for communication. IPv4 and IPv6 are the two main IP versions.</p>
 
-const phoneInput = document.getElementById("phoneInput");
-const pairBtn = document.getElementById("pairBtn");
-const qrBtn = document.getElementById("qrBtn");
+        <h3>DNS</h3>
+        <p>The Domain Name System helps translate human-readable domain names into the information needed to reach internet services.</p>
 
-const codeBox = document.getElementById("codeBox");
-const qrBox = document.getElementById("qrBox");
+        <h3>HTTP and HTTPS</h3>
+        <p>HTTP defines how web clients and servers exchange messages. HTTPS protects HTTP communication using TLS encryption and server authentication.</p>
 
-const codeValue = document.getElementById("codeValue");
-const qrImage = document.getElementById("qrImage");
+        <h3>Routers</h3>
+        <p>Routers forward packets between networks so data can travel toward its destination.</p>
 
-const errorMsg = document.getElementById("errorMsg");
-const connectedBox = document.getElementById("connectedBox");
-const pairSection = document.getElementById("pairSection");
+        <h3>What happens when you send a request?</h3>
+        <p>Your device sends network packets. Routers forward them through interconnected networks, and the destination system sends a response back.</p>
+      `
+    },
 
-const bgMusic = document.getElementById("bgMusic");
-const musicBtn = document.getElementById("musicBtn");
+    iot: {
+      label: 'INTERNET OF THINGS',
+      title: 'What Is the Internet of Things?',
+      body: `
+        <p>The Internet of Things (IoT) describes physical devices with sensors, software and network connectivity that exchange data or respond to commands.</p>
 
-let pollInterval = null;
-let isMuted = false;
+        <h3>Examples</h3>
+        <p>Smart thermostats, environmental sensors, connected vehicles and industrial monitoring systems are examples of IoT applications.</p>
 
+        <h3>How does it work?</h3>
+        <p>A sensor collects information, a device processes or transmits it, and an application may display the data or trigger an action.</p>
 
-/* MUSIC */
+        <h3>Security matters</h3>
+        <p>Change default passwords, install firmware updates, limit unnecessary network access and choose devices from vendors that provide security support.</p>
+      `
+    },
 
-function playMusic() {
-    bgMusic.volume = .6;
-    bgMusic.play().catch(() => {});
-}
+    blockchain: {
+      label: 'BLOCKCHAIN',
+      title: 'What Is Blockchain Technology?',
+      body: `
+        <p>A blockchain is a type of distributed ledger in which records are grouped into blocks and linked using cryptographic techniques.</p>
 
-musicBtn.onclick = () => {
-    isMuted = !isMuted;
-    bgMusic.muted = isMuted;
-    musicBtn.textContent = isMuted ? "🔇" : "🔊";
+        <h3>How it works</h3>
+        <p>Network participants follow a protocol for validating and recording transactions. Depending on the system, consensus mechanisms help participants agree on the ledger's state.</p>
 
-    if (!isMuted) {
-        playMusic();
+        <h3>Smart contracts</h3>
+        <p>Smart contracts are programs executed by a blockchain network under its rules. They can implement predefined operations without requiring each participant to maintain a separate version of the logic.</p>
+
+        <h3>Limitations</h3>
+        <p>Blockchain systems may face performance, cost, privacy and governance challenges. The technology is not automatically better than a conventional database for every application.</p>
+      `
+    },
+
+    robotics: {
+      label: 'ROBOTICS & AUTOMATION',
+      title: 'How Do Robots Work?',
+      body: `
+        <p>Robotics combines mechanical systems, electronics, sensors and software to build machines that perform tasks in the physical world.</p>
+
+        <h3>Sensors and actuators</h3>
+        <p>Sensors collect information about the environment. Actuators create movement or other physical actions.</p>
+
+        <h3>Control systems</h3>
+        <p>Software processes sensor readings and determines how a robot should respond. Some robots follow predefined instructions; others use AI to interpret complex environments.</p>
+
+        <h3>Where robots are used</h3>
+        <p>Robots support manufacturing, agriculture, healthcare research, logistics, exploration and other specialized applications.</p>
+      `
     }
-};
+  };
 
-window.addEventListener("load", playMusic);
+  function openArticle(topic) {
+    const article = articles[topic];
 
-document.addEventListener("click", () => {
-    if (bgMusic.paused && !isMuted) {
-        playMusic();
-    }
-}, { once: true });
+    if (!article) return;
 
+    $('article-label').textContent = article.label;
+    $('article-title').textContent = article.title;
+    $('article-body').innerHTML = article.body;
 
-/* STATUS */
+    $('article-section').classList.remove('hidden');
+    $('article-section').scrollIntoView({ behavior: 'smooth' });
+  }
 
-function updateStatus(status) {
-    statusDot.className =
-        "status-dot " + (status || "waiting");
+  document.querySelectorAll('.topic-card, .read-article, .footer-topic').forEach(button => {
+    button.addEventListener('click', () => openArticle(button.dataset.topic));
+  });
 
-    const statusNames = {
-        connected: "Connected Successfully ✅",
-        generating_code: "Generating pairing code...",
-        waiting_approval: "Waiting for WhatsApp approval...",
-        pairing_code_ready: "Pairing code generated",
-        pairing: "Pairing code generated",
-        qr_ready: "QR Code ready — scan it",
-        connecting: "Connecting to WhatsApp...",
-        disconnected: "Disconnected — reconnecting...",
-        failed: "Connection failed",
-        session_not_found: "Waiting to start...",
-        idle: "Waiting to start...",
-        waiting: "Waiting to start..."
-    };
+  $('back-articles').addEventListener('click', () => {
+    $('article-section').classList.add('hidden');
+    $('learn').scrollIntoView({ behavior: 'smooth' });
+  });
 
-    statusText.textContent =
-        statusNames[status] || status || "Waiting to start...";
-}
-
-
-/* ERROR */
-
-function showError(message) {
-    errorMsg.textContent = message;
-    errorMsg.style.display = "block";
-}
-
-function hideError() {
-    errorMsg.textContent = "";
-    errorMsg.style.display = "none";
-}
-
-
-/* RESET */
-
-function hideBoxes() {
-    codeBox.classList.remove("show");
-    qrBox.classList.remove("show");
-    hideError();
-}
-
-function resetQRButton() {
-    qrBtn.disabled = false;
-    qrBtn.innerHTML =
-        '<i class="fa-solid fa-qrcode"></i> PAIR WITH QR CODE';
-}
-
-function resetPairButton() {
-    pairBtn.disabled = false;
-    pairBtn.innerHTML =
-        '<i class="fa-solid fa-key"></i> GET PAIRING CODE';
-}
-
-
-/* FORMAT CODE */
-
-function formatPairingCode(code) {
-    if (!code) {
-        return "--------";
-    }
-
-    const clean =
-        String(code).replace(/[^A-Za-z0-9]/g, "");
-
-    return clean.length === 8
-        ? clean.match(/.{1,4}/g).join("-")
-        : code;
-}
-
-
-/* COPY */
-
-async function copyCode() {
-    const code = codeValue.textContent.trim();
-
-    if (!code || code === "--------") {
-        return;
-    }
+  // JSON formatter
+  $('format-json').addEventListener('click', () => {
+    const input = $('json-input').value;
 
     try {
-        await navigator.clipboard.writeText(code);
-
-        const button =
-            document.querySelector(".copy-btn");
-
-        const old = button.innerHTML;
-
-        button.innerHTML =
-            '<i class="fa-solid fa-check"></i> COPIED';
-
-        setTimeout(() => {
-            button.innerHTML = old;
-        }, 1500);
-
-    } catch {
-        alert("Copy failed. Please copy the code manually.");
+      const parsed = JSON.parse(input);
+      $('json-input').value = JSON.stringify(parsed, null, 2);
+      $('json-status').textContent = 'Valid JSON. Formatting successful.';
+      $('json-status').className = 'text-sm mt-4 text-green-500';
+    } catch(e) {
+      $('json-status').textContent = 'Invalid JSON: ' + e.message;
+      $('json-status').className = 'text-sm mt-4 text-red-500';
     }
-}
+  });
 
+  $('clear-json').addEventListener('click', () => {
+    $('json-input').value = '';
+    $('json-status').textContent = 'Input cleared.';
+    $('json-status').className = 'text-sm mt-4 text-slate-500';
+  });
 
-/* QR PAIRING */
+  $('copy-json').addEventListener('click', () => {
+    const value = $('json-input').value;
 
-async function startQR() {
-    hideError();
-
-    const phone =
-        phoneInput.value.trim().replace(/\D/g, "");
-
-    if (phone.length < 7) {
-        showError(
-            "Please enter a valid international phone number first."
-        );
-        return;
+    if (!value.trim()) {
+      $('json-status').textContent = 'Enter JSON before copying.';
+      return;
     }
 
-    qrBtn.disabled = true;
-    qrBtn.innerHTML =
-        '<i class="fa-solid fa-spinner fa-spin"></i> GENERATING QR...';
+    copyText(value);
+  });
 
-    clearInterval(pollInterval);
+  // Base64 using UTF-8
+  function toBase64(text) {
+    const bytes = new TextEncoder().encode(text);
+    let binary = '';
 
-    /* Only QR can be visible */
-    codeBox.classList.remove("show");
-    qrBox.classList.remove("show");
+    bytes.forEach(byte => binary += String.fromCharCode(byte));
 
+    return btoa(binary);
+  }
+
+  function fromBase64(value) {
+    const binary = atob(value.trim());
+    const bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
+
+    return new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+  }
+
+  $('encode-base64').addEventListener('click', () => {
     try {
-        const response = await fetch("/api/start-qr", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ phone })
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            showError(
-                data.error || "Failed to generate QR code."
-            );
-
-            resetQRButton();
-            return;
-        }
-
-        if (data.qrDataUrl) {
-            qrImage.src = data.qrDataUrl;
-            qrBox.classList.add("show");
-        }
-
-        updateStatus("qr_ready");
-        startPolling();
-
-        qrBtn.disabled = false;
-        qrBtn.innerHTML =
-            '<i class="fa-solid fa-rotate"></i> REFRESH QR';
-
-    } catch (error) {
-        console.error("[Panel] QR error:", error);
-        showError("Unable to connect to the bot server.");
-        resetQRButton();
+      $('base64-input').value = toBase64($('base64-input').value);
+      $('base64-status').textContent = 'Text encoded successfully.';
+      $('base64-status').className = 'text-sm mt-4 text-green-500';
+    } catch(e) {
+      $('base64-status').textContent = 'Encoding failed.';
+      $('base64-status').className = 'text-sm mt-4 text-red-500';
     }
-}
+  });
 
-
-/* PHONE PAIRING */
-
-async function requestPairing() {
-    hideError();
-
-    const phone =
-        phoneInput.value.trim().replace(/\D/g, "");
-
-    if (phone.length < 7) {
-        showError(
-            "Please enter a valid international phone number."
-        );
-        return;
-    }
-
-    pairBtn.disabled = true;
-    pairBtn.innerHTML =
-        '<i class="fa-solid fa-spinner fa-spin"></i> GENERATING...';
-
-    clearInterval(pollInterval);
-
-    /* Only pairing code can be visible */
-    codeBox.classList.remove("show");
-    qrBox.classList.remove("show");
-
+  $('decode-base64').addEventListener('click', () => {
     try {
-        const response = await fetch("/api/pair", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ phone })
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            showError(
-                data.error ||
-                "Failed to generate pairing code."
-            );
-
-            resetPairButton();
-            return;
-        }
-
-        if (data.pairingCode) {
-            codeValue.textContent =
-                formatPairingCode(data.pairingCode);
-
-            codeBox.classList.add("show");
-        }
-
-        updateStatus("waiting_approval");
-        startPolling();
-
-        pairBtn.disabled = false;
-        pairBtn.innerHTML =
-            '<i class="fa-solid fa-rotate"></i> GENERATE NEW CODE';
-
-    } catch (error) {
-        console.error("[Panel] Pairing error:", error);
-        showError("Unable to connect to the bot server.");
-        resetPairButton();
+      $('base64-input').value = fromBase64($('base64-input').value);
+      $('base64-status').textContent = 'Base64 decoded successfully.';
+      $('base64-status').className = 'text-sm mt-4 text-green-500';
+    } catch(e) {
+      $('base64-status').textContent = 'Invalid Base64 or unsupported text encoding.';
+      $('base64-status').className = 'text-sm mt-4 text-red-500';
     }
-}
+  });
 
+  $('clear-base64').addEventListener('click', () => {
+    $('base64-input').value = '';
+    $('base64-status').textContent = 'Input cleared.';
+    $('base64-status').className = 'text-sm mt-4 text-slate-500';
+  });
 
-/* POLLING */
+  // Unix timestamp
+  function updateClock() {
+    const now = new Date();
 
-function startPolling() {
-    clearInterval(pollInterval);
+    $('current-timestamp').textContent = Math.floor(now.getTime() / 1000);
+    $('current-date').textContent = now.toLocaleString();
+  }
 
-    checkStatus();
+  updateClock();
+  setInterval(updateClock, 1000);
 
-    pollInterval =
-        setInterval(checkStatus, 2000);
-}
+  $('convert-date').addEventListener('click', () => {
+    const value = $('date-input').value;
 
-
-async function checkStatus() {
-    const phone =
-        phoneInput.value.trim().replace(/\D/g, "");
-
-    if (phone.length < 7) {
-        return;
+    if (!value) {
+      $('timestamp-result').textContent = 'Please select a date and time.';
+      return;
     }
 
-    try {
-        const response = await fetch(
-            `/api/status?phone=${encodeURIComponent(phone)}`,
-            { cache: "no-store" }
-        );
+    const milliseconds = new Date(value).getTime();
 
-        if (!response.ok) {
-            return;
-        }
-
-        const data = await response.json();
-
-        updateStatus(data.status);
-
-        if (data.connected === true) {
-            pairSection.style.display = "none";
-            connectedBox.classList.add("show");
-
-            updateStatus("connected");
-            clearInterval(pollInterval);
-            return;
-        }
-
-        if (data.pairingCode) {
-            qrBox.classList.remove("show");
-
-            codeValue.textContent =
-                formatPairingCode(data.pairingCode);
-
-            codeBox.classList.add("show");
-        }
-
-        if (data.qrDataUrl && !data.pairingCode) {
-            codeBox.classList.remove("show");
-
-            qrImage.src = data.qrDataUrl;
-            qrBox.classList.add("show");
-        }
-
-    } catch {}
-}
-
-
-/* GO BACK */
-
-function goBackToPair() {
-    connectedBox.classList.remove("show");
-    pairSection.style.display = "block";
-
-    updateStatus("waiting");
-    hideBoxes();
-
-    resetQRButton();
-    resetPairButton();
-
-    clearInterval(pollInterval);
-
-    phoneInput.value = "";
-    codeValue.textContent = "--------";
-    qrImage.src = "";
-}
-
-
-/* PHONE INPUT */
-
-phoneInput.addEventListener("keydown", event => {
-    if (event.key === "Enter") {
-        event.preventDefault();
-        requestPairing();
-    }
-});
-
-
-phoneInput.addEventListener("input", () => {
-    clearInterval(pollInterval);
-
-    hideError();
-
-    codeBox.classList.remove("show");
-    qrBox.classList.remove("show");
-    connectedBox.classList.remove("show");
-
-    pairSection.style.display = "block";
-
-    resetPairButton();
-    resetQRButton();
-
-    const phone =
-        phoneInput.value.trim().replace(/\D/g, "");
-
-    if (phone.length < 7) {
-        updateStatus("waiting");
-        return;
+    if (!Number.isFinite(milliseconds)) {
+      $('timestamp-result').textContent = 'Invalid date.';
+      return;
     }
 
-    checkStatus();
-});
+    $('timestamp-result').textContent =
+      'Unix timestamp: ' + Math.floor(milliseconds / 1000);
+  });
 
+  // Password generator
+  function generatePassword() {
+    const length = Number($('password-length').value);
+    const symbols = $('include-symbols').checked;
 
-/* INITIAL STATUS */
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const special = '!@#$%^&*()-_=+[]{}?';
+    const chars = symbols ? letters + special : letters;
 
-async function initialize() {
-    updateStatus("waiting");
-
-    const phone =
-        phoneInput.value.trim().replace(/\D/g, "");
-
-    if (phone.length < 7) {
-        return;
+    if (!window.crypto || !window.crypto.getRandomValues) {
+      $('password-status').textContent = 'Secure random generation is unavailable in this browser.';
+      return;
     }
 
-    try {
-        const response = await fetch(
-            `/api/status?phone=${encodeURIComponent(phone)}`,
-            { cache: "no-store" }
-        );
+    // Rejection sampling avoids modulo bias.
+    const limit = Math.floor(256 / chars.length) * chars.length;
+    let password = '';
 
-        if (!response.ok) {
-            return;
-        }
+    while (password.length < length) {
+      const bytes = new Uint8Array(length * 2);
+      window.crypto.getRandomValues(bytes);
 
-        const data = await response.json();
+      for (const byte of bytes) {
+        if (byte >= limit) continue;
 
-        updateStatus(data.status);
+        password += chars[byte % chars.length];
 
-        if (data.connected === true) {
-            pairSection.style.display = "none";
-            connectedBox.classList.add("show");
-
-            updateStatus("connected");
-            return;
-        }
-
-        if (data.pairingCode) {
-            qrBox.classList.remove("show");
-
-            codeValue.textContent =
-                formatPairingCode(data.pairingCode);
-
-            codeBox.classList.add("show");
-        }
-
-        if (data.qrDataUrl && !data.pairingCode) {
-            codeBox.classList.remove("show");
-
-            qrImage.src = data.qrDataUrl;
-            qrBox.classList.add("show");
-        }
-
-        if (
-            data.status !== "idle" &&
-            data.status !== "session_not_found"
-        ) {
-            startPolling();
-        }
-
-    } catch (error) {
-        console.log(
-            "[Panel] Initial status check failed:",
-            error.message
-        );
+        if (password.length === length) break;
+      }
     }
-}
 
-initialize();
+    $('password-output').value = password;
+    $('password-status').textContent = 'Generated locally. Store it securely.';
+  }
+
+  $('generate-password').addEventListener('click', generatePassword);
+
+  $('copy-password').addEventListener('click', () => {
+    const value = $('password-output').value;
+
+    if (!value) {
+      showToast('Generate a password first');
+      return;
+    }
+
+    copyText(value);
+  });
+
+  // Footer year
+  $('year').textContent = new Date().getFullYear();
+
+  // Initial state
+  filterCards();
+
+})();
 </script>
 
 </body>
