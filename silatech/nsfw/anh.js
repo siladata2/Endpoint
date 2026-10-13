@@ -3,34 +3,60 @@ const router = express.Router();
 
 router.apiInfo = {
   name: "Anh Video NSFW",
-  description: "Random Anh Video NSFW  - 18+",
+  description: "Random Anh Video NSFW - 18+",
   method: "GET",
   parameters: []
 };
 
 router.get("/", async (req, res) => {
   try {
-    const apiUrl = "https://prexzyapis.com/random/anhvideonsfw";
-
-    const response = await fetch(apiUrl, {
-      method: "GET",
-      headers: { Accept: "application/json, video/*" },
+    const response = await fetch("https://prexzyapis.com/random/anhvideonsfw", {
       signal: AbortSignal.timeout(60000)
     });
 
     if (!response.ok) {
-      return res.status(502).json({
-        success: false,
-        creator: "Sila Tech",
-        error: "Anh Video NSFW provider failed",
-        upstreamStatus: response.status
-      });
+      throw new Error(`Upstream ${response.status}`);
     }
 
-    const contentType = (response.headers.get("content-type") || "").toLowerCase();
+    const contentType = response.headers.get("content-type") || "";
+    const buffer = Buffer.from(await response.arrayBuffer());
 
+    // 1. JSON
     if (contentType.includes("application/json")) {
-      const data = await response.json();
+      try {
+        const text = buffer.toString("utf-8");
+        const data = JSON.parse(text);
+        return res.status(200).json({
+          success: true,
+          creator: "Sila Tech",
+          result: data
+        });
+      } catch {}
+    }
+
+    // 2. IMAGE
+    if (contentType.includes("image")) {
+      let ext = "jpg";
+      if (contentType.includes("png")) ext = "png";
+      if (contentType.includes("webp")) ext = "webp";
+      if (contentType.includes("gif")) ext = "gif";
+
+      res.setHeader("Content-Type", contentType);
+      res.setHeader("Content-Disposition", `inline; filename="result.${ext}"`);
+      return res.status(200).end(buffer);
+    }
+
+    // 3. VIDEO
+    if (contentType.includes("video") || contentType.includes("octet")) {
+      res.setHeader("Content-Type", contentType || "video/mp4");
+      res.setHeader("Content-Disposition", `inline; filename="result.mp4"`);
+      return res.status(200).end(buffer);
+    }
+
+    // 4. Fallback JSON check
+    const start = buffer.toString("utf-8", 0, 20).trim();
+    if (start.startsWith("{") || start.startsWith("[")) {
+      const data = JSON.parse(buffer.toString("utf-8"));
       return res.status(200).json({
         success: true,
         creator: "Sila Tech",
@@ -38,20 +64,16 @@ router.get("/", async (req, res) => {
       });
     }
 
-    // Direct video file
-    const fileBuffer = Buffer.from(await response.arrayBuffer());
-    res.status(200);
-    res.setHeader("Content-Type", contentType || "video/mp4");
-    res.setHeader("Content-Length", fileBuffer.length);
-    res.setHeader("Content-Disposition", "inline; filename=\"anhvideo.mp4\"");
-    return res.end(fileBuffer);
+    // 5. Unknown - send as is
+    res.setHeader("Content-Type", contentType || "application/octet-stream");
+    return res.status(200).end(buffer);
 
   } catch (error) {
     console.error("[SILA API] anhvideonsfw:", error.message);
     return res.status(502).json({
       success: false,
       creator: "Sila Tech",
-      error: "Unable to fetch Anh Video NSFW right now."
+      error: "Unable to fetch right now."
     });
   }
 });
