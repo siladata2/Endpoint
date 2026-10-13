@@ -298,26 +298,26 @@
 
         </div>
 
-        <!-- NEW STATS SECTION (Matches the image provided) -->
+        <!-- STATS SECTION -->
         <div class="flex flex-wrap justify-center gap-8 sm:gap-12 mt-12 animate-fade-up delay-400">
 
           <div class="text-center">
-            <p id="stat-endpoints" class="text-2xl font-extrabold text-gray-900 dark:text-white">9+</p>
+            <p id="stat-endpoints" class="text-2xl font-extrabold text-gray-900 dark:text-white">—</p>
             <p class="text-sm text-gray-500 dark:text-gray-400">Endpoints</p>
           </div>
 
           <div class="text-center">
-            <p id="stat-requests" class="text-2xl font-extrabold text-gray-900 dark:text-white">0+</p>
+            <p id="stat-requests" class="text-2xl font-extrabold text-gray-900 dark:text-white">—</p>
             <p class="text-sm text-gray-500 dark:text-gray-400">Requests Served</p>
           </div>
 
           <div class="text-center">
-            <p id="stat-visitors" class="text-2xl font-extrabold text-gray-900 dark:text-white">1m</p>
+            <p id="stat-uptime" class="text-2xl font-extrabold text-gray-900 dark:text-white">—</p>
             <p class="text-sm text-gray-500 dark:text-gray-400">Uptime</p>
           </div>
 
           <div class="text-center">
-            <p id="stat-free" class="text-2xl font-extrabold text-gray-900 dark:text-white">Free</p>
+            <p class="text-2xl font-extrabold text-gray-900 dark:text-white">Free</p>
             <p class="text-sm text-gray-500 dark:text-gray-400">No API Key</p>
           </div>
 
@@ -356,13 +356,15 @@
           <p id="card-visitors-today" class="text-xs text-gray-500 dark:text-gray-400 mt-2">New today: —</p>
         </div>
 
+        <!-- NEW IP & LOCATION TRACKER CARD -->
         <div class="bento-card bg-white dark:bg-gray-900/70 rounded-2xl p-6 border border-gray-200 dark:border-gray-800">
           <div class="feature-icon bg-green-100 dark:bg-green-900/30 mb-4">
-            <i class="fas fa-shield-halved text-green-600 dark:text-green-400 text-xl"></i>
+            <i class="fas fa-location-dot text-green-600 dark:text-green-400 text-xl"></i>
           </div>
-          <p class="text-sm text-gray-500 dark:text-gray-400">Success rate</p>
-          <p id="card-success" class="text-3xl font-extrabold mt-1">—</p>
-          <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Successful responses</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Your IP & Location</p>
+          <p id="tracker-ip" class="text-lg font-bold mt-1 truncate">—</p>
+          <p id="tracker-location" class="text-xs text-gray-500 dark:text-gray-400 mt-2 truncate">—</p>
+          <p id="tracker-isp" class="text-[10px] text-gray-400 mt-1 truncate">—</p>
         </div>
 
       </div>
@@ -599,6 +601,18 @@
         || 'fa-cubes';
     }
 
+    // Function to format uptime into d, h, m
+    function formatUptime(seconds) {
+      if (!seconds && seconds !== 0) return '—';
+      const d = Math.floor(seconds / (3600 * 24));
+      const h = Math.floor((seconds % (3600 * 24)) / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      
+      if (d > 0) return `${d}d ${h}h`;
+      if (h > 0) return `${h}h ${m}m`;
+      return `${m}m`;
+    }
+
     $('year').textContent = new Date().getFullYear();
 
     function setTheme() {
@@ -626,23 +640,19 @@
     const closePopup = $('close-popup');
 
     if (popup && closePopup) {
-      // Check if user has already seen the popup
       const hasSeenPopup = localStorage.getItem('sila-popup-seen');
       
       if (!hasSeenPopup) {
-        // Show popup after a short delay
         setTimeout(() => {
           popup.classList.remove('hidden-popup');
         }, 1500);
       }
 
-      // Close popup when clicking the X button
       closePopup.addEventListener('click', () => {
         popup.classList.add('hidden-popup');
         localStorage.setItem('sila-popup-seen', 'true');
       });
 
-      // Close popup when clicking outside the modal
       popup.addEventListener('click', (e) => {
         if (e.target === popup) {
           popup.classList.add('hidden-popup');
@@ -650,6 +660,28 @@
         }
       });
     }
+
+    // IP & Location Tracker Logic
+    async function trackVisitor() {
+      try {
+        const res = await fetch('https://ipapi.co/json/');
+        const data = await res.json();
+        
+        if (data.ip) {
+          $('tracker-ip').textContent = data.ip;
+          $('tracker-location').textContent = `${data.city || 'Unknown'}, ${data.country_name || 'Unknown'}`;
+          $('tracker-isp').textContent = data.org || 'Unknown ISP';
+        } else {
+          $('tracker-ip').textContent = 'Unavailable';
+          $('tracker-location').textContent = 'Location blocked';
+        }
+      } catch (e) {
+        $('tracker-ip').textContent = 'Error';
+        $('tracker-location').textContent = 'Could not fetch';
+      }
+    }
+    
+    trackVisitor();
 
     async function load() {
 
@@ -691,6 +723,7 @@
       const requests = stats.requests || {};
       const visitors = stats.visitors || {};
       const status = stats.status || {};
+      const uptime = stats.uptime || 0; // Assume backend provides uptime in seconds
 
       // Update Stats
       [
@@ -709,7 +742,7 @@
         fmt(Object.keys(cats).length) + ' categories';
 
       $('stat-requests').textContent = fmt(requests.total);
-      $('stat-visitors').textContent = fmt(visitors.total);
+      $('stat-uptime').textContent = formatUptime(uptime); // Updated to use formatUptime
 
       $('card-requests').textContent = fmt(requests.total);
 
@@ -720,11 +753,6 @@
 
       $('card-visitors-today').textContent =
         'New today: ' + fmt(visitors.today);
-
-      $('card-success').textContent =
-        requests.successRate == null
-          ? '—'
-          : Number(requests.successRate).toFixed(1) + '%';
 
       $('nav-status').textContent =
         status.database === 'connected'
